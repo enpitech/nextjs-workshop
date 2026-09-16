@@ -1,0 +1,11 @@
+# Dev overlay when a file without "use client" calls useState
+# Captured 2026-09-16 with Next 16.3.5 in `next dev`.
+
+import { useState } from "react";
+export default function Probe() {
+  const [n, setN] = useState(0);
+  return <button onClick={() => setN(n + 1)}>{n}</button>;
+}
+
+Error: You're importing a module that depends on `useState` into a React Server Component module. This API is only available in Client Components. To fix, mark the file (or its parent) with the `"use client"` directive.
+    Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
