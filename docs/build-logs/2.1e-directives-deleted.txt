@@ -1,0 +1,33 @@
+# 2.1e′ follow-along: every `"use cache";` line deleted from lib/db.ts and lib/speakers.ts, then
+#   npx next build --debug-prerender
+# Captured 2026-09-16 with Next 16.3.5. Only the route lines and the source frames are kept.
+# A plain `next build` stops at the first failing route. --debug-prerender lists all eight.
+
+Error occurred prerendering page "/api/talks".
+    at getTalks (lib\db.ts:17:12)
+    at GET (app\api\talks\route.ts:11:31)
+Error occurred prerendering page "/breaks/1/fixed".
+    at getTalks (lib\db.ts:17:12)
+    at Fixed (app\breaks\1\fixed\page.tsx:7:31)
+Error occurred prerendering page "/breaks/5/broken".
+    at getTalk (lib\db.ts:23:12)
+    at Broken (app\breaks\5\broken\page.tsx:6:29)
+Error occurred prerendering page "/breaks/5/fixed".
+    at getTalk (lib\db.ts:23:12)
+    at Fixed (app\breaks\5\fixed\page.tsx:6:29)
+Error occurred prerendering page "/exercises/1/solution".
+    at getTalks (lib\db.ts:17:12)
+Error occurred prerendering page "/exercises/2".
+    at getTalk (lib\db.ts:23:12)
+Error occurred prerendering page "/exercises/2/solution".
+    at getTalk (lib\db.ts:23:12)
+Error occurred prerendering page "/".
+    at getTalks (lib\db.ts:17:12)
+    at Home (app\page.tsx:6:31)
+
+# Each error carries the same three fix lines:
+#   - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+#   - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+#   - [block] Set `export const instant = false` to allow a blocking route
+# Routes that did not fail: /talks/[id] (loading.tsx is a Suspense boundary), /breaks/1/broken and /exercises/1 (already request-time behind connection()).
+# Restore with: git checkout lib/db.ts lib/speakers.ts
