@@ -1,0 +1,36 @@
+# `next build` on main with cacheComponents: true. Captured 2026-09-16 with Next 16.3.5.
+# Read the symbols: ○ static, ◐ partial prerender (static shell plus streamed holes), ƒ dynamic (waits for the request).
+# Break #3: /breaks/3/broken/* is ƒ because the layout reads cookies() at the top with instant = false. /breaks/3/fixed/* is ◐.
+
+Route (app)                Revalidate  Expire
+┌ ○ /                              1m      1h
+├ ○ /_not-found
+├ ○ /api/talks                     1m      1h
+├ ƒ /api/talks/vote
+├ ○ /breaks
+├ ◐ /breaks/1/broken
+├ ○ /breaks/1/fixed                1m      1h
+├ ○ /breaks/2/broken
+├ ○ /breaks/2/fixed
+├ ƒ /breaks/3/broken/a
+├ ƒ /breaks/3/broken/b
+├ ◐ /breaks/3/fixed/a
+├ ◐ /breaks/3/fixed/b
+├ ○ /breaks/5/broken               1m      1h
+├ ○ /breaks/5/fixed                1m      1h
+├ ○ /exercises
+├ ◐ /exercises/1
+├ ○ /exercises/1/solution          1m      1h
+├ ○ /exercises/2                   1m      1h
+├ ○ /exercises/2/solution          1m      1h
+├ ○ /talks
+└   /talks/[id]
+  └ ◐ /talks/[id]
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)             prerendered as static content
+◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
+ƒ  (Dynamic)            server-rendered on demand
+

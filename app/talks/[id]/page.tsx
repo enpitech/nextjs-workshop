@@ -12,6 +12,7 @@ export default async function TalkPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  if (id === "boom") throw new Error("Boom: a render error on the server (1.2f)");
   const talkId = Number(id);
   if (!Number.isInteger(talkId)) notFound();
 

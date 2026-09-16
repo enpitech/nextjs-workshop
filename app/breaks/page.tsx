@@ -3,6 +3,7 @@ import Link from "next/link";
 const breaks = [
   { n: 1, title: "A function crosses the boundary", routes: ["broken", "fixed"] },
   { n: 2, title: "The barrel-file trap", routes: ["broken", "fixed"] },
+  { n: 3, title: "The dynamic cascade", routes: ["broken/a", "fixed/a"] },
   { n: 5, title: "The stale read", routes: ["broken", "fixed"] },
 ];
 

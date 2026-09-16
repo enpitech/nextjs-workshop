@@ -1,0 +1,4 @@
+# proxy.ts with `export const runtime = "edge";` added
+# Captured 2026-09-16 with Next 16.3.5 in `next dev`.
+
+Error: Route segment config is not allowed in Proxy file at "./proxy.ts". Proxy always runs on Node.js runtime. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
