@@ -67,3 +67,19 @@ Work order
 2. Run `npx create-next-app@latest . ` in this folder with the scaffold options above. Add `json-server@0.17.4`, `concurrently`, `db.json`, scripts `dev`, `api`, `reset`.
 3. Commit, push to `origin main`.
 4. Start §1.4.
+
+## Progress (updated 2026-09-16, end of first build session)
+
+Done and pushed to `origin main`:
+- Scaffold commit `f2c9282`. §1.4 commit `91c54b9`. §1.5 commit `834e144`.
+- Notion: §1.4 (three toggles) and §1.5 written as finished blocks. Local copies: scratchpad `notion/edit-01-section-1.4.md`, `notion/edit-02-section-1.5.md`, baseline `notion/baseline-2026-09-16.md`.
+- Verified claims: `next experimental-analyze` is 16.1 (blog post). `next build` shows no size columns (own output). Error texts captured in `docs/errors/`. Serializable-props list from react.dev; `FormData` is not on the props list, flagged in 1.5a.
+- Deviations from the plan: Break #2 is two sibling routes (`/breaks/2/broken`, `/breaks/2/fixed`), not one. The broken routes use `await connection()` inside `<Suspense>` instead of `export const dynamic`, because that export errors under the flag.
+
+Decisions taken during the build:
+- The flag-off build log for Break #3 and the legend cannot come from this repo as is: `"use cache"` does not compile with the flag off. Capture it from a throwaway copy with the directives and `cacheTag` calls stripped and `cacheComponents: false`. Say so in the §1.6 and §2.1 instructor notes.
+- Under the flag, a `cookies()` read in a layout without `<Suspense>` is a build error, so Break #3's broken form cannot sit on `main`. `main` holds the Suspense-wrapped form. The "broken under the flag" moment is the 2.1e′ live edit.
+- 2.1e′ needs two files with `"use cache"`. Split the data layer or add one UI-level cached component before writing 2.1e.
+- The HD1 intro says the flag stays off all day. The repo has it on from day one. Reword in §1.1 and §2.0 and record it in the changelog toggle.
+
+Next: §2.1 and §2.2. Probe first: `dynamic`/`revalidate`/`fetchCache`/`dynamicParams` errors, `--debug-prerender` labels, Copy prompt button, `revalidateTag` one-argument TypeScript error, `updateTag` in a route handler, `instant` export, `cacheLife` profiles.

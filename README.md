@@ -19,7 +19,7 @@ You are ready when the first page shows the app and the second page shows a JSON
 | `npm run dev` | Starts Next.js on port 3000 and the JSON backend on port 3001 together. |
 | `npm run api` | Starts only the JSON backend (`json-server`, 800 ms delay on every request). |
 | `npm run reset` | Restores `db.json` from `db.seed.json` after you voted. |
-| `npm run build` | Runs `next build`. |
+| `npm run build` | Runs `next build`. The backend must be up: run `npm run dev` or `npm run api` in another terminal first, because the build prerenders the cached reads. |
 
 ## Layout
 
