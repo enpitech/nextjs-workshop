@@ -1,42 +1,33 @@
-// The data layer. Every read goes to json-server on port 3001.
+// The data layer for talks. Every read goes to json-server on port 3001.
 // "server-only" turns an import from a Client Component into a build error.
 import "server-only";
-import { cacheTag } from "next/cache";
-import type { Comment, Speaker, Talk } from "./types";
+import { cacheLife, cacheTag } from "next/cache";
+import type { Talk } from "./types";
 
 export const API = "http://localhost:3001";
 
-async function read<T>(path: string): Promise<T> {
+export async function read<T>(path: string): Promise<T> {
   const res = await fetch(`${API}${path}`);
   if (!res.ok) throw new Error(`GET ${path} failed with ${res.status}`);
   return res.json();
 }
 
+// Reads. Cached with "use cache". The tag is how a write finds the entry.
 export async function getTalks(): Promise<Talk[]> {
   "use cache";
+  cacheLife("minutes");
   cacheTag("talks");
   return read<Talk[]>("/talks");
 }
 
 export async function getTalk(id: number): Promise<Talk> {
   "use cache";
+  cacheLife("minutes");
   cacheTag(`talk-${id}`);
   return read<Talk>(`/talks/${id}`);
 }
 
-export async function getSpeaker(id: number): Promise<Speaker> {
-  "use cache";
-  cacheTag("speakers");
-  return read<Speaker>(`/speakers/${id}`);
-}
-
-export async function getComments(talkId: number): Promise<Comment[]> {
-  "use cache";
-  cacheTag(`comments-${talkId}`);
-  return read<Comment[]>(`/comments?talkId=${talkId}`);
-}
-
-// Writes. Not cached. Called from Server Actions only.
+// Writes. Not cached. Called from Server Actions and Route Handlers only.
 export async function addVote(id: number): Promise<Talk> {
   const talk = await read<Talk>(`/talks/${id}`);
   const res = await fetch(`${API}/talks/${id}`, {

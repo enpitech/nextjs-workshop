@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
-import { getComments, getSpeaker, getTalk } from "@/lib/db";
+import { getTalk } from "@/lib/db";
+import { getComments, getSpeaker } from "@/lib/speakers";
 import { vote } from "@/app/actions";
 import { Collapsible } from "@/components/collapsible";
 import { SpeakerBio } from "@/components/speaker-bio";

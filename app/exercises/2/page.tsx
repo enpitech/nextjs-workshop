@@ -1,5 +1,6 @@
 // Exercise 2: this route works. Refactor the boundary. See README.md.
-import { getComments, getSpeaker, getTalk } from "@/lib/db";
+import { getTalk } from "@/lib/db";
+import { getComments, getSpeaker } from "@/lib/speakers";
 import { TalkDetail } from "./talk-detail";
 
 export default async function Exercise2() {

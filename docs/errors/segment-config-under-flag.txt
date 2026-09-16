@@ -1,0 +1,15 @@
+# next build with cacheComponents: true and one route segment config export per file
+# Captured 2026-09-16 with Next 16.3.5. All four fail at compile time, before any prerender. Colors removed.
+
+> Build error occurred
+Error: Turbopack build failed with 4 errors:
+./app/tmp-dynamic/page.tsx:1:14
+Error: Route segment config "dynamic" is not compatible with `nextConfig.cacheComponents`. Please remove it.
+> 1 | export const dynamic = 'force-dynamic';
+    |              ^^^^^^^
+./app/tmp-dynamicParams/page.tsx:1:14
+Error: Route segment config "dynamicParams" is not compatible with `nextConfig.cacheComponents`. Please remove it.
+./app/tmp-fetchCache/page.tsx:1:14
+Error: Route segment config "fetchCache" is not compatible with `nextConfig.cacheComponents`. Please remove it.
+./app/tmp-revalidate/page.tsx:1:14
+Error: Route segment config "revalidate" is not compatible with `nextConfig.cacheComponents`. Please remove it.

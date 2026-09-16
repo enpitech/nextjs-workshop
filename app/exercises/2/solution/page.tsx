@@ -1,6 +1,7 @@
 // Exercise 2, solution: the directive sits on the leaf, comments cross as
 // rendered children, and the barrel is not imported.
-import { getComments, getSpeaker, getTalk } from "@/lib/db";
+import { getTalk } from "@/lib/db";
+import { getComments, getSpeaker } from "@/lib/speakers";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { CommentsToggle } from "./comments-toggle";
