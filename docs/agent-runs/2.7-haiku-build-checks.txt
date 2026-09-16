@@ -1,0 +1,17 @@
+# next build after applying the Haiku 2.7d diff ("use client" on app/page.tsx). Colors removed, unique lines.
+./lib/db.ts:17:3
+./lib/db.ts:24:3
+./lib/db.ts:3:1
+./lib/db.ts:4:10
+./lib/db.ts:4:21
+Error: It is not allowed to define inline "use cache" annotated functions in Client Components.
+Error: 'server-only' cannot be imported from a Client Component module
+Error: Turbopack build failed with 6 errors:
+Error: You're importing a module that depends on "cacheLife". This API is only available in Server Components in the App Router, but you are using it in the Pages Router.
+Error: You're importing a module that depends on "cacheTag". This API is only available in Server Components in the App Router, but you are using it in the Pages Router.
+Error: You're importing a module that depends on "server-only". This API is only available in Server Components in the App Router, but you are using it in the Pages Router.
+
+# npx tsc --noEmit after applying the Haiku 2.7e diff (cacheLife({ duration: 60 }))
+lib/db.ts(18,15): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Object literal may only specify known properties, and 'duration' does not exist in type '{ stale?: number | undefined; revalidate?: number | undefined; expire?: number | undefined; }'.
