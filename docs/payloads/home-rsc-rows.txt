@@ -1,0 +1,8 @@
+# Two rows from the RSC payload of "/" (request: GET /?_rsc=..., header RSC: 1, response type text/x-component)
+# Captured 2026-09-16 with Next 16.3.5 in `next dev`. Chunk names change on every build.
+
+# Row 74: a client reference. "I" means "import this module in the browser". The server sends the module path and the chunk files, not the component.
+74:I["[project]/components/talk-list.tsx [app-client] (ecmascript)",["/_next/static/chunks/node_modules_next_dist_0mrnf9s._.js","/_next/static/chunks/_11_d4cp._.js"],"TalkList"]
+
+# Row 75: the props that cross the boundary. Plain JSON. This is the `talks` prop of <TalkList>.
+75:[{"id":1,"title":"Two graphs, one boundary","speakerId":1,"track":"core","votes":12},{"id":2,"title":"Reading the RSC payload","speakerId":2,"track":"core","votes":8},{"id":3,"title":"Caching is opt-in","speakerId":3,"track":"data","votes":15},{"id":4,"title":"The waterfall trap","speakerId":1,"track":"data","votes":5},{"id":5,"title":"Server Actions in production","speakerId":4,"track":"data","votes":9},{"id":6,"title":"Agents that know Next 16","speakerId":2,"track":"ai","votes":3}]

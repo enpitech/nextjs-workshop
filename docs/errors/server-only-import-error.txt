@@ -1,0 +1,23 @@
+# next build output when a Client Component imports lib/db.ts (which has `import "server-only"`)
+# Captured 2026-09-16 with Next 16.3.5. Colors and repeated lines removed.
+
+> Build error occurred
+Error: Turbopack build failed with 7 errors:
+
+Error: It is not allowed to define inline "use cache" annotated functions in Client Components.
+Ecmascript file had an error
+
+Error: You're importing a module that depends on "server-only". This API is only available in Server Components in the App Router, but you are using it in the Pages Router.
+  2 | // "server-only" turns an import from a Client Component into a build error.
+> 3 | import "server-only";
+  4 | import { cacheTag } from "next/cache";
+Ecmascript file had an error
+
+Error: 'server-only' cannot be imported from a Client Component module
+  2 | // "server-only" turns an import from a Client Component into a build error.
+> 3 | import "server-only";
+  4 | import { cacheTag } from "next/cache";
+Ecmascript file had an error
+
+# Note: the sentence "but you are using it in the Pages Router" is wrong. There is no Pages Router in this repo.
+# The line that matters is: 'server-only' cannot be imported from a Client Component module

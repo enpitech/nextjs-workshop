@@ -1,0 +1,19 @@
+# Browser console when a Client Component renders `Date.now()` with cacheComponents on
+# Captured 2026-09-16 with Next 16.3.5 in `next dev`. Stack trace removed.
+# Under the flag, Next catches this during the prerender, before it becomes a hydration mismatch.
+
+"use client";
+export default function Probe() {
+  return <p>Rendered at {Date.now()}</p>;
+}
+
+Error: Route "/tmp-hydration": Next.js encountered the unstable value `Date.now()` in a Client Component.
+
+This value would be evaluated during the prerender, instead of recomputed on each visit.
+
+Ways to fix this:
+  - [stream] Wrap the Client Component in `<Suspense fallback={...}>`
+  - [defer] Move the read into a `useEffect` or event handler
+  - [measure] If the value is for telemetry, use a timing API such as `performance.now()`
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-current-time-client
