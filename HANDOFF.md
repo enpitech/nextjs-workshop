@@ -68,18 +68,19 @@ Work order
 3. Commit, push to `origin main`.
 4. Start §1.4.
 
-## Progress (updated 2026-09-16, end of first build session)
+## Progress (updated 2026-09-16, later the same day)
 
-Done and pushed to `origin main`:
-- Scaffold commit `f2c9282`. §1.4 commit `91c54b9`. §1.5 commit `834e144`.
-- Notion: §1.4 (three toggles) and §1.5 written as finished blocks. Local copies: scratchpad `notion/edit-01-section-1.4.md`, `notion/edit-02-section-1.5.md`, baseline `notion/baseline-2026-09-16.md`.
-- Verified claims: `next experimental-analyze` is 16.1 (blog post). `next build` shows no size columns (own output). Error texts captured in `docs/errors/`. Serializable-props list from react.dev; `FormData` is not on the props list, flagged in 1.5a.
-- Deviations from the plan: Break #2 is two sibling routes (`/breaks/2/broken`, `/breaks/2/fixed`), not one. The broken routes use `await connection()` inside `<Suspense>` instead of `export const dynamic`, because that export errors under the flag.
+Done and pushed to `origin main` (commit 6a99dd9 and earlier):
+- Repo: scaffold, data layer (lib/db.ts, lib/speakers.ts), talks list and talk page, Breaks #1 to #6 as sibling routes, Exercises 1 to 3 with README and solution, the vote action (plain and useActionState), route handlers (GET in app/api/talks, POST in app/api/talks/vote), proxy.ts, error.tsx, not-found.tsx, nav with usePathname, .mcp.json and .cursor/mcp.json. docs/errors/ holds every captured error text. docs/build-logs/ holds the flag-on and flag-off build tables, the 2.1e log and the Break #2 treemaps. docs/payloads/ holds the RSC rows and the vote POST.
+- Notion: every section is written as finished blocks: §1.1, Installation, §1.2, §1.4, §1.5, §1.6, HD1 close, §2.0, §2.1 (with 2.1g), §2.2, §2.3, §2.4, §2.5, §2.8, and a Changelog toggle at the bottom (the old §1.3 and 2.4c moved there). Instructor meta sits in a collapsed "Instructor notes" details block at the top of each section.
+- Not yet in Notion: §2.6 and §2.7. They wait for the agent transcripts.
+- Local copies of every Notion edit: scratchpad `notion/edit-01` to `edit-08-09`, baseline in `notion/baseline-2026-09-16.md`.
 
-Decisions taken during the build:
-- The flag-off build log for Break #3 and the legend cannot come from this repo as is: `"use cache"` does not compile with the flag off. Capture it from a throwaway copy with the directives and `cacheTag` calls stripped and `cacheComponents: false`. Say so in the §1.6 and §2.1 instructor notes.
-- Under the flag, a `cookies()` read in a layout without `<Suspense>` is a build error, so Break #3's broken form cannot sit on `main`. `main` holds the Suspense-wrapped form. The "broken under the flag" moment is the 2.1e′ live edit.
-- 2.1e′ needs two files with `"use cache"`. Split the data layer or add one UI-level cached component before writing 2.1e.
-- The HD1 intro says the flag stays off all day. The repo has it on from day one. Reword in §1.1 and §2.0 and record it in the changelog toggle.
+Agent runs (in progress when this was written):
+- §2.6 planted bug: `claude -p` in the main repo with the next-devtools MCP against the running dev server. Transcript, stderr and diff go to the scratchpad `agent-runs/2.6-planted-bug.*`, then to `docs/agent-runs/`. The working tree is reverted after the run.
+- §2.7 c, d, e: `claude -p` in a throwaway copy of HEAD with AGENTS.md and CLAUDE.md removed (the "no managed block" condition). Prompts are in the scratchpad `agent-runs/2.7*-prompt.txt`. If a run does not fail the way the outline expects, the Notion block says so and shows what happened instead.
 
-Next: §2.1 and §2.2. Probe first: `dynamic`/`revalidate`/`fetchCache`/`dynamicParams` errors, `--debug-prerender` labels, Copy prompt button, `revalidateTag` one-argument TypeScript error, `updateTag` in a route handler, `instant` export, `cacheLife` profiles.
+Facts verified today (all against nextjs.org, the bundled docs in node_modules/next/dist/docs, or the real build):
+- error.tsx `retry` stable in 16.3.0; `experimental-analyze` since 16.1; `--debug-prerender` adds source frames and lists every failing route, the labels appear in a plain build too; `dynamic`, `revalidate`, `fetchCache`, `dynamicParams` all fail at compile time under the flag; `revalidateTag` one-argument form is TS2554; `updateTag` throws outside a Server Action; proxy `runtime` export throws; a POST export makes a route.ts file dynamic; `instant = false` gives ƒ and passes the build; `usePathname` in the root layout blocks prerender without Suspense; Turbopack default, `--webpack` opts out; `next-async-request-api` and `middleware-to-proxy` codemods exist.
+
+Remaining after the agent runs: write §2.6 and §2.7 to Notion, commit docs/agent-runs, close the browser tab, final HANDOFF update.
