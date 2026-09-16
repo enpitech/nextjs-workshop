@@ -35,3 +35,15 @@ export async function getComments(talkId: number): Promise<Comment[]> {
   cacheTag(`comments-${talkId}`);
   return read<Comment[]>(`/comments?talkId=${talkId}`);
 }
+
+// Writes. Not cached. Called from Server Actions only.
+export async function addVote(id: number): Promise<Talk> {
+  const talk = await read<Talk>(`/talks/${id}`);
+  const res = await fetch(`${API}/talks/${id}`, {
+    method: "PATCH",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ votes: talk.votes + 1 }),
+  });
+  if (!res.ok) throw new Error(`PATCH /talks/${id} failed with ${res.status}`);
+  return res.json();
+}

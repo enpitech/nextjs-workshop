@@ -1,0 +1,11 @@
+# Break #1: a Server Component passes a function prop to a Client Component
+# Captured 2026-09-16 with Next 16.3.5. Same text in `next dev` (overlay) and `next build`.
+
+Error: Event handlers cannot be passed to Client Component props.
+  <... talks={[...]} onVote={function onVote}>
+                            ^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+
+# Read the second sentence. It is the fix: move the interactive part, not the data, across the line.
+# The prop name starts with "on", so React calls it an event handler. A prop named `format` gives:
+# Functions cannot be passed directly to Client Components unless you explicitly expose it by marking it with "use server". Or maybe you meant to call this function rather than return it.

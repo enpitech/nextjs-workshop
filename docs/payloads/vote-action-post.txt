@@ -1,0 +1,12 @@
+# What the browser sends when the vote form submits (1.5f)
+# Captured 2026-09-16 with Next 16.3.5 in `next dev`, from a wrapped window.fetch.
+
+POST /talks/1                      <-- same URL as the page. There is no /api route.
+Accept: text/x-component           <-- the response is an RSC payload, not HTML
+next-action: <44-hex-character id> <-- which "use server" function to run. The function never crosses. Its id does.
+next-router-state-tree: ...        <-- where the router is, so the response can refresh this page
+body: FormData                     <-- the form fields, here id=1
+
+# After the action, the response carries the re-rendered page. The list page shows the new count on the next
+# navigation (its cache tag "talks" was updated). This talk page still shows the old count: its entry is tagged
+# "talk-1" and nobody updated that tag. That is the planted bug for §2.6.

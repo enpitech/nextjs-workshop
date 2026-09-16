@@ -1,5 +1,8 @@
 import { notFound } from "next/navigation";
 import { getComments, getSpeaker, getTalk } from "@/lib/db";
+import { vote } from "@/app/actions";
+import { Collapsible } from "@/components/collapsible";
+import { SpeakerBio } from "@/components/speaker-bio";
 
 // params is a promise in Next 16. You must await it.
 export default async function TalkPage({
@@ -23,7 +26,13 @@ export default async function TalkPage({
       <p className="text-sm text-gray-500">
         {speaker.name} · {talk.track} · {talk.votes} votes
       </p>
-      <p className="my-4">{speaker.bio}</p>
+      <form action={vote} className="my-3">
+        <input type="hidden" name="id" value={talk.id} />
+        <button className="rounded border px-3 py-1">Vote</button>
+      </form>
+      <Collapsible title={`About ${speaker.name}`}>
+        <SpeakerBio id={speaker.id} />
+      </Collapsible>
       <h2 className="mt-6 font-semibold">Comments</h2>
       <ul className="list-disc pl-5">
         {comments.map((c) => (

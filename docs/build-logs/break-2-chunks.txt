@@ -1,0 +1,22 @@
+# Break #2: which client chunks each route loads (from .next/server/app/**/*.html after `next build`)
+# Captured 2026-09-16 with Next 16.3.5. Chunk names change on every build.
+
+# The chunk that holds components/ui/emoji-table.ts:
+static/chunks/34xk1ycqdkcj8.js   622398 bytes
+
+# /breaks/2/broken  (imports { Badge } from "@/components/ui", the barrel with "use client")
+static/chunks/34xk1ycqdkcj8.js   <-- the 622 KB table ships, for one <Badge>
+plus the 7 shared framework chunks
+
+# /breaks/2/fixed   (imports { Badge } from "@/components/ui/badge")
+only the 7 shared framework chunks
+
+# How to reproduce without the analyzer:
+#   npx next build
+#   grep -l "SYMBOL NUMBER 3999" .next/static/chunks/*.js
+#   grep -o 'static/chunks/[^"]*\.js' .next/server/app/breaks/2/broken.html | sort -u
+
+# From `npx next experimental-analyze` (route selector top left, "Client" treemap), 2026-09-16:
+#   /breaks/2/broken   404.28 KB compressed, 1.91 MB uncompressed, 170 modules. components/ui/ = 129.72 KB, emoji-table.ts = 128.85 KB
+#   /breaks/2/fixed    274.33 KB compressed, 735.01 KB uncompressed, 165 modules. No components/ui/ box.
+# Screenshots: break-2-broken-treemap.jpg, break-2-fixed-treemap.jpg
