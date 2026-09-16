@@ -1,33 +1,44 @@
-# 2.1e′ follow-along: every `"use cache";` line deleted from lib/db.ts and lib/speakers.ts, then
-#   npx next build --debug-prerender
-# Captured 2026-09-16 with Next 16.3.5. Only the route lines and the source frames are kept.
-# A plain `next build` stops at the first failing route. --debug-prerender lists all eight.
+# 2.1e follow-along, real run on 2026-09-16 with Next 16.3.5 (npm run dev up in another terminal).
+#
+# Step 1: delete the three cache lines from every function in lib/db.ts and lib/speakers.ts:
+#   "use cache";   cacheLife(...);   cacheTag(...);
+# (Deleting only the "use cache" line gives a different error on every route:
+#   Error: `cacheLife()` can only be called inside a "use cache" function.
+#  Delete all three.)
+#
+# Step 2: npx next build --debug-prerender   ->  7 routes fail:
+#   /  /breaks/1/fixed  /breaks/5/broken  /breaks/5/fixed  /exercises/1/solution  /exercises/2  /exercises/2/solution
+# Routes that did not fail: /talks/[id] (loading.tsx is a Suspense boundary), /breaks/1/broken, /exercises/1,
+# /breaks/4/* and /breaks/6/broken (already request-time behind connection()), /api/talks (a GET with an uncached read
+# turns dynamic without an error).
+# A plain `next build` stops at the first failing route. --debug-prerender lists all of them.
+#
+# The block for /breaks/5/broken, verbatim:
+Error: Route "/breaks/5/broken": Next.js encountered uncached or runtime data during prerendering.
 
-Error occurred prerendering page "/api/talks".
-    at getTalks (lib\db.ts:17:12)
-    at GET (app\api\talks\route.ts:11:31)
-Error occurred prerendering page "/breaks/1/fixed".
-    at getTalks (lib\db.ts:17:12)
-    at Fixed (app\breaks\1\fixed\page.tsx:7:31)
-Error occurred prerendering page "/breaks/5/broken".
-    at getTalk (lib\db.ts:23:12)
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at read (lib\db.ts:10:21)
+    at getTalk (lib\db.ts:21:10)
     at Broken (app\breaks\5\broken\page.tsx:6:29)
-Error occurred prerendering page "/breaks/5/fixed".
-    at getTalk (lib\db.ts:23:12)
-    at Fixed (app\breaks\5\fixed\page.tsx:6:29)
-Error occurred prerendering page "/exercises/1/solution".
-    at getTalks (lib\db.ts:17:12)
-Error occurred prerendering page "/exercises/2".
-    at getTalk (lib\db.ts:23:12)
-Error occurred prerendering page "/exercises/2/solution".
-    at getTalk (lib\db.ts:23:12)
-Error occurred prerendering page "/".
-    at getTalks (lib\db.ts:17:12)
-    at Home (app\page.tsx:6:31)
+   8 |
+   9 | export async function read<T>(path: string): Promise<T> {
+> 10 |   const res = await fetch(`${API}${path}`);
+     |                     ^
+  11 |   if (!res.ok) throw new Error(`GET ${path} failed with ${res.status}`);
+  12 |   return res.json();
+  13 | }
+To debug the issue, start the app in development mode by running `next dev`, then open "/breaks/5/broken" in your browser to investigate the error.
+Error occurred prerendering page "/breaks/5/broken". Read more: https://nextjs.org/docs/messages/prerender-error
 
-# Each error carries the same three fix lines:
-#   - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
-#   - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
-#   - [block] Set `export const instant = false` to allow a blocking route
-# Routes that did not fail: /talks/[id] (loading.tsx is a Suspense boundary), /breaks/1/broken and /exercises/1 (already request-time behind connection()).
-# Restore with: git checkout lib/db.ts lib/speakers.ts
+# Step 3, fix A ([cache]): put the three lines back into getTalks() only  ->  4 routes fail:
+#   /breaks/5/broken  /breaks/5/fixed  /exercises/2  /exercises/2/solution
+# Step 3, fix B ([stream]): in app/breaks/5/broken/page.tsx move the getTalk(2) read into a child component inside
+#   <Suspense fallback={<p>Loading…</p>}>  ->  3 routes fail. /breaks/5/broken now builds.
+# Step 4: git checkout lib/db.ts lib/speakers.ts app/breaks/5/broken/page.tsx

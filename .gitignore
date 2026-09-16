@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# private planning notes, not for the public repo
+HANDOFF.md
+# raw agent transcripts stay out of the repo: they can carry file contents
+docs/agent-runs/*.stream.jsonl

@@ -34,7 +34,7 @@ for (const l of lines) {
         n++;
         const input = JSON.stringify(c.input);
         out.push(`${n}. **${c.name}** \`${input.length > 300 ? input.slice(0, 300) + "…" : input}\``);
-        const r = resultsById.get(c.id);
+        const r = /HANDOFF|.mcp.json/i.test(input) ? "" : resultsById.get(c.id);
         if (r) {
           const short = r.replace(/\r/g, "").split("\n").slice(0, 6).join("\n");
           out.push("", "   ```", "   " + short.replace(/\n/g, "\n   ").slice(0, 600), "   ```", "");
