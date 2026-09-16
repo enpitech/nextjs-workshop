@@ -1,9 +1,10 @@
 import { notFound } from "next/navigation";
 import { getTalk } from "@/lib/db";
 import { getComments, getSpeaker } from "@/lib/speakers";
-import { vote } from "@/app/actions";
+import { voteWithState } from "@/app/actions";
 import { Collapsible } from "@/components/collapsible";
 import { SpeakerBio } from "@/components/speaker-bio";
+import { VoteForm } from "@/components/vote-form";
 
 // params is a promise in Next 16. You must await it.
 export default async function TalkPage({
@@ -28,10 +29,9 @@ export default async function TalkPage({
       <p className="text-sm text-gray-500">
         {speaker.name} · {talk.track} · {talk.votes} votes
       </p>
-      <form action={vote} className="my-3">
-        <input type="hidden" name="id" value={talk.id} />
-        <button className="rounded border px-3 py-1">Vote</button>
-      </form>
+      {/* 1.5f built this as a plain <form action={vote}>. That shape is in app/breaks/5/broken/page.tsx.
+          2.4b upgraded it: pending state, a returned message, useActionState. */}
+      <VoteForm id={talk.id} action={voteWithState} />
       <Collapsible title={`About ${speaker.name}`}>
         <SpeakerBio id={speaker.id} />
       </Collapsible>

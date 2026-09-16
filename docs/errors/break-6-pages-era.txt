@@ -1,0 +1,17 @@
+# Break #6: Pages Router habits in app/
+# Captured 2026-09-16 with Next 16.3.5.
+
+--- 1. `import { useRouter } from "next/router"` in a Client Component under app/ ---
+# Compiles. Throws when the component renders (dev overlay and server log):
+Error: NextRouter was not mounted. https://nextjs.org/docs/messages/next-router-not-mounted
+
+--- 2. `export async function getServerSideProps()` in an app/ page ---
+# Does not compile. `next build` stops before any route renders:
+Error: Turbopack build failed with 1 error:
+./app/tmp-gssp/page.tsx:1:23
+Error: "getServerSideProps" is not supported in app/. Read more: https://nextjs.org/docs/app/building-your-application/data-fetching
+> 1 | export async function getServerSideProps() { return { props: {} }; }
+    |                       ^^^^^^^^^^^^^^^^^^
+
+--- 3. Route segment config (`export const dynamic`, `revalidate`, `fetchCache`, `dynamicParams`) ---
+# See segment-config-under-flag.txt. Compile error under cacheComponents.

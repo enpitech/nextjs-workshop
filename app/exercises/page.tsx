@@ -3,6 +3,7 @@ import Link from "next/link";
 const exercises = [
   { n: 1, title: "Fix Break #1 yourself" },
   { n: 2, title: "The boundary refactor" },
+  { n: 3, title: "Fix the waterfall" },
 ];
 
 export default function Exercises() {
