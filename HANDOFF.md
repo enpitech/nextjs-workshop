@@ -76,11 +76,19 @@ Done and pushed to `origin main` (commit 6a99dd9 and earlier):
 - Not yet in Notion: §2.6 and §2.7. They wait for the agent transcripts.
 - Local copies of every Notion edit: scratchpad `notion/edit-01` to `edit-08-09`, baseline in `notion/baseline-2026-09-16.md`.
 
-Agent runs (in progress when this was written):
-- §2.6 planted bug: `claude -p` in the main repo with the next-devtools MCP against the running dev server. Transcript, stderr and diff go to the scratchpad `agent-runs/2.6-planted-bug.*`, then to `docs/agent-runs/`. The working tree is reverted after the run.
-- §2.7 c, d, e: `claude -p` in a throwaway copy of HEAD with AGENTS.md and CLAUDE.md removed (the "no managed block" condition). Prompts are in the scratchpad `agent-runs/2.7*-prompt.txt`. If a run does not fail the way the outline expects, the Notion block says so and shows what happened instead.
+Agent runs (done, all in docs/agent-runs/ as .md and raw .stream.jsonl, rendered by scripts/transcript-to-md.mjs):
+- 2.6 planted bug: claude-fable-5-1 with the next-devtools MCP against the running dev server. Found the bug at call 14, fixed at 15, looped on verification 16 to 43. 44 turns, $1.74.
+- 2.7c/d/e with claude-fable-5-1 (AGENTS.md and CLAUDE.md removed): all three correct Next 16 code. No failure. Kept as the comparison.
+- 2.7c/d/e with claude-haiku-4-5 (guard files, HANDOFF.md and docs/ removed): 2.7c no Pages-era code but the opposite of "never at build time" (a cached static page); 2.7d the boundary failure exactly as the outline expects ("use client" on app/page.tsx, build fails on server-only); 2.7e an invented cacheLife({ duration: 60 }) option, TS2769. The build and tsc outputs for the two failing diffs are in docs/agent-runs/2.7-haiku-build-checks.txt.
+- Notion 2.7 says all of this. Break #6 is the artifact for 2.7c, which stays the 5-minute slide.
 
 Facts verified today (all against nextjs.org, the bundled docs in node_modules/next/dist/docs, or the real build):
 - error.tsx `retry` stable in 16.3.0; `experimental-analyze` since 16.1; `--debug-prerender` adds source frames and lists every failing route, the labels appear in a plain build too; `dynamic`, `revalidate`, `fetchCache`, `dynamicParams` all fail at compile time under the flag; `revalidateTag` one-argument form is TS2554; `updateTag` throws outside a Server Action; proxy `runtime` export throws; a POST export makes a route.ts file dynamic; `instant = false` gives ƒ and passes the build; `usePathname` in the root layout blocks prerender without Suspense; Turbopack default, `--webpack` opts out; `next-async-request-api` and `middleware-to-proxy` codemods exist.
 
-Remaining after the agent runs: write §2.6 and §2.7 to Notion, commit docs/agent-runs, close the browser tab, final HANDOFF update.
+Everything in the work order is done. §2.6 and §2.7 are in Notion. The Chrome tab is closed.
+
+Open for Rotem to decide (not done, on purpose):
+- The Links table row for 2.1g to 2.7e was rewritten to match the real runs. Read it once.
+- The dev server and json-server may still be running from this session. Stop them with taskkill or close the terminal.
+- The scratchpad copies (flagoff, agentrun) can be deleted. Nothing in the repo depends on them.
+- Rotem said the repo will be made public. It is still whatever visibility it was created with.
