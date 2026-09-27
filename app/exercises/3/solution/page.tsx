@@ -3,7 +3,7 @@
 // each behind its own boundary. Nothing waits for something it does not need.
 import { Suspense } from "react";
 import { connection } from "next/server";
-import { read } from "@/lib/db";
+import { read } from "@/lib/api";
 import type { Comment, Speaker, Talk } from "@/lib/types";
 
 export default function Solution3() {

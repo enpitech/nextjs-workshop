@@ -1,8 +1,9 @@
-# `next build` with cacheComponents: false. Captured 2026-09-16 with Next 16.3.5 from a throwaway copy of main.
+# `next build` with cacheComponents: false. Captured 2026-09-17 with Next 16.3.5 from a fresh throwaway copy of main
+# (git worktree of commit 8b252c1, own `npm ci`). json-server was up on port 3001.
 #
 # Caveat, so that "same code, different flag" is read correctly: this repo does not compile with the flag off,
 # because "use cache" needs the flag. The copy had these lines removed before the build:
-#   every `"use cache";`, `cacheLife(...)` and `cacheTag(...)` line in lib/db.ts and lib/speakers.ts
+#   every `"use cache";`, `cacheLife(...)` and `cacheTag(...)` line in lib/db.ts and lib/speakers.ts, and their import
 #   `export const instant = false;` in app/breaks/3/broken/layout.tsx
 # Everything else is identical to main.
 #
@@ -10,6 +11,10 @@
 #   /breaks/3/broken/* is ƒ in both. One cookies() read in the layout makes every child route dynamic.
 #   /breaks/3/fixed/*  is ƒ here and ◐ with the flag. With the flag off, <Suspense> gives streaming only.
 #                      It does not keep the rest of the route static. That is the precise point of 1.6a″.
+#   /breaks/4/*, /breaks/6/broken, /exercises/3 and /exercises/3/solution
+#                      are ƒ here and ◐ with the flag, for the same reason as /breaks/3/fixed/*. Each one calls
+#                      connection() inside a <Suspense> boundary. With the flag off, that call marks the whole
+#                      route dynamic. With the flag on, only the hole inside the boundary is dynamic.
 #   /                  is ○ here: the talks were read once at build time and baked in. Nothing refreshes them.
 #   /breaks/5/broken   is ○ here for the same reason. The stale read of Break #5 is the default in the old model.
 #   The legend has two symbols here (○ ƒ) and three with the flag (○ ◐ ƒ). ● (SSG with generateStaticParams)
@@ -29,13 +34,19 @@ Route (app)
 ├ ƒ /breaks/3/broken/b
 ├ ƒ /breaks/3/fixed/a
 ├ ƒ /breaks/3/fixed/b
+├ ƒ /breaks/4/broken
+├ ƒ /breaks/4/fixed
 ├ ○ /breaks/5/broken
 ├ ○ /breaks/5/fixed
+├ ƒ /breaks/6/broken
+├ ○ /breaks/6/fixed
 ├ ○ /exercises
 ├ ƒ /exercises/1
 ├ ○ /exercises/1/solution
 ├ ○ /exercises/2
 ├ ○ /exercises/2/solution
+├ ƒ /exercises/3
+├ ƒ /exercises/3/solution
 ├ ○ /talks
 └ ƒ /talks/[id]
 
@@ -44,4 +55,3 @@ Route (app)
 
 ○  (Static)   prerendered as static content
 ƒ  (Dynamic)  server-rendered on demand
-

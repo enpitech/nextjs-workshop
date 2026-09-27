@@ -1,6 +1,7 @@
 // Turns a `claude -p --output-format stream-json --verbose` transcript into a readable Markdown file.
 // Usage: node scripts/transcript-to-md.mjs <run.stream.jsonl> <title> [prompt.txt] [diff]
 import { readFileSync } from "node:fs";
+import { scrub } from "./scrub-paths.mjs";
 
 const [file, title, promptFile, diffFile] = process.argv.slice(2);
 const lines = readFileSync(file, "utf8").split("\n").filter(Boolean);
@@ -50,4 +51,4 @@ if (diffFile) {
   const d = readFileSync(diffFile, "utf8").trim();
   out.push("## Diff the agent left in the working tree", "", "```diff", d.length > 6000 ? d.slice(0, 6000) + "\n… (cut)" : d, "```", "");
 }
-process.stdout.write(out.join("\n"));
+process.stdout.write(scrub(out.join("\n")));

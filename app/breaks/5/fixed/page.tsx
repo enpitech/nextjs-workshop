@@ -1,5 +1,5 @@
 // Break #5, fixed: the action expires the tag it wrote to.
-import { getTalk } from "@/lib/db";
+import { getTalk } from "@/lib/talks";
 import { voteFresh } from "../actions";
 
 export default async function Fixed() {

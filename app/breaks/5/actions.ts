@@ -1,6 +1,6 @@
 "use server";
 import { updateTag } from "next/cache";
-import { addVote } from "@/lib/db";
+import { addVote } from "@/lib/talks";
 
 // Break #5, broken: the write happens. Nothing tells the cache.
 export async function voteStale(formData: FormData) {

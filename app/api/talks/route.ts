@@ -1,7 +1,7 @@
 // The sixth route file. For callers outside the React tree: a mobile app,
 // a webhook, a third party. A Server Component does not call this. It
-// calls lib/db.ts directly.
-import { getTalks } from "@/lib/db";
+// calls lib/talks.ts directly.
+import { getTalks } from "@/lib/talks";
 
 // GET /api/talks. Under the flag this prerenders (○ in the build output):
 // it reads only cached data. The directive lives on getTalks(), not on GET.

@@ -2,7 +2,7 @@
 // The reads are uncached on purpose, so the timing is visible on every request.
 import { Suspense } from "react";
 import { connection } from "next/server";
-import { read } from "@/lib/db";
+import { read } from "@/lib/api";
 import { timed } from "@/lib/timing";
 import type { Comment, Speaker, Talk } from "@/lib/types";
 import { Detail } from "../detail";

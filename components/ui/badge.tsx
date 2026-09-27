@@ -1,5 +1,7 @@
 export function Badge({ children }: { children: React.ReactNode }) {
   return (
-    <span className="rounded bg-gray-200 px-2 py-0.5 text-xs">{children}</span>
+    <span className="inline-flex items-center rounded-full bg-accent-soft px-2.5 py-0.5 align-middle text-xs font-medium text-accent-strong">
+      {children}
+    </span>
   );
 }

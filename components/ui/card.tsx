@@ -1,3 +1,3 @@
 export function Card({ children }: { children: React.ReactNode }) {
-  return <div className="rounded border p-4">{children}</div>;
+  return <div className="panel p-6">{children}</div>;
 }

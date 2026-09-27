@@ -10,10 +10,13 @@ export default function TalkError({
   retry: () => void;
 }) {
   return (
-    <main>
-      <h1 className="mb-2 text-2xl font-bold">Something broke</h1>
-      <p className="mb-3 text-sm text-gray-500">{error.message}</p>
-      <button className="rounded border px-3 py-1" onClick={() => retry()}>
+    <main className="panel border-danger/20 p-8 sm:p-10">
+      <p className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-danger">Error</p>
+      <h1 className="text-3xl font-bold tracking-tight">Something broke</h1>
+      <pre className="mt-4 overflow-x-auto rounded-xl bg-danger-soft px-4 py-3 font-mono text-sm text-danger">
+        {error.message}
+      </pre>
+      <button className="btn-primary mt-6" onClick={() => retry()}>
         Try again
       </button>
     </main>

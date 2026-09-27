@@ -9,17 +9,37 @@ const exercises = [
 export default function Exercises() {
   return (
     <main>
-      <h1 className="mb-4 text-2xl font-bold">Exercises</h1>
-      <p className="mb-4 text-sm text-gray-500">
-        Each exercise has a README.md next to its page.tsx. Edit in place. Reset with{" "}
-        <code>git checkout .</code>
-      </p>
-      <ul className="space-y-2">
+      <header className="mb-8">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-accent">
+          Hands on
+        </p>
+        <h1 className="text-4xl font-bold tracking-tight">Exercises</h1>
+        <p className="mt-3 max-w-prose text-sm leading-relaxed text-muted">
+          Each exercise has a README.md next to its page.tsx. Edit in place. Reset with{" "}
+          <code>git checkout .</code>
+        </p>
+      </header>
+      <ul className="space-y-3">
         {exercises.map((e) => (
-          <li key={e.n}>
-            {e.n}. {e.title}:{" "}
-            <Link className="mr-3 underline" href={`/exercises/${e.n}`}>start</Link>
-            <Link className="underline" href={`/exercises/${e.n}/solution`}>solution</Link>
+          <li key={e.n} className="panel flex flex-wrap items-center gap-4 px-5 py-4 sm:px-6">
+            <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-accent-soft font-semibold text-accent-strong tabular-nums">
+              {e.n}
+            </span>
+            <span className="flex-1 font-medium">{e.title}</span>
+            <span className="flex gap-2 text-sm">
+              <Link
+                href={`/exercises/${e.n}`}
+                className="btn-primary inline-flex rounded-[0.625rem] border px-3.5 py-1.5 font-medium"
+              >
+                Start
+              </Link>
+              <Link
+                href={`/exercises/${e.n}/solution`}
+                className="inline-flex rounded-[0.625rem] border border-line-strong bg-surface px-3.5 py-1.5 font-medium transition-colors hover:border-accent hover:bg-accent-soft hover:text-accent-strong"
+              >
+                Solution
+              </Link>
+            </span>
           </li>
         ))}
       </ul>

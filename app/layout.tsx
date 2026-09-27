@@ -16,11 +16,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="mx-auto max-w-2xl p-6 font-sans">
+      <body className="flex min-h-dvh flex-col font-sans">
         <Suspense>
           <Nav />
         </Suspense>
-        {children}
+        <div className="fade-in mx-auto w-full max-w-3xl flex-1 px-5 py-10 sm:px-8">
+          {children}
+        </div>
+        <footer className="mx-auto w-full max-w-3xl px-5 py-8 text-xs text-faint sm:px-8">
+          Next.js 16 workshop · demo app
+        </footer>
       </body>
     </html>
   );

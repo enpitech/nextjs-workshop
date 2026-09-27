@@ -1,5 +1,5 @@
 // Break #5: the stale read. Vote, watch the database change, watch the page not change.
-import { getTalk } from "@/lib/db";
+import { getTalk } from "@/lib/talks";
 import { voteStale } from "../actions";
 
 export default async function Broken() {

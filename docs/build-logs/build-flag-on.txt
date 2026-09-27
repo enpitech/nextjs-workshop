@@ -1,6 +1,7 @@
-# `next build` on main with cacheComponents: true. Captured 2026-09-16 with Next 16.3.5.
+# `next build` on main with cacheComponents: true. Captured 2026-09-17 with Next 16.3.5. json-server was up on port 3001, because the static routes read it at build time.
 # Read the symbols: ○ static, ◐ partial prerender (static shell plus streamed holes), ƒ dynamic (waits for the request).
 # Break #3: /breaks/3/broken/* is ƒ because the layout reads cookies() at the top with instant = false. /breaks/3/fixed/* is ◐.
+# Break #4, Break #6 broken and Exercise 3: ◐ because each one calls connection() inside a <Suspense> boundary. The shell is static, the hole streams.
 
 Route (app)                Revalidate  Expire
 ┌ ○ /                              1m      1h
@@ -16,13 +17,19 @@ Route (app)                Revalidate  Expire
 ├ ƒ /breaks/3/broken/b
 ├ ◐ /breaks/3/fixed/a
 ├ ◐ /breaks/3/fixed/b
+├ ◐ /breaks/4/broken
+├ ◐ /breaks/4/fixed
 ├ ○ /breaks/5/broken               1m      1h
 ├ ○ /breaks/5/fixed                1m      1h
+├ ◐ /breaks/6/broken
+├ ○ /breaks/6/fixed
 ├ ○ /exercises
 ├ ◐ /exercises/1
 ├ ○ /exercises/1/solution          1m      1h
 ├ ○ /exercises/2                   1m      1h
 ├ ○ /exercises/2/solution          1m      1h
+├ ◐ /exercises/3
+├ ◐ /exercises/3/solution
 ├ ○ /talks
 └   /talks/[id]
   └ ◐ /talks/[id]
@@ -33,4 +40,3 @@ Route (app)                Revalidate  Expire
 ○  (Static)             prerendered as static content
 ◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
 ƒ  (Dynamic)            server-rendered on demand
-

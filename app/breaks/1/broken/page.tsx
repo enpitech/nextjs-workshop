@@ -2,7 +2,7 @@
 // Predict what happens before you open /breaks/1/broken.
 import { Suspense } from "react";
 import { connection } from "next/server";
-import { getTalks } from "@/lib/db";
+import { getTalks } from "@/lib/talks";
 import { VoteList } from "../vote-list";
 
 export default function Broken() {

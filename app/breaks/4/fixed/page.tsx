@@ -2,7 +2,7 @@
 // speaker needs talk. comments does not. Two round trips instead of three.
 import { Suspense } from "react";
 import { connection } from "next/server";
-import { read } from "@/lib/db";
+import { read } from "@/lib/api";
 import { timed } from "@/lib/timing";
 import type { Comment, Speaker, Talk } from "@/lib/types";
 import { Detail } from "../detail";

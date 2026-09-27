@@ -1,16 +1,9 @@
-// The data layer for talks. Every read goes to json-server on port 3001.
+// The data layer for talks. Reads are cached with "use cache". Writes are not.
 // "server-only" turns an import from a Client Component into a build error.
 import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
+import { API, read } from "./api";
 import type { Talk } from "./types";
-
-export const API = "http://localhost:3001";
-
-export async function read<T>(path: string): Promise<T> {
-  const res = await fetch(`${API}${path}`);
-  if (!res.ok) throw new Error(`GET ${path} failed with ${res.status}`);
-  return res.json();
-}
 
 // Reads. Cached with "use cache". The tag is how a write finds the entry.
 export async function getTalks(): Promise<Talk[]> {
@@ -36,5 +29,20 @@ export async function addVote(id: number): Promise<Talk> {
     body: JSON.stringify({ votes: talk.votes + 1 }),
   });
   if (!res.ok) throw new Error(`PATCH /talks/${id} failed with ${res.status}`);
+  return res.json();
+}
+
+// Used by the /submit Server Action. json-server assigns the id.
+export async function addTalk(input: {
+  title: string;
+  speakerId: number;
+  category: Talk["category"];
+}): Promise<Talk> {
+  const res = await fetch(`${API}/talks`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ ...input, votes: 0 }),
+  });
+  if (!res.ok) throw new Error(`POST /talks failed with ${res.status}`);
   return res.json();
 }

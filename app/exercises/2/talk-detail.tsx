@@ -17,7 +17,7 @@ export function TalkDetail({
   return (
     <Card>
       <h2 className="text-xl font-semibold">
-        {talk.title} <Badge>{talk.track}</Badge>
+        {talk.title} <Badge>{talk.category}</Badge>
       </h2>
       <p className="text-sm text-gray-500">
         {speaker.name} · {talk.votes} votes

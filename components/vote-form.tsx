@@ -2,7 +2,7 @@
 // 2.4b: the vote form with useActionState. Three things the plain form did not have:
 // a pending flag, a returned message, and a submission that works before hydration.
 import { useActionState } from "react";
-import type { VoteState } from "@/app/actions";
+import type { VoteState } from "@/app/talks/actions";
 
 export function VoteForm({
   id,
@@ -13,12 +13,22 @@ export function VoteForm({
 }) {
   const [state, formAction, pending] = useActionState(action, { ok: false, message: "" });
   return (
-    <form action={formAction} className="my-3">
+    <form action={formAction} className="flex flex-wrap items-center gap-3">
       <input type="hidden" name="id" value={id} />
-      <button className="rounded border px-3 py-1" disabled={pending}>
-        {pending ? "Voting…" : "Vote"}
+      <button className="btn-primary" disabled={pending}>
+        <svg aria-hidden="true" viewBox="0 0 20 20" className="size-4 fill-current">
+          <path d="M10 3.5 3.5 10.6h3.9V16.5h5.2v-5.9h3.9L10 3.5Z" />
+        </svg>
+        {pending ? "Voting…" : "Vote for this talk"}
       </button>
-      {state.message && <p className="mt-1 text-sm text-gray-500">{state.message}</p>}
+      {state.message && (
+        <p
+          role="status"
+          className={`fade-in text-sm ${state.ok ? "text-accent-strong" : "text-muted"}`}
+        >
+          {state.message}
+        </p>
+      )}
     </form>
   );
 }

@@ -1,8 +1,8 @@
 // Exercise 1: this is Break #1. Fix it in place.
-import { Suspense } from "react";
-import { connection } from "next/server";
-import { getTalks } from "@/lib/db";
-import { VoteList } from "@/app/breaks/1/vote-list";
+import {Suspense} from "react";
+import {connection} from "next/server";
+import {getTalks} from "@/lib/talks";
+import {VoteList} from "@/app/breaks/1/vote-list";
 
 export default function Exercise1() {
   return (

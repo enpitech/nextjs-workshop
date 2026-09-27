@@ -1,6 +1,6 @@
 # Exercise 3: fix the waterfall (12 min)
 
-Open http://localhost:3000/exercises/3. It works. It takes 2.4 seconds.
+Open http://localhost:3000/exercises/3.
 
 ## Setup
 
@@ -13,7 +13,7 @@ Open http://localhost:3000/exercises/3. It works. It takes 2.4 seconds.
 
 ## Run
 
-Open the route. Read the number at the bottom. Then open the Network tab of `json-server` in the terminal: three requests, one after the other.
+Open the route. Read the number at the bottom. Then look at the request lines `json-server` prints in the terminal: three requests, one after the other.
 
 ## Read
 

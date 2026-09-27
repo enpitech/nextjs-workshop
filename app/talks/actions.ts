@@ -1,10 +1,12 @@
 "use server";
 import { updateTag } from "next/cache";
-import { addVote } from "@/lib/db";
+import { addVote } from "@/lib/talks";
 
 export async function vote(formData: FormData) {
-  await addVote(Number(formData.get("id")));
+  const id = Number(formData.get("id"));
+  await addVote(id);
   updateTag("talks");
+  updateTag(`talk-${id}`);
 }
 
 // 2.4b: the same action, shaped for useActionState (previous state in, new state out).
@@ -15,5 +17,6 @@ export async function voteWithState(_prev: VoteState, formData: FormData): Promi
   if (!Number.isInteger(id) || id < 1) return { ok: false, message: "No talk id in the form." };
   const talk = await addVote(id);
   updateTag("talks");
+  updateTag(`talk-${id}`);
   return { ok: true, message: `Thanks. ${talk.title} now has ${talk.votes} votes.` };
 }

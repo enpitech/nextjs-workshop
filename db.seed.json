@@ -1,23 +1,95 @@
 {
   "talks": [
-    { "id": 1, "title": "Two graphs, one boundary", "speakerId": 1, "track": "core", "votes": 12 },
-    { "id": 2, "title": "Reading the RSC payload", "speakerId": 2, "track": "core", "votes": 8 },
-    { "id": 3, "title": "Caching is opt-in", "speakerId": 3, "track": "data", "votes": 15 },
-    { "id": 4, "title": "The waterfall trap", "speakerId": 1, "track": "data", "votes": 5 },
-    { "id": 5, "title": "Server Actions in production", "speakerId": 4, "track": "data", "votes": 9 },
-    { "id": 6, "title": "Agents that know Next 16", "speakerId": 2, "track": "ai", "votes": 3 }
+    {
+      "id": 1,
+      "title": "Two graphs, one boundary",
+      "speakerId": 1,
+      "votes": 12,
+      "category": "architecture"
+    },
+    {
+      "id": 2,
+      "title": "Reading the RSC payload",
+      "speakerId": 2,
+      "votes": 8,
+      "category": "frontend"
+    },
+    {
+      "id": 3,
+      "title": "Caching is opt-in",
+      "speakerId": 3,
+      "votes": 15,
+      "category": "performance"
+    },
+    {
+      "id": 4,
+      "title": "The waterfall trap",
+      "speakerId": 1,
+      "votes": 5,
+      "category": "performance"
+    },
+    {
+      "id": 5,
+      "title": "Server Actions in production",
+      "speakerId": 4,
+      "votes": 9,
+      "category": "backend"
+    },
+    {
+      "id": 6,
+      "title": "Agents that know Next 16",
+      "speakerId": 2,
+      "votes": 3,
+      "category": "ai"
+    }
   ],
   "speakers": [
-    { "id": 1, "name": "Noa Levi", "bio": "Frontend lead. Migrated three apps from Pages Router to App Router." },
-    { "id": 2, "name": "Dan Cohen", "bio": "Platform engineer. Reads network tabs for fun." },
-    { "id": 3, "name": "Maya Peretz", "bio": "Works on caching layers and cache invalidation." },
-    { "id": 4, "name": "Omer Katz", "bio": "Builds forms and mutations for large teams." }
+    {
+      "id": 1,
+      "name": "Noa Levi",
+      "bio": "Frontend lead. Migrated three apps from Pages Router to App Router."
+    },
+    {
+      "id": 2,
+      "name": "Dan Cohen",
+      "bio": "Platform engineer. Reads network tabs for fun."
+    },
+    {
+      "id": 3,
+      "name": "Maya Peretz",
+      "bio": "Works on caching layers and cache invalidation."
+    },
+    {
+      "id": 4,
+      "name": "Omer Katz",
+      "bio": "Builds forms and mutations for large teams."
+    }
   ],
   "comments": [
-    { "id": 1, "talkId": 1, "text": "The drawing finally made the boundary click." },
-    { "id": 2, "talkId": 1, "text": "Please show the payload row again." },
-    { "id": 3, "talkId": 3, "text": "So what does the flag actually change?" },
-    { "id": 4, "talkId": 4, "text": "We have this exact bug in production." },
-    { "id": 5, "talkId": 5, "text": "How do I show a pending state?" }
+    {
+      "id": 1,
+      "talkId": 1,
+      "text": "The drawing finally made the boundary click."
+    },
+    {
+      "id": 2,
+      "talkId": 1,
+      "text": "Please show the payload row again."
+    },
+    {
+      "id": 3,
+      "talkId": 3,
+      "text": "So what does the flag actually change?"
+    },
+    {
+      "id": 4,
+      "talkId": 4,
+      "text": "We have this exact bug in production."
+    },
+    {
+      "id": 5,
+      "talkId": 5,
+      "text": "How do I show a pending state?"
+    }
   ]
 }

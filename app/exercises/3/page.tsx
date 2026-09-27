@@ -1,7 +1,7 @@
 // Exercise 3: this is Break #4. Fix the waterfall in place. See README.md.
 import { Suspense } from "react";
 import { connection } from "next/server";
-import { read } from "@/lib/db";
+import { read } from "@/lib/api";
 import { timed } from "@/lib/timing";
 import type { Comment, Speaker, Talk } from "@/lib/types";
 import { Detail } from "@/app/breaks/4/detail";

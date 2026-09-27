@@ -7,7 +7,8 @@ export function proxy(request: NextRequest) {
   return NextResponse.redirect(new URL("/", request.url));
 }
 
-// Comment the matcher out and the redirect fires on every route, with no error (1.6a‴).
+// Comment the matcher out and the redirect fires on every route, including "/" itself.
+// "/" redirects to "/" until the browser gives up: ERR_TOO_MANY_REDIRECTS (1.6a‴).
 export const config = {
   matcher: ["/admin/:path*"],
 };
