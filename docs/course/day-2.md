@@ -392,7 +392,53 @@ Notion 2.7a to 2.7f. Files: `AGENTS.md`, `app/breaks/6/`, `docs/errors/break-6-p
 
 ---
 
-## Lesson 10: Recap and close (§2.8, 20 min)
+## Lesson 10: eve, an agent inside the app (§2.8, 30 min)
+
+### Explain
+
+Until now the agent wrote the code. Now the code runs an agent. eve is a framework from Vercel for AI agents that run on the server. It is open source and in beta.
+
+An agent is a loop. The model reads the conversation and picks a tool. eve runs the tool and gives the result back. This repeats until the model answers in text. In eve, the agent is a folder: `agent/instructions.md` is the system prompt, `agent/agent.ts` holds the model, and every file in `agent/tools/` is one tool, named by its file. It is the same idea as `app/`, where a folder is a route.
+
+`withEve` in `next.config.ts` starts the agent next to `next dev` and sends `/eve/v1/*` to it. The agent is its own Node process, so it cannot use `"use cache"` or `updateTag`. It reaches the app over HTTP, through the Route Handlers from lesson 3, like the mobile app.
+
+The model is scripted with eve's `mockModel`, so the room sees the same answer every time and no key is needed. eve still runs the real loop, the tools, and the approval. `approval: always()` on the vote tool stops the turn until a person clicks Approve. `eve eval` is a test that checks what the agent did.
+
+### Show
+
+1. Before the room: this laptop runs Node 24, because eve needs it. Open http://localhost:3000/agent. On Node 22 the page says that eve is off, and the rest of the app works.
+2. Show the folder `agent/` in the editor. Open `agent/tools/list_talks.ts`: `description`, `inputSchema`, `execute`. Point at the URL `/api/talks`.
+3. Click "What are the top talks?". Read the tool line out loud:
+
+   ```plain text
+   list_talks({"limit":3}) · output-available
+   ```
+
+4. Open `agent/lib/scripted-model.ts`. Say: only the choice is scripted. The one line to change for a real model is in `agent/agent.ts`.
+5. Open `agent/tools/vote_for_talk.ts` and point at `approval: always()`. Click "Vote for talk 2". The tool shows `approval-requested` with Approve and Cancel.
+6. Reload the tab. The URL ends with `?session=wrun_...`, and the question still waits. Click Approve. The chat says the talk now has 9 votes. Open `/talks/2`: 9.
+7. In a second terminal: `npx eve eval --url http://localhost:3000`. It prints `gates 6/6`. Then show `docs/eve/eval-fail-no-approval.txt`, the run without `approval: always()`: "the last turn did not park".
+8. After: `npm run reset`.
+
+Do not stop `npm run dev` while an approval waits. The waiting turn survives a reload, but not a restart of the dev server (eve 0.68.0, see the instructor notes in Notion 2.8).
+
+### Ask
+
+The talk page is cached with the tag `talk-2`. The agent cannot call `updateTag`. Who told the cache that the count changed?
+
+Answer: the Route Handler `POST /api/talks/vote`. It calls `revalidateTag` for `talks` and `talk-2`. `updateTag` works only in a Server Action, and the agent is not even inside Next.
+
+Second question: which defense from lesson 9 does `eve eval` look like?
+
+Answer: Defense 3. `next build` checks the code an agent wrote. `eve eval` checks what an agent does.
+
+### Where it is
+
+Notion 2.8a to 2.8f. Files: `agent/`, `app/agent/page.tsx`, `app/agent/agent-chat.tsx`, `evals/agent.eval.ts`, `next.config.ts`, `docs/eve/`.
+
+---
+
+## Lesson 11: Recap and close (§2.9, 20 min)
 
 ### Explain
 
@@ -406,10 +452,10 @@ Name what two half-days did not teach: routing at scale, named production failur
 
 ### Show
 
-1. Put the empty table from Notion 2.8a on screen. Fill it with the room. Then show the answer key below it.
+1. Put the empty table from Notion 2.9a on screen. Fill it with the room. Then show the answer key below it.
 2. Read back the three answers from Day 1, lesson 1: "the one thing you want to be able to do by tomorrow evening".
 3. The close. What you keep: the Notion page and the repo, with every break, exercise, error text, build log and transcript. The one task this week: in your own app, add `import "server-only"` to the data layer and run `next build`. If it says nothing, draw the two graphs for one route and make sure the drawing is true.
-4. The support window and the feedback request, as written in Notion 2.8e. Confirm those terms before the room. The build session wrote them, not you.
+4. The support window and the feedback request, as written in Notion 2.9e. Confirm those terms before the room. The build session wrote them, not you.
 
 ### Ask
 
@@ -419,6 +465,6 @@ Answer: usually the Route Handler. It has the same rules as a page, and that is 
 
 ### Where it is
 
-Notion 2.8a to 2.8e.
+Notion 2.9a to 2.9e.
 
 After the room leaves: `npm run reset`, `git checkout .`, and stop the dev server.
