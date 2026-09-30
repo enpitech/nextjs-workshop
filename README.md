@@ -6,7 +6,7 @@ The demo app for the two half-day Next.js 16 workshop. The teaching notes live i
 
 1. Install Node 22 or newer.
 2. Clone this repo and open a terminal in the folder.
-3. Run `npm install`.
+3. Run `npm install`. On Node 22, npm prints `EBADENGINE` warnings for `eve`. They are expected: only the eve demo needs Node 24.
 4. Run `npm run dev`.
 5. Open http://localhost:3000 and http://localhost:3001/talks in a browser.
 
