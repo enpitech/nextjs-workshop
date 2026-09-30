@@ -60,6 +60,43 @@ step. Add a category to `CATEGORIES` in `lib/types.ts` and `lib/jev.ts` stops co
 The first page groups the talks under a heading for each category. The filter above the list
 picks one category or shows them all.
 
+## The eve demo
+
+Open http://localhost:3000/agent to talk to an agent about the talks.
+
+eve is Vercel's framework for backend AI agents: https://eve.dev. An agent is a folder of
+files. eve runs the loop, calls the tools, and keeps each conversation on the server.
+
+eve needs Node 24. On Node 22 the rest of the app works, and `/agent` says that eve is off.
+`next.config.ts` wraps the configuration with `withEve` only on Node 24.
+
+The model is scripted. `agent/lib/scripted-model.ts` uses eve's `mockModel`, so every run gives
+the same answer and no API key is needed. eve still runs the real loop, the real tools and
+the real approval step. To use a real model, set `model` in `agent/agent.ts` to a model string,
+for example `"anthropic/claude-opus-5.5"`, and put `AI_GATEWAY_API_KEY` in `.env.local`.
+
+| File | What it does |
+| --- | --- |
+| `agent/instructions.md` | The system prompt. The scripted model ignores it. A real model reads it. |
+| `agent/agent.ts` | The model and `defaultTools: false`, so the agent has no shell, file or web tools. |
+| `agent/tools/list_talks.ts` | A read. It calls `GET /api/talks`. |
+| `agent/tools/vote_for_talk.ts` | A write. `approval: always()` parks the turn until a person clicks Approve. It calls `POST /api/talks/vote`. |
+| `app/agent/agent-chat.tsx` | The chat. `useEveAgent` from `eve/react`. The session id stays in the URL, so a reload continues the conversation. |
+| `evals/agent.eval.ts` | A test for the agent. It checks that a vote waits for approval. |
+
+The tools run in the eve process, not in Next. They reach the app over HTTP through the
+Route Handlers, like any outside caller.
+
+To run the eval, start the app on Node 24 with `npm run dev`, and run this in a second
+terminal:
+
+```bash
+npx eve eval --url http://localhost:3000
+```
+
+The saved outputs are in `docs/eve/`: one run that passes, and one run with
+`approval: always()` removed, which fails.
+
 ## Layout
 
 - `app/` holds the routes.
@@ -67,5 +104,6 @@ picks one category or shows them all.
 - `app/exercises/N/` holds the exercises. Each one has a `README.md` and a `solution` route.
 - `db.json` is the backend data. `db.seed.json` is the copy that `npm run reset` restores.
 - `app/submit/` holds the Jev demo.
+- `agent/` holds the eve agent, `evals/` its test, and `app/agent/` its chat page.
 - `docs/build-logs/` holds saved `next build` output for comparison.
 - `docs/agent-runs/` holds real transcripts of agent runs against this repo.

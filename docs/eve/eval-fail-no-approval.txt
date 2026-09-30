@@ -1,0 +1,14 @@
+$ npx eve eval --url http://localhost:3000   # approval: always() removed from agent/tools/vote_for_talk.ts
+
+EVALS 1
+target http://localhost:3000/
+
+✗  agent  gates 2/4
+  ✗ calledTool(vote_for_talk) (0% < 100%): expected exactly 1 matching call(s), found 0; observed vote_for_talk calls: {"id":2}
+  ✗ requireInputRequest (0% < 100%): expected one pending input request, but the last turn did not park
+
+Results: 1 failed (1 total)
+Gates: 2 passed, 2 failed
+
+Completed in 2.7s
+

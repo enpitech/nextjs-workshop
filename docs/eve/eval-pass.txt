@@ -1,0 +1,12 @@
+$ npx eve eval --url http://localhost:3000
+
+EVALS 1
+target http://localhost:3000/
+
+✓  agent  gates 6/6
+
+Results: 1 passed (1 total)
+Gates: 6 passed
+
+Completed in 2.8s
+
