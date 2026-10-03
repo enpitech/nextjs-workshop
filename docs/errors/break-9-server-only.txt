@@ -1,0 +1,26 @@
+# next dev, GET /breaks/9/broken with import "server-only" uncommented in app/breaks/9/broken/secret-card.tsx
+# HTTP 500 and the dev error overlay. While the line is uncommented, every route in the dev server returns this error.
+
+Error: ./app/breaks/9/broken/secret-card.tsx:3:1
+Error: You're importing a module that depends on "server-only" into a React Client Component module. This API is only available in Server Components but one of its parents is marked with "use client", so this module is also a Client Component.
+    Learn more: https://nextjs.org/docs/app/building-your-application/rendering
+  1 | // Break #9, broken: written as a Server Component. No directive, and it holds a secret.
+  2 | // The guard: uncomment the next line. The import from page.tsx becomes an error.
+> 3 | import "server-only";
+    | ^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | const API_KEY = "dangerous-api-key";
+  6 |
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./app/breaks/9/broken/secret-card.tsx [Client Component Browser]
+    ./app/breaks/9/broken/page.tsx [Client Component Browser]
+    ./app/breaks/9/broken/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/breaks/9/broken/secret-card.tsx [Client Component SSR]
+    ./app/breaks/9/broken/page.tsx [Client Component SSR]
+    ./app/breaks/9/broken/page.tsx [Server Component]

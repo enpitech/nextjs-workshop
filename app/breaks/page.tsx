@@ -7,6 +7,9 @@ const breaks = [
   { n: 4, title: "The waterfall", routes: ["broken", "fixed"] },
   { n: 5, title: "The stale read", routes: ["broken", "fixed"] },
   { n: 6, title: "Pages-era patterns", routes: ["broken", "fixed"] },
+  { n: 7, title: "The hydration mismatch", routes: ["broken", "fixed"] },
+  { n: 8, title: "The provider in the layout", routes: ["broken", "fixed"] },
+  { n: 9, title: "The secret in the client graph", routes: ["broken", "fixed"] },
 ];
 
 export default function Breaks() {
@@ -18,7 +21,7 @@ export default function Breaks() {
         </p>
         <h1 className="text-4xl font-bold tracking-tight">Breaks</h1>
         <p className="mt-3 max-w-prose text-sm leading-relaxed text-muted">
-          Six ways an App Router app goes wrong. Each break has a broken route and a fixed route.
+          Nine ways an App Router app goes wrong. Each break has a broken route and a fixed route.
           Open both and compare the code.
         </p>
       </header>

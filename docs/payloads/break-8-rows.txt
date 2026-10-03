@@ -1,0 +1,14 @@
+# Break #8: RSC payload rows for /breaks/8/broken and /breaks/8/fixed (request: GET ?_rsc=..., header RSC: 1)
+# Captured 2026-10-03 with Next 16.3.5 in `next dev`. Row numbers and chunk names change on every build.
+
+# Broken. The layout itself is a client reference. panel.tsx has no row of its own:
+# it is inside the layout's chunks, and the browser runs it. The text "Panel, imported by the layout" is not in the payload.
+3c:I["[project]/app/breaks/8/broken/layout.tsx [app-client] (ecmascript)",["/_next/static/chunks/node_modules_next_1de51ag._.js","/_next/static/chunks/components_12hrh0w._.js","/_next/static/chunks/app_breaks_8_15nd5lo._.js"],"default"]
+
+# Fixed. Only the provider is a client reference.
+45:I["[project]/app/breaks/8/theme-provider.tsx [app-client] (ecmascript)",["/_next/static/chunks/node_modules_next_1de51ag._.js","/_next/static/chunks/components_12hrh0w._.js","/_next/static/chunks/app_breaks_8_theme-provider_tsx_0qeyqh4._.js"],"ThemeProvider"]
+
+# Fixed. Panel arrived as rendered JSX, a plain row. Its code stayed on the server.
+46:["$","aside",null,{"className":"panel p-5","children":[["$","h2",null,{"className":"mb-2 font-medium","children":"Panel, imported by the layout"},"$47","$4b",1],"$4c"]},"$47","$49",1]
+
+# Both routes also have a client reference for theme-toggle.tsx, and neither has one for the page.
