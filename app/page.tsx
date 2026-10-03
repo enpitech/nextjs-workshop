@@ -1,6 +1,7 @@
 import {getTalks} from "@/lib/talks";
 import {TalkList} from "@/components/talk-list";
 import {PageHeader} from "@/components/page-header";
+import {Card} from "@/components/ui/card";
 
 // Server Component. It runs on the server, awaits data, and ships no JS.
 export default async function Home() {
@@ -14,6 +15,7 @@ export default async function Home() {
         </p>
       </PageHeader>
       <TalkList talks={talks} />
+      <Card>Speakers</Card>
     </main>
   );
 }
