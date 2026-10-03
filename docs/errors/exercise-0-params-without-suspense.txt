@@ -1,0 +1,32 @@
+# Exercise 0: app/exercises/0/solution/speakers/[id]/loading.tsx deleted, then npx next build (Next.js 16.3.5, cacheComponents: true), 2026-10-03
+
+▲ Next.js 16.3.5 (Turbopack)
+- Environments: .env.local
+✓ Running next.config.ts took 48ms
+- Cache Components enabled
+  Creating an optimized production build ...
+✓ Compiled successfully in 1956ms
+  Running TypeScript ...
+  Finished TypeScript in 1454ms ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/38) ...
+  Generating static pages using 19 workers (9/38) 
+Error: Route "/exercises/0/solution/speakers/[id]": Next.js encountered uncached or runtime data during prerendering.
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at section (<anonymous>)
+    at div (<anonymous>)
+    at main (<anonymous>)
+    at div (<anonymous>)
+    at body (<anonymous>)
+    at html (<anonymous>)
+To get a more detailed stack trace and pinpoint the issue, try one of the following:
+  - Start the app in development mode by running `next dev`, then open "/exercises/0/solution/speakers/[id]" in your browser to investigate the error.
+  - Rerun the production build with `next build --debug-prerender` to generate better stack traces.
+Error occurred prerendering page "/exercises/0/solution/speakers/[id]". Read more: https://nextjs.org/docs/messages/prerender-error
+Export encountered an error on /exercises/0/solution/speakers/[id]/page: /exercises/0/solution/speakers/[id], exiting the build.
+⨯ Next.js build worker exited with code: 1 and signal: null
