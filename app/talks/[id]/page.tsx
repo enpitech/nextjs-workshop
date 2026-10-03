@@ -10,6 +10,7 @@ import { VoteForm } from "@/components/vote-form";
 import { TalkCard } from "@/components/talk-card";
 import { CommentList } from "@/components/comment-list";
 import { SectionHeading } from "@/components/section-heading";
+import { WebVitals } from "@/components/web-vitals";
 
 // params is a promise in Next 16. You must await it.
 export default async function TalkPage({
@@ -30,6 +31,8 @@ export default async function TalkPage({
 
   return (
     <article className="space-y-6">
+      {/* 6a: logs TTFB and the other web vitals to the browser console. */}
+      <WebVitals />
       <Link
         href="/"
         className="inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-accent-strong"
