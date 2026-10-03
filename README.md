@@ -45,7 +45,8 @@ An API key is optional.
 To run the live path, copy `.env.example` to `.env.local` and paste a key from
 https://console.typesafe.ai. The file `.env.local` is ignored by git.
 
-Three files hold the demo.
+Three files hold the logic. The form's fields are split into `components/submit-first-fields.tsx`,
+`components/submit-ask-fields.tsx`, `components/form-field.tsx` and `components/guess-bars.tsx`.
 
 - `lib/jev.ts` makes the call. `import "server-only"` keeps the key and the SDK out of the
   client graph.

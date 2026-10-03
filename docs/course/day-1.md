@@ -176,7 +176,7 @@ A Server Component cannot hold state, and now you can say why: state means an ev
    ```
 
 2. Open `app/page.tsx`. It is async. It awaits `getTalks()` and hands the array to `<TalkList talks={talks} />`. That prop is the line.
-3. Open `components/talk-list.tsx`. Line 1 is `"use client"`. It has `useState` for the category filter. It imports `next/link`, so `next/link` is in the client graph because of this import.
+3. Open `components/talk-list.tsx`. Line 1 is `"use client"`. It has `useState` for the category filter. It has no `next/link` import of its own. `talk-row.tsx` (no directive) imports it, and `talk-list.tsx` imports `talk-group.tsx`, which imports `talk-row.tsx`. So both files, and `next/link`, join the client graph.
 4. In the browser on `/`, press Ctrl+U for the page source. Search for the title of the first talk, "Two graphs, one boundary". It is in the HTML. The Client Component ran on the server for the first render.
 5. Open `lib/talks.ts`. Line 3 is `import "server-only"`. Say: "This line is the guard. Without it, the mistake is silent."
 6. Prove the guard, in the editor, without saving to the repo for long: open `components/talk-list.tsx`, add `import { getTalks } from "@/lib/talks";` at the top, and watch the dev overlay. If the overlay stays quiet, run `npx next build` in a second terminal. The error reads: `'server-only' cannot be imported from a Client Component module`. Remove the line. The full build output is in `docs/errors/server-only-import-error.txt`. One of the seven errors there says "but you are using it in the Pages Router". That sentence is wrong. Ignore it and read the line above it.
@@ -195,7 +195,7 @@ Answer: without the guard, there is no sign until a runtime failure or a leaked 
 
 ### Where it is
 
-Notion 1.4a, 1.4b, 1.5a, 1.5b, 1.5c (the sections "1.4 Server Components foundations" and "1.5 Two-graph mental model"). Files: `app/page.tsx`, `components/talk-list.tsx`, `lib/talks.ts`, `lib/api.ts`, `docs/errors/server-only-import-error.txt`, `docs/errors/hydration-mismatch.txt`, `docs/errors/date-now-in-client-component.txt`.
+Notion 1.4a, 1.4b, 1.5a, 1.5b, 1.5c (the sections "1.4 Server Components foundations" and "1.5 Two-graph mental model"). Files: `app/page.tsx`, `components/talk-list.tsx`, `components/talk-row.tsx`, `lib/talks.ts`, `lib/api.ts`, `docs/errors/server-only-import-error.txt`, `docs/errors/hydration-mismatch.txt`, `docs/errors/date-now-in-client-component.txt`.
 
 ---
 

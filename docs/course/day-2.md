@@ -434,7 +434,7 @@ Answer: Defense 3. `next build` checks the code an agent wrote. `eve eval` check
 
 ### Where it is
 
-Notion 2.8a to 2.8f. Files: `agent/`, `app/agent/page.tsx`, `app/agent/agent-chat.tsx`, `evals/agent.eval.ts`, `next.config.ts`, `docs/eve/`.
+Notion 2.8a to 2.8f. Files: `agent/`, `app/agent/page.tsx`, `app/agent/agent-chat.tsx`, `components/chat-message.tsx`, `components/tool-call-card.tsx`, `evals/agent.eval.ts`, `next.config.ts`, `docs/eve/`.
 
 ---
 
