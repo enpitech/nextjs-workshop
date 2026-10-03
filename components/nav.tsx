@@ -7,6 +7,7 @@ import { NavLink } from "./nav-link";
 
 const links = [
   { href: "/", label: "Talks" },
+  { href: "/search", label: "Search" },
   { href: "/breaks", label: "Breaks" },
   { href: "/exercises", label: "Exercises" },
   { href: "/submit", label: "Submit" },

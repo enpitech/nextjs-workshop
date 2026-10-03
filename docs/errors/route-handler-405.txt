@@ -1,0 +1,4 @@
+# curl -i -X DELETE http://localhost:3000/api/talks on next dev. Captured 2026-10-03 with Next 16.3.5.
+# app/api/talks/route.ts exports only GET, so every other method gets 405.
+
+HTTP/1.1 405 Method Not Allowed

@@ -114,7 +114,7 @@ Notion 2.1a to 2.1f. Files: `next.config.ts`, `lib/talks.ts`, `lib/speakers.ts`,
 
 ---
 
-## Lesson 3: Route Handlers, fetch, and who gets the data how (§2.1g to 2.1j, 12 min)
+## Lesson 3: Route Handlers, fetch, and who gets the data how (§2.1g to 2.1j, and §12c to §12f, 23 min)
 
 ### Explain
 
@@ -130,6 +130,14 @@ The second question is a table. A Server Component calls the data layer. A Clien
 
 In a Route Handler, `revalidateTag(tag, profile)` is allowed and `updateTag` is not.
 
+A folder in brackets works under `app/api` as it does for a page. The handler gets `params` in its second argument, as a promise, and `RouteContext<"/api/talks/[id]">` types it. A Route Handler renders no `not-found.tsx`. `notFound()` sends a `404` with an empty body, so a JSON endpoint returns `Response.json(body, { status: 404 })` itself.
+
+A `POST` in the same file is one way to make a `GET` dynamic. Reading the request is the other: `request.url`, `searchParams`, headers, cookies, the body, `headers()`, `cookies()`, `connection()`. `"use cache"` cannot sit in the body of `GET`. It goes on a helper, as on `getTalks()`.
+
+The table row "searches as you type" is real in the demo. `/search` holds a Client Component that calls `GET /api/talks/search?q=` on every key press. It uses plain `fetch` with an `AbortController`, so an old answer cannot replace a newer one. SWR or React Query add a client cache and retries.
+
+Last, the rules of the file. Seven methods: `GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `HEAD`, `OPTIONS`. Any other method gets `405`. A folder has `page.tsx` or `route.ts`, never both. `route.ts` replaces the `pages/api` API Routes of the Pages Router.
+
 ### Show
 
 1. Open `app/api/talks/route.ts`. One `GET` export that calls `getTalks()`. The `"use cache"` is on `getTalks`, not on `GET`. Open `http://localhost:3000/api/talks` in the browser: the JSON list.
@@ -143,6 +151,10 @@ In a Route Handler, `revalidateTag(tag, profile)` is allowed and `updateTag` is 
    ```
 
    The response is the talk with one more vote. The quoting above is for Git Bash or cmd. In PowerShell, write the body as `'{"id":1}'` with single quotes.
+6. Open `app/api/talks/[id]/route.ts`. Point at `ctx.params` and `RouteContext`. Open `/api/talks/1`, `/api/talks/99` and `/api/talks/abc` in the browser: 200, 404 and 400, each with a JSON body.
+7. Open `app/api/talks/search/route.ts` next to `app/api/talks/route.ts`. The same `getTalks()`, one more line that reads `searchParams`. Put `docs/build-logs/step-12-route-handlers.txt` on screen: `○ /api/talks`, `ƒ /api/talks/search`, `ƒ /api/talks/[id]`. Read the header comment: with `generateStaticParams`, the `[id]` rows become `●`.
+8. Open `/search` (Search in the nav) and the Network tab. Type `server`. One request per key press, and the list shows "Server Actions in production". Open `components/talk-search.tsx` and point at the `AbortController`.
+9. Run `curl -i -X DELETE http://localhost:3000/api/talks`: `405 Method Not Allowed`. Put `docs/errors/route-and-page-conflict.txt` on screen for the page and route conflict.
 
 ### Ask
 
@@ -154,9 +166,17 @@ Second question: the mobile app votes through the POST. A web user has the talk 
 
 Answer: the stale count, served while the entry revalidates in the background. That is what `revalidateTag` with `"max"` means. Lesson 4 compares it with `updateTag`.
 
+Third question: `getTalk()` is cached. Why is `/api/talks/[id]` still `ƒ`?
+
+Answer: at build time Next does not know which ids exist. `generateStaticParams` gives it the list, and the build prints one `●` row per id.
+
+Fourth question: why not a Server Action for the search?
+
+Answer: Server Actions are made for writes. The client sends them one at a time and waits for each one, so fast reads wait in line.
+
 ### Where it is
 
-Notion 2.1h, 2.1i, 2.1j. Files: `app/api/talks/route.ts`, `app/api/talks/vote/route.ts`, `lib/api.ts`, `lib/talks.ts`.
+Notion 2.1h, 2.1i, 2.1j (now §12a, §8l, §12b), and §12c to §12f. Files: `app/api/talks/route.ts`, `app/api/talks/vote/route.ts`, `app/api/talks/[id]/route.ts`, `app/api/talks/search/route.ts`, `app/search/page.tsx`, `components/talk-search.tsx`, `lib/api.ts`, `lib/talks.ts`, `docs/build-logs/step-12-route-handlers.txt`, `docs/errors/route-handler-405.txt`, `docs/errors/route-and-page-conflict.txt`.
 
 ---
 

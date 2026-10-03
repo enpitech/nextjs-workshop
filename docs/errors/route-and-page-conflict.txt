@@ -1,0 +1,8 @@
+# app/talks/route.ts added next to app/talks/page.tsx, then next build. Captured 2026-10-03 with Next 16.3.5.
+# Only one of page.tsx and route.ts can own a URL. The file was deleted after the capture.
+
+> Build error occurred
+Error: Turbopack build failed with 1 error:
+./app
+Error: An issue occurred while preparing your Next.js app
+Conflicting route and page at /talks: route at /talks/route and page at /talks/page

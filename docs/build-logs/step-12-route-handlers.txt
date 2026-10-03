@@ -1,0 +1,50 @@
+# next build on main with cacheComponents: true, after the Step 12 routes were added. Captured 2026-10-03 with Next 16.3.5, json-server up on port 3001.
+# /api/talks is ○: GET only, cached read. /api/talks/search is ƒ: it reads request.nextUrl.searchParams. /api/talks/[id] is ƒ: Next does not know the ids at build time.
+# With generateStaticParams returning ids 1 and 2, the same build printed:
+#   ├   /api/talks/[id]
+#   │ ├ ● /api/talks/1                 1m      1h
+#   │ └ ● /api/talks/2                 1m      1h
+
+Route (app)                Revalidate  Expire
+┌ ○ /                              1m      1h
+├ ○ /_not-found
+├ ○ /agent
+├ ○ /api/talks                     1m      1h
+├ ƒ /api/talks/[id]
+├ ƒ /api/talks/search
+├ ƒ /api/talks/vote
+├ ○ /breaks
+├ ◐ /breaks/1/broken
+├ ○ /breaks/1/fixed                1m      1h
+├ ○ /breaks/2/broken
+├ ○ /breaks/2/fixed
+├ ƒ /breaks/3/broken/a
+├ ƒ /breaks/3/broken/b
+├ ◐ /breaks/3/fixed/a
+├ ◐ /breaks/3/fixed/b
+├ ◐ /breaks/4/broken
+├ ◐ /breaks/4/fixed
+├ ○ /breaks/5/broken               1m      1h
+├ ○ /breaks/5/fixed                1m      1h
+├ ◐ /breaks/6/broken
+├ ○ /breaks/6/fixed
+├ ○ /exercises
+├ ◐ /exercises/1
+├ ○ /exercises/1/solution          1m      1h
+├ ○ /exercises/2                   1m      1h
+├ ○ /exercises/2/solution          1m      1h
+├ ◐ /exercises/3
+├ ◐ /exercises/3/solution
+├ ○ /search
+├ ○ /submit                        1h      1d
+├ ○ /talks
+└   /talks/[id]
+  └ ◐ /talks/[id]
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)             prerendered as static content
+◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
+ƒ  (Dynamic)            server-rendered on demand
+
