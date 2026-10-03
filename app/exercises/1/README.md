@@ -25,15 +25,16 @@ If you need interactivity, consider converting part of this to a Client Componen
 
 ## Fix
 
-Decide where the handler belongs. Two answers are correct:
+Decide where the handler belongs. This handler needs browser state only, so move it into a Client Component that wraps `<VoteList>`.
 
-1. The handler only needs browser state. Move it into a Client Component that wraps `<VoteList>`.
-2. The handler must write to the server. Make it a Server Action with `"use server"`. Then it crosses the line as a callable reference.
-
-Edit `page.tsx` in place. Compare with `solution/page.tsx` when you are done.
+Edit `page.tsx` in place. Compare with `app/breaks/1/fixed/` when you are done.
 
 ## Why
 
-A function is code. Code does not serialize. The output of a Server Component crosses as data only. A Server Action is the one exception: it crosses as an ID, and the browser calls it with a POST.
+A function is code. Code does not serialize. The output of a Server Component crosses as data only. The Client Component owns the behavior.
+
+## Later, in §7a
+
+A handler that writes to the server has a second fix: make it a Server Action with `"use server"`. A Server Action is the one function that crosses the line. It crosses as an ID, and the browser calls it with a POST. §7a teaches `"use server"` and then comes back to this exercise. `solution/page.tsx` is that second fix. Open it in §7a.
 
 Reset: `git checkout app/exercises/1`

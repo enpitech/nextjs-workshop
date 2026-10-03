@@ -1,5 +1,5 @@
-// Exercise 1, solution B: the handler writes to the server, so it is a Server Action.
-// Solution A (handler in a Client Component) is /breaks/1/fixed.
+// Exercise 1, second fix (taught in §7a): the handler writes to the server, so it is a Server Action.
+// The first fix, the one §5i asks for (handler in a Client Component), is /breaks/1/fixed.
 import { getTalks } from "@/lib/talks";
 import { vote } from "@/app/talks/actions";
 import { VoteList } from "@/app/breaks/1/vote-list";
