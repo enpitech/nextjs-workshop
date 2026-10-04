@@ -1,0 +1,6 @@
+Exercise 4 starter: app/exercises/4/actions.ts without "use server".
+Captured on Next 16.3.5, next dev, 2026-10-04, from http://localhost:3000/exercises/4.
+
+Functions cannot be passed directly to Client Components unless you explicitly expose it by marking it with "use server". Or maybe you meant to call this function rather than return it.
+  <... id={1} action={function upvote}>
+                     ^^^^^^^^^^^^^^^^^

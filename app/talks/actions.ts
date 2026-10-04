@@ -9,7 +9,7 @@ export async function vote(formData: FormData) {
   updateTag(`talk-${id}`);
 }
 
-// 2.4b: the same action, shaped for useActionState (previous state in, new state out).
+// §7b: the same action, shaped for useActionState (previous state in, new state out).
 export type VoteState = { ok: boolean; message: string };
 
 export async function voteWithState(_prev: VoteState, formData: FormData): Promise<VoteState> {

@@ -2,7 +2,7 @@ import { PageHeader } from "@/components/page-header";
 import { TalkSearch } from "@/components/talk-search";
 
 // The page itself reads no data, so it prerenders. The list arrives later,
-// from the browser, through GET /api/talks/search (Step 12).
+// from the browser, through GET /api/talks/search (Step 10).
 export default function Search() {
   return (
     <main>

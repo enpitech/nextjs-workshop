@@ -1,5 +1,5 @@
 // Route-segment Suspense boundary. Delete this file and the route hangs
-// until the whole page has rendered (1.2d).
+// until the whole page has rendered (§6a).
 export default function Loading() {
   return (
     <div aria-busy="true" aria-label="Loading talk" className="space-y-6">

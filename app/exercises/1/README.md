@@ -1,4 +1,4 @@
-# Exercise 1: fix Break #1 yourself (5 min)
+# Exercise 1: fix Break #1 yourself (3 min)
 
 Open http://localhost:3000/exercises/1. The route throws.
 

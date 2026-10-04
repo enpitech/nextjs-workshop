@@ -5,6 +5,9 @@ const exercises = [
   { n: 1, title: "Fix Break #1 yourself" },
   { n: 2, title: "The boundary refactor" },
   { n: 3, title: "Fix the waterfall" },
+  { n: 4, title: "Write the vote action" },
+  { n: 5, title: "A title for every talk" },
+  { n: 6, title: "A Route Handler with status codes" },
 ];
 
 export default function Exercises() {

@@ -4,7 +4,7 @@
       "id": 1,
       "title": "Two graphs, one boundary",
       "speakerId": 1,
-      "votes": 13,
+      "votes": 14,
       "category": "architecture"
     },
     {
@@ -32,14 +32,14 @@
       "id": 5,
       "title": "Server Actions in production",
       "speakerId": 4,
-      "votes": 9,
+      "votes": 11,
       "category": "backend"
     },
     {
       "id": 6,
       "title": "Agents that know Next 16",
       "speakerId": 2,
-      "votes": 3,
+      "votes": 5,
       "category": "ai"
     }
   ],

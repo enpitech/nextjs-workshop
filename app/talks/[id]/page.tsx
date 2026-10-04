@@ -19,7 +19,7 @@ export default async function TalkPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  if (id === "boom") throw new Error("Boom: a render error on the server (1.2f)");
+  if (id === "boom") throw new Error("Boom: a render error on the server");
   const talkId = Number(id);
   if (!Number.isInteger(talkId)) notFound();
 
@@ -41,8 +41,8 @@ export default async function TalkPage({
       </Link>
 
       <TalkCard talk={talk} speakerName={speaker.name}>
-        {/* 1.5f built this as a plain <form action={vote}>. That shape is in app/breaks/5/broken/page.tsx.
-            2.4b upgraded it: pending state, a returned message, useActionState. */}
+        {/* §7a built this as a plain <form action={vote}>. That shape is in app/breaks/5/broken/page.tsx.
+            §7b upgraded it: pending state, a returned message, useActionState. */}
         <VoteForm id={talk.id} action={voteWithState} />
       </TalkCard>
 

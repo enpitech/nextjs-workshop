@@ -1,5 +1,5 @@
 "use client";
-// 2.4b: the vote form with useActionState. Three things the plain form did not have:
+// §7b: the vote form with useActionState. Three things the plain form did not have:
 // a pending flag, a returned message, and a submission that works before hydration.
 import { useActionState } from "react";
 import type { VoteState } from "@/app/talks/actions";

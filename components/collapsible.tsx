@@ -1,5 +1,5 @@
 "use client";
-// The escape hatch (1.5c): a Client Component can render server output it
+// The escape hatch (§5j): a Client Component can render server output it
 // did not import. `children` arrives already rendered, as part of the payload.
 import { useState } from "react";
 
