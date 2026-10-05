@@ -1,0 +1,56 @@
+# Break #10: a Client Component throws after a click (app/breaks/10/broken, no error.tsx anywhere above it)
+# Captured 2026-10-04 with Next 16.3.5. Click "Open talk 1" first: it works. Then click "Open talk 99".
+# The page loads fine. Only the click breaks it: byId[99] is undefined, and the render reads .title.
+
+--- next dev: dev overlay ---
+Runtime TypeError
+
+Cannot read properties of undefined (reading 'title')
+
+app/breaks/10/talk-viewer.tsx (25:76) @ TalkViewer
+
+  23 |       </div>
+  24 |       {/* TypeScript is happy: a Record<number, Talk> says every key exists. The data says otherwise. */}
+> 25 |       {openId !== null && <p className="text-lg font-medium">{byId[openId].title}</p>}
+     |                                                                            ^
+  26 |     </section>
+
+Call Stack:
+  TalkViewer  app/breaks/10/talk-viewer.tsx (25:76)
+  Page        app/breaks/10/broken/page.tsx (12:7)
+
+--- next dev: what is behind the overlay ---
+# The whole page is replaced. The nav is gone too. Nothing of the app is left.
+This page couldn't load
+
+Reload to try again, or go back.
+
+[Reload] [Back]
+
+--- next dev: terminal ---
+[browser] Uncaught TypeError: Cannot read properties of undefined (reading 'title')
+    at TalkViewer (app/breaks/10/talk-viewer.tsx:25:76)
+    at Page (app/breaks/10/broken/page.tsx:12:7)
+
+--- next build + next start: what the browser shows (no overlay) ---
+# Same white page. This is NOT the older "Application error: a client-side exception has occurred ..." text.
+# In 16.3.5 the default global error page says:
+This page couldn't load
+
+Reload to try again, or go back.
+
+[Reload] [Back]
+
+--- next start: browser console ---
+TypeError: Cannot read properties of undefined (reading 'title')
+    at https://.../_next/static/chunks/<hash>.js:1:693
+
+--- /breaks/10/fixed (same page, plus app/breaks/10/fixed/error.tsx), after "Open talk 99" ---
+# Same text in next dev and in next start. A client-side error keeps its message in production.
+# The nav stays. Only the page area is replaced by the box from error.tsx.
+ERROR
+This part broke
+Cannot read properties of undefined (reading 'title')
+[Try again]
+
+# "Try again" calls retry(). The page renders again, the buttons come back and no talk is open.

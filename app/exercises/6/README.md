@@ -1,4 +1,6 @@
-# Exercise 6: a Route Handler with status codes (5 min)
+# Exercise 6: a Route Handler with status codes (homework, 5 min)
+
+Homework after Half-Day 1 (Step 10 on the course page). Do it at home.
 
 Open http://localhost:3000/exercises/6. Click the three links with the Network tab open.
 

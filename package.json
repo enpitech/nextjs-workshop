@@ -11,6 +11,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.104.1",
     "@typesafe-ai/sdk": "^0.6.0",
     "ai": "^7.0.123",
     "eve": "^0.68.0",

@@ -1,0 +1,68 @@
+# Exercise 7: app/exercises/7 (starter, no error.tsx and no not-found.tsx) and app/exercises/7/solution
+# Captured 2026-10-04 with Next 16.3.5. Both are server errors (thrown while rendering the Server Component).
+
+--- starter, /exercises/7/boom, next dev ---
+# Browser: the nav is gone, the whole page is replaced:
+This page couldn't load
+
+A server error occurred. Reload to try again.
+
+[Reload]
+
+ERROR 873773604
+
+# Dev overlay (Runtime Error): Boom: a render error on the server
+#   app/exercises/7/[id]/page.tsx (10:28) @ SpeakerPage
+# Terminal:
+⨯ Error: Boom: a render error on the server
+    at SpeakerPage (app/exercises/7/[id]/page.tsx:10:28)
+  digest: '873773604'
+
+--- starter, /exercises/7/99, next dev ---
+# Browser: the same page as /boom, only the number differs (the digest).
+# Dev overlay and terminal: GET /speakers/99 failed with 404
+⨯ Error: GET /speakers/99 failed with 404
+  digest: '882104584'
+
+--- starter, /exercises/7/boom and /exercises/7/99, next start ---
+# Browser: the same page, no overlay. The digest is the only link to the server log.
+This page couldn't load
+
+A server error occurred. Reload to try again.
+
+[Reload]
+
+ERROR 1877849611        (/boom)
+ERROR 1630143337        (/99)
+# Terminal of next start: the full message and the same digest.
+⨯ Error: Boom: a render error on the server
+  digest: '1877849611'
+⨯ Error: GET /speakers/99 failed with 404
+  digest: '1630143337'
+
+--- solution, /exercises/7/solution/boom, next dev ---
+# The nav stays. error.tsx fills the speaker area:
+Could not load the speaker
+Boom: a render error on the server
+[Try again]
+
+--- solution, /exercises/7/solution/boom, next start ---
+# error.message of a server error is replaced in production. Use error.digest to find it in the server log.
+Could not load the speaker
+Minified React error #441; visit https://react.dev/errors/441 for the full message or use the non-minified dev environment for full errors and additional helpful warnings.
+[Try again]
+# React error 441: "An error occurred in the Server Components render. The specific message is omitted in
+# production builds to avoid leaking sensitive details. A digest property is included on this error instance..."
+
+--- solution, /exercises/7/solution/99, dev and start ---
+# notFound() in the page, and the closer not-found.tsx wins over app/not-found.tsx. HTTP status is 200
+# in curl, also for a missing speaker. The page has <meta name="robots" content="noindex">.
+404
+No such speaker
+Try /exercises/7/solution/1.
+
+--- starter with only notFound() added (no not-found.tsx) ---
+# app/not-found.tsx renders, which is wrong for a speaker:
+Not found
+No such talk.
+[Back to the list]

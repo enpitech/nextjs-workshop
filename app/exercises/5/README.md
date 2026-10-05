@@ -1,4 +1,6 @@
-# Exercise 5: a title for every talk (4 min)
+# Exercise 5: a title for every talk (homework, 4 min)
+
+Homework after Half-Day 1 (Step 9 on the course page). Do it at home.
 
 Open http://localhost:3000/exercises/5 and click a talk. Read the title of the browser tab.
 
