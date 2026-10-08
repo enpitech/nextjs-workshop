@@ -9,6 +9,9 @@ const exercises = [
   { n: 5, title: "A title for every talk (homework)" },
   { n: 6, title: "A Route Handler with status codes (homework)" },
   { n: 7, title: "Catch the errors" },
+  { n: 8, title: "Build the organizer dashboard (capstone)" },
+  { n: 9, title: "Make the talk board fast (capstone)" },
+  { n: 10, title: "Review an agent's draft (capstone)" },
 ];
 
 export default function Exercises() {

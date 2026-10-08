@@ -1,0 +1,9 @@
+# npx tsc --noEmit with the Exercise 10 draft copied into app/exercises/10/top/ and app/exercises/10/eve/
+# Captured 2026-10-07 with Next 16.3.5 and TypeScript from the repo, in a copy of the repo outside the app tree.
+# The draft is planted: the workshop author wrote it. It is not a real agent run.
+# eve/get_talk.ts has no type error. Its problem is where it runs, not its types.
+
+app/exercises/10/top/actions.ts(11,3): error TS2554: Expected 2 arguments, but got 1.
+app/exercises/10/top/page.tsx(17,15): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Object literal may only specify known properties, and 'duration' does not exist in type '{ stale?: number | undefined; revalidate?: number | undefined; expire?: number | undefined; }'.

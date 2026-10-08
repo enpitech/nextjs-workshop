@@ -1,0 +1,53 @@
+"use client";
+// PLANTED. The workshop author wrote this file to look like a typical agent draft.
+// It is not the output of a real agent run. Review it before you trust it.
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { cacheLife } from "next/cache";
+import { getTalks } from "@/lib/talks";
+import type { Talk } from "@/lib/types";
+import { VoteButton } from "./vote-button";
+
+// Refresh the page every 60 seconds.
+export const revalidate = 60;
+
+// Cache the sorted list for 60 seconds.
+async function getTopTalks() {
+  "use cache";
+  cacheLife({ duration: 60 });
+  const talks = await getTalks();
+  return talks.sort((a, b) => b.votes - a.votes);
+}
+
+export default function TopTalks() {
+  const router = useRouter();
+  const [talks, setTalks] = useState<Talk[]>([]);
+  const [showAll, setShowAll] = useState(false);
+
+  useEffect(() => {
+    getTopTalks().then(setTalks);
+  }, []);
+
+  const shown = showAll ? talks : talks.slice(0, 3);
+
+  return (
+    <main>
+      <h1 className="mb-4 text-2xl font-bold">Top talks</h1>
+      <button className="mb-4 rounded border px-3 py-1" onClick={() => setShowAll(!showAll)}>
+        {showAll ? "Show the top 3" : "Show all talks"}
+      </button>
+      <ul className="mb-4 space-y-2">
+        {shown.map((t) => (
+          <li key={t.id} className="flex items-center gap-4">
+            <span className="flex-1">{t.title}</span>
+            <span className="tabular-nums">{t.votes} votes</span>
+            <VoteButton id={t.id} />
+          </li>
+        ))}
+      </ul>
+      <button className="rounded border px-3 py-1" onClick={() => router.push("/exercises/10")}>
+        Back
+      </button>
+    </main>
+  );
+}

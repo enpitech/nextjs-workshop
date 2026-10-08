@@ -1,0 +1,12 @@
+"use server";
+// PLANTED. The workshop author wrote this file to look like a typical agent draft.
+// It is not the output of a real agent run. Review it before you trust it.
+import { revalidateTag } from "next/cache";
+import { addVote } from "@/lib/talks";
+
+// Add one vote and clear the cache, so the new count shows right away.
+export async function vote(formData: FormData) {
+  const id = Number(formData.get("id"));
+  await addVote(id);
+  revalidateTag("talks");
+}

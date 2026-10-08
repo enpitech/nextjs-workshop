@@ -1,0 +1,15 @@
+// PLANTED. The workshop author wrote this file to look like a typical agent draft.
+// It is not the output of a real agent run. Review it before you trust it.
+import { defineTool } from "eve/tools";
+import { z } from "zod";
+import { getTalk } from "@/lib/talks";
+
+// Reuse the cached read from the app. It is fast, and it is already tested.
+export default defineTool({
+  description: "Get one conference talk by its id, with its vote count.",
+  inputSchema: z.object({ id: z.number() }),
+  async execute({ id }) {
+    const talk = await getTalk(id);
+    return { id: talk.id, title: talk.title, votes: talk.votes };
+  },
+});

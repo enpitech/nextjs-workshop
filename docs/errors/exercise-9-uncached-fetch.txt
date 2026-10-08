@@ -1,0 +1,41 @@
+# Exercise 9, Task 2: the cookie read is inside <Suspense> now, but the two reads at the top are still uncached.
+# Captured 2026-10-07 with Next.js 16.3.5, cacheComponents: true. Command: npx next build --debug-prerender.
+
+## The page
+
+import { Suspense } from "react";
+import { fetchSpeakers, fetchTalks } from "../backend";
+import { Greeting } from "./greeting";
+
+export default async function Board() {
+  const [talks, speakers] = await Promise.all([fetchTalks(), fetchSpeakers()]);
+
+  return (
+    <main className="space-y-6">
+      <h1 className="text-2xl font-bold">Talk board</h1>
+      <Suspense fallback={<p>Checking who you are…</p>}>
+        <Greeting />
+      </Suspense>
+  ...
+
+## The build
+
+Error: Route "/exercises/9/board": Next.js encountered uncached or runtime data during prerendering.
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at read (lib\api.ts:8:21)
+    at fetchTalks (app\exercises\9\backend.ts:10:14)
+    at Board (app\exercises\9\board\page.tsx:6:58)
+   6 |
+   7 | export async function read<T>(path: string): Promise<T> {
+>  8 |   const res = await fetch(`${API}${path}`);
+     |                     ^
+   9 |   if (!res.ok) throw new Error(`GET ${path} failed with ${res.status}`);
+  10 |   return res.json();
+  11 | }
+To debug the issue, start the app in development mode by running `next dev`, then open "/exercises/9/board" in your browser to investigate the error.
+Error occurred prerendering page "/exercises/9/board". Read more: https://nextjs.org/docs/messages/prerender-error

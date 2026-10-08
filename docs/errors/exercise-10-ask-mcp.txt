@@ -1,0 +1,35 @@
+# node app/exercises/10/ask-mcp.mjs against a running dev server
+# Captured 2026-10-07 with Next 16.3.5 on Node 22.17.0. The script sends the same JSON-RPC POST
+# to /_next/mcp that next-devtools-mcp 0.4.0 sends (nextjs-runtime-manager.js, makeNextJsMCPRequest).
+
+$ node app/exercises/10/ask-mcp.mjs            # next dev
+get_project_metadata
+get_errors
+get_page_metadata
+get_logs
+get_server_action_by_id
+get_routes
+get_request_insights
+get_compilation_issues
+compile_route
+
+$ node app/exercises/10/ask-mcp.mjs get_logs   # next dev, path shortened
+{"logFilePath":"<repo>\\.next\\dev\\logs\\next-development.log"}
+
+$ node app/exercises/10/ask-mcp.mjs get_routes # next dev, cut to the Exercise 10 lines
+    "/exercises/10/solution",
+    "/exercises/10/solution/top",
+
+$ node app/exercises/10/ask-mcp.mjs compile_route routeSpecifier=/exercises/10/solution/top   # next dev
+{"routeSpecifier":"/exercises/10/solution/top","issues":[]}
+# (This call was sent with the same JSON-RPC body from a scratch script, before ask-mcp.mjs took
+# key=value arguments. The dev server had stopped when the script was retried.)
+
+$ node app/exercises/10/ask-mcp.mjs nope       # next dev
+MCP error -32602: Tool nope not found
+
+$ node app/exercises/10/ask-mcp.mjs            # next start: no MCP endpoint
+HTTP 404. No MCP answer. Is this next dev?
+
+# get_routes listed the two solution routes before any browser had opened them: it scans the files.
+# Not captured yet: compile_route and get_errors with the planted draft in app/exercises/10/top/.

@@ -1,0 +1,76 @@
+# Exercise 9, Task 1: the starting board (cookies() and two uncached reads at the top of the page).
+# Captured 2026-10-07 with Next.js 16.3.5, cacheComponents: true, json-server on 3001. Temporary copy at app/exercises/9/board/, deleted afterwards.
+
+## The page
+
+import { cookies } from "next/headers";
+import { fetchSpeaker, fetchSpeakers, fetchTalks } from "../backend";
+
+export default async function Board() {
+  const id = (await cookies()).get("speaker")?.value;
+  const me = id ? await fetchSpeaker(Number(id)) : null;
+  const [talks, speakers] = await Promise.all([fetchTalks(), fetchSpeakers()]);
+
+  ...
+
+## npx next build (a plain build stops at the first failing route)
+
+Error: Route "/exercises/9/board": Next.js encountered uncached or runtime data during prerendering.
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at div (<anonymous>)
+    at body (<anonymous>)
+    at html (<anonymous>)
+To get a more detailed stack trace and pinpoint the issue, try one of the following:
+  - Start the app in development mode by running `next dev`, then open "/exercises/9/board" in your browser to investigate the error.
+  - Rerun the production build with `next build --debug-prerender` to generate better stack traces.
+Error occurred prerendering page "/exercises/9/board". Read more: https://nextjs.org/docs/messages/prerender-error
+Export encountered an error on /exercises/9/board/page: /exercises/9/board, exiting the build.
+⨯ Next.js build worker exited with code: 1 and signal: null
+
+## npx next build --debug-prerender (the frame points at the first runtime read: cookies(), line 5)
+
+Error: Route "/exercises/9/board": Next.js encountered uncached or runtime data during prerendering.
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at Board (app\exercises\9\board\page.tsx:5:28)
+  3 |
+  4 | export default async function Board() {
+> 5 |   const id = (await cookies()).get("speaker")?.value;
+    |                            ^
+  6 |   const me = id ? await fetchSpeaker(Number(id)) : null;
+  7 |   const [talks, speakers] = await Promise.all([fetchTalks(), fetchSpeakers()]);
+  8 |
+To debug the issue, start the app in development mode by running `next dev`, then open "/exercises/9/board" in your browser to investigate the error.
+Error occurred prerendering page "/exercises/9/board". Read more: https://nextjs.org/docs/messages/prerender-error
+
+## The terminal of next dev, GET /exercises/9/board (dev renders the page, status 200, and names the fetch)
+
+Error: Route "/exercises/9/board": Next.js encountered uncached data during prerendering.
+
+`fetch(...)` or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] Cache the data access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at read (.next/dev/server/chunks/ssr/...js:190:23)
+    at fetchSpeakers (.next/dev/server/chunks/ssr/...js:60:131)
+    at Board (app\exercises\9\board\page.tsx:7:75)
+   5 |   const id = (await cookies()).get("speaker")?.value;
+   6 |   const me = id ? await fetchSpeaker(Number(id)) : null;
+>  7 |   const [talks, speakers] = await Promise.all([fetchTalks(), fetchSpeakers()]);
+     |                                                                           ^
+   8 |
+   9 |   return (
+  10 |     <main className="space-y-6">

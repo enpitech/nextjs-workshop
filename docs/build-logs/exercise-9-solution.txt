@@ -1,0 +1,88 @@
+# Exercise 9: next build with the solution in place (Next.js 16.3.5, cacheComponents: true), 2026-10-07.
+# json-server up on port 3001 (--delay 800). Command: npx next build. Result: green, exit 0.
+# Part 1 is the final build of the repo (only app/exercises/9/solution/). Part 2 is the same build with a copy of
+# the solution at app/exercises/9/board/, the folder participants write, so the rows show the participant URLs.
+# Part 3 is what dev and next start showed for the mutations. The copy was deleted afterwards.
+
+## Part 1: the final build, rows for Exercise 9 and the legend
+
+▲ Next.js 16.3.5 (Turbopack)
+- Environments: .env.local
+✓ Running next.config.ts took 58ms
+- Cache Components enabled
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 2.2s
+  Running TypeScript ...
+  Finished TypeScript in 1928ms ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/76) ...
+  ...
+Route (app)                                       Revalidate  Expire
+├ ○ /exercises/9
+├ ○ /exercises/9/solution
+├ ◐ /exercises/9/solution/board                           1h      1d
+├ ƒ /exercises/9/solution/board/api/revalidate
+├ ○ /exercises/9/solution/board/api/talks                 1h      1d
+  ...
+ƒ Proxy (Middleware)
+
+○  (Static)             prerendered as static content
+◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
+ƒ  (Dynamic)            server-rendered on demand
+
+## Part 2: the same build with the solution copied to app/exercises/9/board/ (the participant URLs)
+
+Route (app)                                       Revalidate  Expire
+├ ○ /exercises/9
+├ ◐ /exercises/9/board                                    1h      1d
+├ ƒ /exercises/9/board/api/revalidate
+├ ○ /exercises/9/board/api/talks                          1h      1d
+├ ○ /exercises/9/solution
+├ ◐ /exercises/9/solution/board                           1h      1d
+├ ƒ /exercises/9/solution/board/api/revalidate
+├ ○ /exercises/9/solution/board/api/talks                 1h      1d
+
+# Part 2 ran with the first version of the webhook (tag in a JSON body). The final version reads ?tag=, and Part 1 shows it is ƒ too.
+# getTalks() uses cacheLife("hours") (revalidate 1h, expire 1d). getSpeakers() and getSpeaker() use "days" (1d, 1w).
+# The board row prints 1h 1d: the numbers of "hours", the shorter of the two lifetimes it reads.
+# After Task 3 alone (no greeting fix yet, no API routes), the build printed:
+#   ◐ /exercises/9/board                                    1h      1d
+
+## Part 3: mutations, checked with curl and Chrome against next dev and next start
+
+# next dev, /exercises/9/solution/board, after npm run reset (talk 1 = 12 votes, talk 2 = 8):
+#   First GET 1.19 s (two reads of 800 ms in parallel, plus compile). Next two GETs 0.056 s and 0.053 s (cache hit).
+#   Task 2/3 state (greeting calls the uncached fetchSpeaker), cookie speaker=2: "Signed in as Dan Cohen", 2.08 s, then 0.90 s again.
+#   Cookie speaker=2 (solution): the HTML streams "Signed in as Dan Cohen." First request 0.92 s (getSpeaker(2) misses), then 0.06 s.
+#   Vote on talk 1 (no-JS form POST with the $ACTION_ID field): the response and the next GET show 13. GET .../api/talks shows 13.
+#     json-server log after the vote: GET /talks/1, PATCH /talks/1, GET /talks. No GET /speakers.
+#   Vote in Chrome on talk 2 ("Reading the RSC payload"): 8 -> 9. Dev log: POST /exercises/9/solution/board 200 in 2.5s.
+#     json-server log: GET /talks/2, PATCH /talks/2, GET /talks. No GET /speakers.
+#   updateTag("talks") commented out: page 13, .../api/talks 13, database (localhost:3001/talks/1) 14.
+#   refresh() from next/cache instead of updateTag: page 14 before and after the vote, database 15.
+#   Webhook (final version, the tag in the query string), run under npm run dev after npm run reset:
+#     db.json edited by hand: speaker 1 renamed to "Noa Levi-Cohen". json-server (--watch) served the new name. Page still "Noa Levi".
+#     POST .../api/revalidate?tag=speakers -> 200 {"revalidated":"speakers"}.
+#     Reload 1 (0.056 s): "Noa Levi" (stale). The npm run dev terminal: [api] GET /speakers, in the background.
+#     Reload 2, 1.5 s later: "Noa Levi-Cohen".
+#     POST ?tag=votes -> 400 {"error":"Unknown tag: votes"}. POST with no tag -> 400 {"error":"Unknown tag: null"}.
+#     (An earlier version took {"tag": ...} as a JSON body and a PATCH to json-server. Same result: stale once, then fresh.)
+#   GET .../api/revalidate -> 405. DELETE .../api/talks -> 405.
+#   updateTag(tag) in the webhook instead of revalidateTag -> 500, text in docs/errors/exercise-9-updatetag-in-route-handler.txt.
+#
+# next start on the Part 2 build, /exercises/9/board:
+#   The shell showed the data from build time: talk 1 = 12 and "Noa Levi", while the database had 15 and "Noa Levi-Cohen".
+#   (JSON-body version of the webhook) POST {"tag":"speakers"}: reload 1 still 12 and "Noa Levi" (stale). Reload 2 (1.5 s later): 15 and
+#   "Noa Levi-Cohen". json-server: GET /talks, GET /speakers, GET /talks. The re-render read the talks again too.
+#   Vote on talk 4 (form POST, 2.56 s): the next GET and .../api/talks show 6 (was 5).
+#
+# Stretch 3, proxy (root proxy.ts edited in dev, then restored with git checkout proxy.ts):
+#   With "/exercises/9/scoreboard" in the matcher: GET /exercises/9/scoreboard -> 307 to /exercises/9/board. /admin -> 307 to /.
+#   Without it in the matcher: GET /exercises/9/scoreboard -> 404. No error in dev.
+#
+# The final build ran while npm run dev was up, after app/exercises/9/board/ was deleted and dev had rewritten its route types.
+# Reset trap: after deleting app/exercises/9/board/ (with no next dev running), next build failed:
+#   .next/dev/types/validator.ts(539,39): error TS2307: Cannot find module '../../../app/exercises/9/board/page.js' or its corresponding type declarations.
+#   Start npm run dev once (it rewrites the route types), then the build is green again.
+# next build while next dev runs on port 3000: green, and dev still served the board.

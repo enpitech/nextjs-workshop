@@ -1,0 +1,58 @@
+# Exercise 9, Task 4, the wrong way: cookies() inside a "use cache" function. The Greeting that calls it is inside <Suspense>.
+# Captured 2026-10-07 with Next.js 16.3.5, cacheComponents: true. The <Suspense> does not help: the build still fails.
+
+## board/data.ts (the function that breaks the rule)
+
+export async function getMe() {
+  "use cache";
+  cacheLife("days");
+  const id = (await cookies()).get("speaker")?.value;
+  return id ? fetchSpeaker(Number(id)) : null;
+}
+
+## board/greeting.tsx
+
+import { getMe } from "./data";
+
+export async function Greeting() {
+  const me = await getMe();
+  return <p>Signed in as {me ? me.name : "a guest"}.</p>;
+}
+
+## npx next build
+
+⨯ Error: Route /exercises/9/board used `cookies()` inside "use cache". Accessing Dynamic data sources inside a cache scope is not supported. If you need this data inside a cached function use `cookies()` outside of the cached function and pass the required dynamic data in as an argument. See more info here: https://nextjs.org/docs/messages/next-request-in-use-cache
+    at l (app\exercises\9\board\data.ts:20:21)
+  18 |   "use cache";
+  19 |   cacheLife("days");
+> 20 |   const id = (await cookies()).get("speaker")?.value;
+     |                     ^
+  21 |   return id ? fetchSpeaker(Number(id)) : null;
+  22 | }
+  23 | {
+  digest: '4273675403@E831'
+}
+Error: Route /exercises/9/board used `cookies()` inside "use cache". Accessing Dynamic data sources inside a cache scope is not supported. If you need this data inside a cached function use `cookies()` outside of the cached function and pass the required dynamic data in as an argument. See more info here: https://nextjs.org/docs/messages/next-request-in-use-cache
+    at l (app\exercises\9\board\data.ts:20:21)
+To get a more detailed stack trace and pinpoint the issue, try one of the following:
+  - Start the app in development mode by running `next dev`, then open "/exercises/9/board" in your browser to investigate the error.
+  - Rerun the production build with `next build --debug-prerender` to generate better stack traces.
+Error occurred prerendering page "/exercises/9/board". Read more: https://nextjs.org/docs/messages/prerender-error
+Export encountered an error on /exercises/9/board/page: /exercises/9/board, exiting the build.
+⨯ Next.js build worker exited with code: 1 and signal: null
+
+## The terminal of next dev, GET /exercises/9/board (status 200, the error is printed)
+
+⨯ Error: Route /exercises/9/board used `cookies()` inside "use cache". Accessing Dynamic data sources inside a cache scope is not supported. If you need this data inside a cached function use `cookies()` outside of the cached function and pass the required dynamic data in as an argument. See more info here: https://nextjs.org/docs/messages/next-request-in-use-cache
+    at getMe (app\exercises\9\board\data.ts:20:28)
+  18 |   "use cache";
+  19 |   cacheLife("days");
+> 20 |   const id = (await cookies()).get("speaker")?.value;
+     |                            ^
+  21 |   return id ? fetchSpeaker(Number(id)) : null;
+  22 | }
+  23 | {
+  environmentName: 'Cache',
+  digest: '2696773803@E831'
+}
+ GET /exercises/9/board 200 in 1390ms (next.js: 339ms, application-code: 1051ms)

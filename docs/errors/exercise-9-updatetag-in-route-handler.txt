@@ -1,0 +1,13 @@
+# Exercise 9, Stretch 2: updateTag() in the webhook Route Handler instead of revalidateTag().
+# Captured 2026-10-07 in next dev with Next.js 16.3.5. curl -X POST .../api/revalidate -d '{"tag":"speakers"}' answered 500.
+
+⨯ Error: updateTag can only be called from within a Server Action. To invalidate cache tags in Route Handlers or other contexts, use revalidateTag instead. See more info here: https://nextjs.org/docs/app/api-reference/functions/updateTag
+    at POST (app\exercises\9\solution\board\api\revalidate\route.ts:15:12)
+  13 |   }
+  14 |   // "max": the next reader gets the old value at once, and a fresh read runs in the background.
+> 15 |   updateTag(tag);
+     |            ^
+  16 |   return Response.json({ revalidated: tag });
+  17 | }
+  18 |
+ POST /exercises/9/solution/board/api/revalidate 500 in 150ms (next.js: 29ms, application-code: 121ms)
