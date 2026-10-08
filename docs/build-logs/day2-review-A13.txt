@@ -1,0 +1,24 @@
+# day2-review-A13, real run on 2026-10-07, Next 16.3.5 `npx next dev -p 3000` + `npm run api` (json-server, --delay 800), Node 22.
+# db.json reset from db.seed.json first (talk 2 = 8 votes). Votes were sent the way the eve tool does it:
+#   POST /api/talks/vote {"id":2}  (app/api/talks/vote/route.ts: addVote, then revalidateTag("talks","max") and revalidateTag("talk-2","max")).
+# The count on /talks/2 was read from the HTML of curl http://localhost:3000/talks/2 (the RSC data in the page: children:[N," votes"]).
+# Every GET is a fresh request (new curl, no browser cache).
+#
+# CASE A, warm cache (/talks/2 loaded twice before the vote):
+#   GET /talks/2 -> 8        GET /talks/2 -> 8        DB talk 2 = 8
+#   POST /api/talks/vote  -> {"id":2,...,"votes":9}    DB talk 2 = 9
+#   GET /talks/2 (first load after the vote)           -> 8   STALE
+#   GET /talks/2 (second, a moment later)              -> 8   STALE (the refresh was still running: json-server delay is 800 ms)
+#   GET /talks/2 (after 3 more seconds)                -> 9   fresh
+# CASE B, cold cache (dev server restarted, /talks/2 never loaded; talk 2 at 9 in DB):
+#   POST /api/talks/vote  -> {"id":2,...,"votes":10}
+#   GET /talks/2 (first load)                          -> 10  fresh
+#   GET /talks/2                                       -> 10  fresh
+# RESULT: the first load is stale (the old count) if /talks/2 was opened before the vote, and fresh if it was not.
+# Both match revalidateTag(tag, "max") = stale-while-revalidate, §12f. The page text "Open /talks/2. It shows 9." holds only for a cold entry.
+# Tool used: curl (not Chrome).
+#
+# dev server log, case B (excerpt):
+#  POST /api/talks/vote 200 in 2.2s
+#  GET /talks/2 200 in 3.5s
+#  GET /talks/2 200 in 87ms

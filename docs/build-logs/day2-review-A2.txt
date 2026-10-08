@@ -1,0 +1,634 @@
+# day2-review-A2, real run on 2026-10-07, Next 16.3.5, json-server on 3001. All edits reverted afterwards.
+# Edit applied exactly as the agent made it (docs/agent-runs/2.7e-fable-no-block.stream.jsonl, Edit new_string),
+# ported from lib/db.ts to getTalks() in lib/talks.ts:
+#   -  cacheLife("minutes");
+#   +  // 60 seconds: a client keeps the entry for 60s, the server refreshes it after 60s,
+#   +  // and nothing older than 60s is served. updateTag("talks") in app/actions.ts clears it early.
+#   +  cacheLife({ stale: 60, revalidate: 60, expire: 60 });
+#
+# RESULT 1: `next build` FAILS (exit 1). The first failing route in a plain build is /breaks/1/fixed ("exiting the build").
+#   With --debug-prerender, 13 routes fail, / among them: / /breaks/1/fixed /breaks/10/broken /breaks/10/fixed /breaks/8/broken
+#   /breaks/8/fixed /exercises/1/solution /exercises/10/solution/top /exercises/4/solution /exercises/5 /exercises/5/solution
+#   /exercises/8/solution/dashboard /exercises/8/solution/dashboard/talks. Every route that awaits getTalks() at the top.
+#   Error on /: "Route "/": Next.js encountered uncached or runtime data during prerendering." ([stream] [cache] [block] block).
+#   The type check passes (the agent's tsc was right); only the build fails. Cause: expire 60 is under the 300 s minimum
+#   (MIN_PRERENDERABLE_EXPIRE = 300, node_modules/next/dist/server/use-cache/constants.js:28), so the entry is a dynamic hole.
+# RESULT 2: smallest correct version, expire: 300 (rest unchanged): `next build` exit 0. Rows: / ○ 1m 5m, /breaks/1/fixed ○ 1m 5m,
+#   /exercises/1/solution ○ 1m 5m, /exercises/5 ○ 1m 5m. Note: the agent's comment "nothing older than 60s is served" is then wrong.
+# RESULT 3: alternative, keep expire: 60 and wrap {children} in app/layout.tsx with <Suspense>: `next build` exit 0.
+#   Rows: / ◐, /breaks/1/fixed ◐, /exercises/1/solution ◐. The whole page is behind the fallback, so it works but is a poor fix.
+#   (8 "Unexpected cache miss after cache warming phase" messages are printed but the build passes.)
+#
+# ===== RUN 1: plain next build with expire: 60 (exit 1) =====
+▲ Next.js 16.3.5 (Turbopack)
+- Environments: .env.local
+✓ Running next.config.ts took 53ms
+- Cache Components enabled
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 2.8s
+  Running TypeScript ...
+  Finished TypeScript in 3.9s ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/76) ...
+SecretCard ran in the server. Key starts with dang
+Error: Route "/breaks/1/fixed": Next.js encountered uncached or runtime data during prerendering.
+
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at div (<anonymous>)
+    at body (<anonymous>)
+    at html (<anonymous>)
+To get a more detailed stack trace and pinpoint the issue, try one of the following:
+  - Start the app in development mode by running `next dev`, then open "/breaks/1/fixed" in your browser to investigate the error.
+  - Rerun the production build with `next build --debug-prerender` to generate better stack traces.
+Error occurred prerendering page "/breaks/1/fixed". Read more: https://nextjs.org/docs/messages/prerender-error
+Export encountered an error on /breaks/1/fixed/page: /breaks/1/fixed, exiting the build.
+⨯ Next.js build worker exited with code: 1 and signal: null
+
+# ===== RUN 2: next build --debug-prerender with expire: 60 (exit 1), error blocks only =====
+⚠ Prerendering is running in debug mode with NODE_ENV='development'. This will affect performance and should not be used for production.
+▲ Next.js 16.3.5 (Turbopack)
+- Environments: .env.local
+✓ Running next.config.ts took 63ms
+- Cache Components enabled
+- Experiments (use with caution):
+  ✓ allowDevelopmentBuild (enabled by `--debug-prerender`)
+  ⨯ prerenderEarlyExit (disabled by `--debug-prerender`)
+  ✓ serverSourceMaps (enabled by `--debug-prerender`)
+  ⨯ turbopackMinify (disabled by `--debug-prerender`)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 4.2s
+  Running TypeScript ...
+  Finished TypeScript in 2.4s ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/76) ...
+SecretCard ran in the server. Key starts with dang
+Error: Route "/breaks/1/fixed": Next.js encountered uncached or runtime data during prerendering.
+
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at Fixed (app\breaks\1\fixed\page.tsx:7:31)
+   5 |
+   6 | export default async function Fixed() {
+>  7 |   const talks = await getTalks();
+     |                               ^
+   8 |   return (
+   9 |     <main>
+  10 |       <h1 className="mb-4 text-2xl font-bold">Break #1: fixed</h1>
+To debug the issue, start the app in development mode by running `next dev`, then open "/breaks/1/fixed" in your browser to investigate the error.
+Error occurred prerendering page "/breaks/1/fixed". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/exercises/5": Next.js encountered uncached or runtime data during prerendering.
+
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at Exercise5 (app\exercises\5\page.tsx:6:31)
+  4 |
+  5 | export default async function Exercise5() {
+> 6 |   const talks = await getTalks();
+    |                               ^
+  7 |   return (
+  8 |     <main>
+  9 |       <h1 className="mb-4 text-2xl font-bold">Exercise 5</h1>
+To debug the issue, start the app in development mode by running `next dev`, then open "/exercises/5" in your browser to investigate the error.
+Error occurred prerendering page "/exercises/5". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/exercises/4/solution": Next.js encountered uncached or runtime data during prerendering.
+
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at Solution4 (app\exercises\4\solution\page.tsx:8:31)
+   6 |
+   7 | export default async function Solution4() {
+>  8 |   const talks = await getTalks();
+     |                               ^
+   9 |   return (
+  10 |     <main>
+  11 |       <h1 className="mb-4 text-2xl font-bold">Exercise 4: solution</h1>
+To debug the issue, start the app in development mode by running `next dev`, then open "/exercises/4/solution" in your browser to investigate the error.
+Error occurred prerendering page "/exercises/4/solution". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/breaks/8/fixed": Next.js encountered uncached or runtime data during prerendering.
+
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at Talks (app\breaks\8\talks.tsx:7:31)
+    at Page (app\breaks\8\fixed\page.tsx:6:10)
+   5 |
+   6 | export async function Talks({ title }: { title: string }) {
+>  7 |   const talks = await getTalks();
+     |                               ^
+   8 |   return (
+   9 |     <section className="panel grid gap-3 p-5">
+  10 |       <h1 className="text-2xl font-bold">{title}</h1>
+To debug the issue, start the app in development mode by running `next dev`, then open "/breaks/8/fixed" in your browser to investigate the error.
+Error occurred prerendering page "/breaks/8/fixed". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/breaks/8/broken": Next.js encountered uncached or runtime data during prerendering.
+
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at Talks (app\breaks\8\talks.tsx:7:31)
+    at Page (app\breaks\8\broken\page.tsx:6:10)
+   5 |
+   6 | export async function Talks({ title }: { title: string }) {
+>  7 |   const talks = await getTalks();
+     |                               ^
+   8 |   return (
+   9 |     <section className="panel grid gap-3 p-5">
+  10 |       <h1 className="text-2xl font-bold">{title}</h1>
+To debug the issue, start the app in development mode by running `next dev`, then open "/breaks/8/broken" in your browser to investigate the error.
+Error occurred prerendering page "/breaks/8/broken". Read more: https://nextjs.org/docs/messages/prerender-error
+SecretCard ran in the server. Key starts with dang
+  Generating static pages using 19 workers (19/76) 
+Error: Route "/exercises/8/solution/dashboard/talks": Next.js encountered uncached or runtime data during prerendering.
+
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at TalksPage (app\exercises\8\solution\dashboard\talks\page.tsx:10:31)
+   8 |
+   9 | export default async function TalksPage() {
+> 10 |   const talks = await getTalks();
+     |                               ^
+  11 |   return <TalkTable talks={talks} />;
+  12 | }
+  13 |
+To debug the issue, start the app in development mode by running `next dev`, then open "/exercises/8/solution/dashboard/talks" in your browser to investigate the error.
+Error occurred prerendering page "/exercises/8/solution/dashboard/talks". Read more: https://nextjs.org/docs/messages/prerender-error
+SecretCard ran in the server. Key starts with dang
+Error: Unexpected cache miss after cache warming phase during prerendering. This is likely caused by non-deterministic arguments that differ between the cache warming phase and the final prerender phase (e.g. unstable array order). Ensure that arguments passed to cached functions are deterministic.
+    at async Page (app\breaks\10\broken\page.tsx:8:17)
+   6 |
+   7 | export default async function Page() {
+>  8 |   const talks = await getTalks();
+     |                 ^
+   9 |   return (
+  10 |     <main className="grid gap-4">
+  11 |       <h1 className="text-2xl font-bold">Break #10: broken</h1>
+Error: Unexpected cache miss after cache warming phase during prerendering. This is likely caused by non-deterministic arguments that differ between the cache warming phase and the final prerender phase (e.g. unstable array order). Ensure that arguments passed to cached functions are deterministic.
+    at async Page (app\breaks\10\fixed\page.tsx:7:17)
+   5 |
+   6 | export default async function Page() {
+>  7 |   const talks = await getTalks();
+     |                 ^
+   8 |   return (
+   9 |     <main className="grid gap-4">
+  10 |       <h1 className="text-2xl font-bold">Break #10: fixed</h1>
+Error: Unexpected cache miss after cache warming phase during prerendering. This is likely caused by non-deterministic arguments that differ between the cache warming phase and the final prerender phase (e.g. unstable array order). Ensure that arguments passed to cached functions are deterministic.
+    at async Solution5 (app\exercises\5\solution\page.tsx:6:17)
+  4 |
+  5 | export default async function Solution5() {
+> 6 |   const talks = await getTalks();
+    |                 ^
+  7 |   return (
+  8 |     <main>
+  9 |       <h1 className="mb-4 text-2xl font-bold">Exercise 5: solution</h1>
+SecretCard ran in the server. Key starts with dang
+Error: Route "/breaks/10/broken": Next.js encountered uncached or runtime data during prerendering.
+
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at Page (app\breaks\10\broken\page.tsx:8:31)
+   6 |
+   7 | export default async function Page() {
+>  8 |   const talks = await getTalks();
+     |                               ^
+   9 |   return (
+  10 |     <main className="grid gap-4">
+  11 |       <h1 className="text-2xl font-bold">Break #10: broken</h1>
+To debug the issue, start the app in development mode by running `next dev`, then open "/breaks/10/broken" in your browser to investigate the error.
+Error occurred prerendering page "/breaks/10/broken". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Unexpected cache miss after cache warming phase during prerendering. This is likely caused by non-deterministic arguments that differ between the cache warming phase and the final prerender phase (e.g. unstable array order). Ensure that arguments passed to cached functions are deterministic.
+    at async Home (app\page.tsx:8:17)
+   6 | // Server Component. It runs on the server, awaits data, and ships no JS.
+   7 | export default async function Home() {
+>  8 |   const talks = await getTalks();
+     |                 ^
+   9 |   return (
+  10 |     <main>
+  11 |       <PageHeader eyebrow="Program" title="Talks">
+Error: Unexpected cache miss after cache warming phase during prerendering. This is likely caused by non-deterministic arguments that differ between the cache warming phase and the final prerender phase (e.g. unstable array order). Ensure that arguments passed to cached functions are deterministic.
+    at async Solution1 (app\exercises\1\solution\page.tsx:8:17)
+   6 |
+   7 | export default async function Solution1() {
+>  8 |   const talks = await getTalks();
+     |                 ^
+   9 |
+  10 |   async function onVote(id: number) {
+  11 |     "use server";
+Error: Route "/breaks/10/fixed": Next.js encountered uncached or runtime data during prerendering.
+
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at Page (app\breaks\10\fixed\page.tsx:7:31)
+   5 |
+   6 | export default async function Page() {
+>  7 |   const talks = await getTalks();
+     |                               ^
+   8 |   return (
+   9 |     <main className="grid gap-4">
+  10 |       <h1 className="text-2xl font-bold">Break #10: fixed</h1>
+To debug the issue, start the app in development mode by running `next dev`, then open "/breaks/10/fixed" in your browser to investigate the error.
+Error occurred prerendering page "/breaks/10/fixed". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Unexpected cache miss after cache warming phase during prerendering. This is likely caused by non-deterministic arguments that differ between the cache warming phase and the final prerender phase (e.g. unstable array order). Ensure that arguments passed to cached functions are deterministic.
+    at ignore-listed frames
+Error: Route "/exercises/5/solution": Next.js encountered uncached or runtime data during prerendering.
+
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at Solution5 (app\exercises\5\solution\page.tsx:6:31)
+  4 |
+  5 | export default async function Solution5() {
+> 6 |   const talks = await getTalks();
+    |                               ^
+  7 |   return (
+  8 |     <main>
+  9 |       <h1 className="mb-4 text-2xl font-bold">Exercise 5: solution</h1>
+To debug the issue, start the app in development mode by running `next dev`, then open "/exercises/5/solution" in your browser to investigate the error.
+Error occurred prerendering page "/exercises/5/solution". Read more: https://nextjs.org/docs/messages/prerender-error
+  Generating static pages using 19 workers (38/76) 
+Error: Route "/": Next.js encountered uncached or runtime data during prerendering.
+
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at Home (app\page.tsx:8:31)
+   6 | // Server Component. It runs on the server, awaits data, and ships no JS.
+   7 | export default async function Home() {
+>  8 |   const talks = await getTalks();
+     |                               ^
+   9 |   return (
+  10 |     <main>
+  11 |       <PageHeader eyebrow="Program" title="Talks">
+To debug the issue, start the app in development mode by running `next dev`, then open "/" in your browser to investigate the error.
+Error occurred prerendering page "/". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/exercises/1/solution": Next.js encountered uncached or runtime data during prerendering.
+
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at Solution1 (app\exercises\1\solution\page.tsx:8:31)
+   6 |
+   7 | export default async function Solution1() {
+>  8 |   const talks = await getTalks();
+     |                               ^
+   9 |
+  10 |   async function onVote(id: number) {
+  11 |     "use server";
+To debug the issue, start the app in development mode by running `next dev`, then open "/exercises/1/solution" in your browser to investigate the error.
+Error occurred prerendering page "/exercises/1/solution". Read more: https://nextjs.org/docs/messages/prerender-error
+  Generating static pages using 19 workers (57/76) 
+Error: Unexpected cache miss after cache warming phase during prerendering. This is likely caused by non-deterministic arguments that differ between the cache warming phase and the final prerender phase (e.g. unstable array order). Ensure that arguments passed to cached functions are deterministic.
+    at async Overview (app\exercises\8\solution\dashboard\page.tsx:10:29)
+   8 | export default async function Overview() {
+   9 |   // The two reads do not need each other, so they start together.
+> 10 |   const [talks, speakers] = await Promise.all([getTalks(), getSpeakers()]);
+     |                             ^
+  11 |
+  12 |   const votes = talks.reduce((sum, t) => sum + t.votes, 0);
+  13 |   const top = [...talks].sort((a, b) => b.votes - a.votes)[0];
+Error: Route "/exercises/8/solution/dashboard": Next.js encountered uncached or runtime data during prerendering.
+
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at Promise.then (<anonymous>:1:21)
+    at Function.all (<anonymous>:1:21)
+    at Overview (app\exercises\8\solution\dashboard\page.tsx:10:43)
+   8 | export default async function Overview() {
+   9 |   // The two reads do not need each other, so they start together.
+> 10 |   const [talks, speakers] = await Promise.all([getTalks(), getSpeakers()]);
+     |                                           ^
+  11 |
+  12 |   const votes = talks.reduce((sum, t) => sum + t.votes, 0);
+  13 |   const top = [...talks].sort((a, b) => b.votes - a.votes)[0];
+To debug the issue, start the app in development mode by running `next dev`, then open "/exercises/8/solution/dashboard" in your browser to investigate the error.
+Error occurred prerendering page "/exercises/8/solution/dashboard". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Unexpected cache miss after cache warming phase during prerendering. This is likely caused by non-deterministic arguments that differ between the cache warming phase and the final prerender phase (e.g. unstable array order). Ensure that arguments passed to cached functions are deterministic.
+    at async TopTalks (app\exercises\10\solution\top\page.tsx:10:17)
+   8 |
+   9 | export default async function TopTalks() {
+> 10 |   const talks = await getTalks();
+     |                 ^
+  11 |   // Sort a copy. The array from getTalks() stays as it came.
+  12 |   const sorted = [...talks].sort((a, b) => b.votes - a.votes);
+  13 |
+Error: Route "/exercises/10/solution/top": Next.js encountered uncached or runtime data during prerendering.
+
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at TopTalks (app\exercises\10\solution\top\page.tsx:10:31)
+   8 |
+   9 | export default async function TopTalks() {
+> 10 |   const talks = await getTalks();
+     |                               ^
+  11 |   // Sort a copy. The array from getTalks() stays as it came.
+  12 |   const sorted = [...talks].sort((a, b) => b.votes - a.votes);
+  13 |
+To debug the issue, start the app in development mode by running `next dev`, then open "/exercises/10/solution/top" in your browser to investigate the error.
+Error occurred prerendering page "/exercises/10/solution/top". Read more: https://nextjs.org/docs/messages/prerender-error
+
+> Export encountered errors on 13 paths:
+	/breaks/1/fixed/page: /breaks/1/fixed
+	/breaks/10/broken/page: /breaks/10/broken
+	/breaks/10/fixed/page: /breaks/10/fixed
+	/breaks/8/broken/page: /breaks/8/broken
+	/breaks/8/fixed/page: /breaks/8/fixed
+	/exercises/1/solution/page: /exercises/1/solution
+	/exercises/10/solution/top/page: /exercises/10/solution/top
+	/exercises/4/solution/page: /exercises/4/solution
+	/exercises/5/page: /exercises/5
+	/exercises/5/solution/page: /exercises/5/solution
+	/exercises/8/solution/dashboard/page: /exercises/8/solution/dashboard
+	/exercises/8/solution/dashboard/talks/page: /exercises/8/solution/dashboard/talks
+	/page: /
+
+# ===== RUN 3: next build with expire: 300 (exit 0) =====
+▲ Next.js 16.3.5 (Turbopack)
+- Environments: .env.local
+✓ Running next.config.ts took 57ms
+- Cache Components enabled
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 4.5s
+  Running TypeScript ...
+  Finished TypeScript in 2.3s ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/76) ...
+SecretCard ran in the server. Key starts with dang
+  Generating static pages using 19 workers (19/76) 
+SecretCard ran in the server. Key starts with dang
+SecretCard ran in the server. Key starts with dang
+SecretCard ran in the server. Key starts with dang
+  Generating static pages using 19 workers (38/76) 
+  Generating static pages using 19 workers (57/76) 
+✓ Generating static pages using 19 workers (76/76) in 960ms
+  Finalizing page optimization ...
+
+Route (app)                                       Revalidate  Expire
+┌ ○ /                                                     1m      5m
+├ ○ /_not-found
+├ ○ /agent
+├ ○ /api/talks                                            1m      5m
+├ ƒ /api/talks/[id]
+├ ƒ /api/talks/search
+├ ƒ /api/talks/vote
+├ ○ /breaks
+├ ◐ /breaks/1/broken
+├ ○ /breaks/1/fixed                                       1m      5m
+├ ○ /breaks/10/broken                                     1m      5m
+├ ○ /breaks/10/fixed                                      1m      5m
+├ ○ /breaks/2/broken
+├ ○ /breaks/2/fixed
+├ ƒ /breaks/3/broken/a
+├ ƒ /breaks/3/broken/b
+├ ◐ /breaks/3/fixed/a
+├ ◐ /breaks/3/fixed/b
+├ ◐ /breaks/4/broken
+├ ◐ /breaks/4/fixed
+├ ○ /breaks/5/broken                                      1m      1h
+├ ○ /breaks/5/fixed                                       1m      1h
+├ ◐ /breaks/6/broken
+├ ○ /breaks/6/fixed
+├ ○ /breaks/7/broken
+├ ○ /breaks/7/fixed
+├ ○ /breaks/8/broken                                      1m      5m
+├ ○ /breaks/8/fixed                                       1m      5m
+├ ○ /breaks/9/broken
+├ ○ /breaks/9/fixed
+├ ○ /exercises
+├ ○ /exercises/0
+├ ○ /exercises/0/solution
+├ ○ /exercises/0/solution/speakers                        1h      1d
+├   /exercises/0/solution/speakers/[id]                   1h      1d
+│ └ ◐ /exercises/0/solution/speakers/[id]                 1h      1d
+├ ◐ /exercises/1
+├ ○ /exercises/1/solution                                 1m      5m
+├ ○ /exercises/10
+├ ○ /exercises/10/solution
+├ ○ /exercises/10/solution/top                            1m      5m
+├ ○ /exercises/2                                          1m      1h
+├ ○ /exercises/2/solution                                 1m      1h
+├ ◐ /exercises/3
+├ ◐ /exercises/3/solution
+├ ◐ /exercises/4
+├ ○ /exercises/4/solution                                 1m      5m
+├ ○ /exercises/5                                          1m      5m
+├   /exercises/5/[id]
+│ └ ◐ /exercises/5/[id]
+├ ○ /exercises/5/solution                                 1m      5m
+├   /exercises/5/solution/[id]
+│ └ ◐ /exercises/5/solution/[id]
+├ ○ /exercises/6
+├ ƒ /exercises/6/api/speakers/[id]
+├ ○ /exercises/6/solution
+├ ƒ /exercises/6/solution/api/speakers/[id]
+├ ○ /exercises/7
+├   /exercises/7/[id]
+│ └ ◐ /exercises/7/[id]
+├ ○ /exercises/7/solution
+├   /exercises/7/solution/[id]
+│ └ ◐ /exercises/7/solution/[id]
+├ ○ /exercises/8
+├ ○ /exercises/8/solution
+├ ○ /exercises/8/solution/dashboard                       1m      5m
+├ ƒ /exercises/8/solution/dashboard/api/talks
+├ ○ /exercises/8/solution/dashboard/talks                 1m      5m
+├   /exercises/8/solution/dashboard/talks/[id]
+│ └ ◐ /exercises/8/solution/dashboard/talks/[id]
+├ ○ /exercises/8/solution/dashboard/votes
+├ ○ /exercises/9
+├ ○ /exercises/9/solution
+├ ◐ /exercises/9/solution/board                           1h      1d
+├ ƒ /exercises/9/solution/board/api/revalidate
+├ ○ /exercises/9/solution/board/api/talks                 1h      1d
+├ ○ /search
+├ ○ /spa
+├ ◐ /spa/query
+├ ○ /spa/use                                              1m      5m
+├ ○ /submit                                               1h      1d
+├ ○ /talks
+└   /talks/[id]
+  └ ◐ /talks/[id]
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)             prerendered as static content
+◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
+ƒ  (Dynamic)            server-rendered on demand
+
+
+# ===== RUN 4: next build with expire: 60 plus <Suspense> around children in app/layout.tsx (exit 0), route table only =====
+Route (app)                                       Revalidate  Expire
+┌ ◐ /
+├ ○ /_not-found
+├ ○ /agent
+├ ƒ /api/talks
+├ ƒ /api/talks/[id]
+├ ƒ /api/talks/search
+├ ƒ /api/talks/vote
+├ ○ /breaks
+├ ◐ /breaks/1/broken
+├ ◐ /breaks/1/fixed
+├ ◐ /breaks/10/broken
+├ ◐ /breaks/10/fixed
+├ ○ /breaks/2/broken
+├ ○ /breaks/2/fixed
+├ ◐ /breaks/3/broken/a
+├ ◐ /breaks/3/broken/b
+├ ◐ /breaks/3/fixed/a
+├ ◐ /breaks/3/fixed/b
+├ ◐ /breaks/4/broken
+├ ◐ /breaks/4/fixed
+├ ○ /breaks/5/broken                                      1m      1h
+├ ○ /breaks/5/fixed                                       1m      1h
+├ ◐ /breaks/6/broken
+├ ○ /breaks/6/fixed
+├ ○ /breaks/7/broken
+├ ○ /breaks/7/fixed
+├ ◐ /breaks/8/broken
+├ ◐ /breaks/8/fixed
+├ ○ /breaks/9/broken
+├ ○ /breaks/9/fixed
+├ ○ /exercises
+├ ○ /exercises/0
+├ ○ /exercises/0/solution
+├ ○ /exercises/0/solution/speakers                        1h      1d
+├   /exercises/0/solution/speakers/[id]                   1h      1d
+│ └ ◐ /exercises/0/solution/speakers/[id]                 1h      1d
+├ ◐ /exercises/1
+├ ◐ /exercises/1/solution
+├ ○ /exercises/10
+├ ○ /exercises/10/solution
+├ ◐ /exercises/10/solution/top
+├ ○ /exercises/2                                          1m      1h
+├ ○ /exercises/2/solution                                 1m      1h
+├ ◐ /exercises/3
+├ ◐ /exercises/3/solution
+├ ◐ /exercises/4
+├ ◐ /exercises/4/solution
+├ ◐ /exercises/5
+├   /exercises/5/[id]
+│ └ ◐ /exercises/5/[id]
+├ ◐ /exercises/5/solution
+├   /exercises/5/solution/[id]
+│ └ ◐ /exercises/5/solution/[id]
+├ ○ /exercises/6
+├ ƒ /exercises/6/api/speakers/[id]
+├ ○ /exercises/6/solution
+├ ƒ /exercises/6/solution/api/speakers/[id]
+├ ○ /exercises/7
+├   /exercises/7/[id]
+│ └ ◐ /exercises/7/[id]
+├ ○ /exercises/7/solution
+├   /exercises/7/solution/[id]
+│ └ ◐ /exercises/7/solution/[id]
+├ ○ /exercises/8
+├ ○ /exercises/8/solution
+├ ◐ /exercises/8/solution/dashboard                       1h      1d
+├ ƒ /exercises/8/solution/dashboard/api/talks
+├ ◐ /exercises/8/solution/dashboard/talks
+├   /exercises/8/solution/dashboard/talks/[id]
+│ └ ◐ /exercises/8/solution/dashboard/talks/[id]
+├ ○ /exercises/8/solution/dashboard/votes
+├ ○ /exercises/9
+├ ○ /exercises/9/solution
+├ ◐ /exercises/9/solution/board                           1h      1d
+├ ƒ /exercises/9/solution/board/api/revalidate
+├ ○ /exercises/9/solution/board/api/talks                 1h      1d
+├ ○ /search
+├ ○ /spa
+├ ◐ /spa/query
+├ ◐ /spa/use
+├ ○ /submit                                               1h      1d
+├ ○ /talks
+└   /talks/[id]
+  └ ◐ /talks/[id]
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)             prerendered as static content
+◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
+ƒ  (Dynamic)            server-rendered on demand
+

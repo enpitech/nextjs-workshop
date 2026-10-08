@@ -1,0 +1,129 @@
+# day2-review-A20, real run on 2026-10-07, Next 16.3.5, plain next build (exit 0). Temp files deleted afterwards.
+# The Haiku 2.7c page (docs/agent-runs/2.7c-haiku-no-block.md:300-372) was rebuilt: app/speakers/page.tsx with the transcript's
+# code, a "use client" BackButton with useRouter from next/navigation, and getSpeakers() with "use cache", cacheLife("minutes"),
+# cacheTag("speakers") (put in a temp lib file, because today lib/db.ts is lib/talks.ts + lib/speakers.ts).
+# RESULT: /speakers is ○ (Static), Revalidate 1m, Expire 1h. No error, no warning.
+# Second variant, same page using the repo's own getSpeakers() (cacheLife("hours")): /tmp-speakers-hours is ○, 1h 1d.
+# On a clean repo there is no /speakers route at all; the row exists only after the Haiku diff is applied.
+
+├ ○ /exercises/0/solution/speakers                        1h      1d
+├ ○ /speakers                                             1m      1h
+└ ○ /tmp-speakers-hours                                   1h      1d
+
+# ---- full output ----
+▲ Next.js 16.3.5 (Turbopack)
+- Environments: .env.local
+✓ Running next.config.ts took 51ms
+- Cache Components enabled
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 3.4s
+  Running TypeScript ...
+  Finished TypeScript in 3.9s ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/78) ...
+SecretCard ran in the server. Key starts with dang
+SecretCard ran in the server. Key starts with dang
+SecretCard ran in the server. Key starts with dang
+  Generating static pages using 19 workers (19/78) 
+SecretCard ran in the server. Key starts with dang
+  Generating static pages using 19 workers (38/78) 
+  Generating static pages using 19 workers (58/78) 
+✓ Generating static pages using 19 workers (78/78) in 928ms
+  Finalizing page optimization ...
+
+Route (app)                                       Revalidate  Expire
+┌ ○ /                                                     1m      1h
+├ ○ /_not-found
+├ ○ /agent
+├ ○ /api/talks                                            1m      1h
+├ ƒ /api/talks/[id]
+├ ƒ /api/talks/search
+├ ƒ /api/talks/vote
+├ ○ /breaks
+├ ◐ /breaks/1/broken
+├ ○ /breaks/1/fixed                                       1m      1h
+├ ○ /breaks/10/broken                                     1m      1h
+├ ○ /breaks/10/fixed                                      1m      1h
+├ ○ /breaks/2/broken
+├ ○ /breaks/2/fixed
+├ ƒ /breaks/3/broken/a
+├ ƒ /breaks/3/broken/b
+├ ◐ /breaks/3/fixed/a
+├ ◐ /breaks/3/fixed/b
+├ ◐ /breaks/4/broken
+├ ◐ /breaks/4/fixed
+├ ○ /breaks/5/broken                                      1m      1h
+├ ○ /breaks/5/fixed                                       1m      1h
+├ ◐ /breaks/6/broken
+├ ○ /breaks/6/fixed
+├ ○ /breaks/7/broken
+├ ○ /breaks/7/fixed
+├ ○ /breaks/8/broken                                      1m      1h
+├ ○ /breaks/8/fixed                                       1m      1h
+├ ○ /breaks/9/broken
+├ ○ /breaks/9/fixed
+├ ○ /exercises
+├ ○ /exercises/0
+├ ○ /exercises/0/solution
+├ ○ /exercises/0/solution/speakers                        1h      1d
+├   /exercises/0/solution/speakers/[id]                   1h      1d
+│ └ ◐ /exercises/0/solution/speakers/[id]                 1h      1d
+├ ◐ /exercises/1
+├ ○ /exercises/1/solution                                 1m      1h
+├ ○ /exercises/10
+├ ○ /exercises/10/solution
+├ ○ /exercises/10/solution/top                            1m      1h
+├ ○ /exercises/2                                          1m      1h
+├ ○ /exercises/2/solution                                 1m      1h
+├ ◐ /exercises/3
+├ ◐ /exercises/3/solution
+├ ◐ /exercises/4
+├ ○ /exercises/4/solution                                 1m      1h
+├ ○ /exercises/5                                          1m      1h
+├   /exercises/5/[id]
+│ └ ◐ /exercises/5/[id]
+├ ○ /exercises/5/solution                                 1m      1h
+├   /exercises/5/solution/[id]
+│ └ ◐ /exercises/5/solution/[id]
+├ ○ /exercises/6
+├ ƒ /exercises/6/api/speakers/[id]
+├ ○ /exercises/6/solution
+├ ƒ /exercises/6/solution/api/speakers/[id]
+├ ○ /exercises/7
+├   /exercises/7/[id]
+│ └ ◐ /exercises/7/[id]
+├ ○ /exercises/7/solution
+├   /exercises/7/solution/[id]
+│ └ ◐ /exercises/7/solution/[id]
+├ ○ /exercises/8
+├ ○ /exercises/8/solution
+├ ○ /exercises/8/solution/dashboard                       1m      1h
+├ ƒ /exercises/8/solution/dashboard/api/talks
+├ ○ /exercises/8/solution/dashboard/talks                 1m      1h
+├   /exercises/8/solution/dashboard/talks/[id]
+│ └ ◐ /exercises/8/solution/dashboard/talks/[id]
+├ ○ /exercises/8/solution/dashboard/votes
+├ ○ /exercises/9
+├ ○ /exercises/9/solution
+├ ◐ /exercises/9/solution/board                           1h      1d
+├ ƒ /exercises/9/solution/board/api/revalidate
+├ ○ /exercises/9/solution/board/api/talks                 1h      1d
+├ ○ /search
+├ ○ /spa
+├ ◐ /spa/query
+├ ○ /spa/use                                              1m      1h
+├ ○ /speakers                                             1m      1h
+├ ○ /submit                                               1h      1d
+├ ○ /talks
+├   /talks/[id]
+│ └ ◐ /talks/[id]
+└ ○ /tmp-speakers-hours                                   1h      1d
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)             prerendered as static content
+◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
+ƒ  (Dynamic)            server-rendered on demand
+
