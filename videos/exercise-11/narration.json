@@ -1,0 +1,98 @@
+{
+  "voice": "en-US-AvaNeural",
+  "engine": "kokoro",
+  "kokoroVoice": "af_heart",
+  "kokoroSpeed": 1.05,
+  "long": true,
+  "rate": "+4%",
+  "gap": 0.85,
+  "lead": 1.4,
+  "tail": 2.8,
+  "beats": [
+    {
+      "id": "intro",
+      "text": "Exercise eleven. You drive an AI coding agent, from the first prompt to the last review. The organizers want a speakers page, with a comment count for each talk and a form to add a comment. The draft and the agent run are planted. The workshop author wrote them. You need no agent of your own.",
+      "caption": "Exercise 11. You drive an AI coding agent, from the first prompt to the last review. The organizers want a speakers page, with a comment count for each talk and a form to add a comment. The draft and the agent run are planted. The workshop author wrote them. You need no agent of your own."
+    },
+    {
+      "id": "setup",
+      "text": "The setup. Run N P M run reset, then N P M run dev. In a second terminal, run the copy draft script. It creates the speakers folder, your work folder. Do not open it yet. While the draft is there, every route answers with a five hundred. So read the read me in your editor.",
+      "caption": "The setup. Run npm run reset, then npm run dev. In a second terminal, run copy-draft.mjs. It creates speakers/, your work folder. Do not open it yet. While the draft is there, every route answers with a 500. So read the README in your editor."
+    },
+    {
+      "id": "claim",
+      "text": "This is the prompt that a teammate typed. List the speakers and their talks. Cache the comment counts. Add a form. Show one speaker when the U R L has speaker equals two. The agent made thirty calls, and then it said: The feature is complete. Your job is to check that claim.",
+      "caption": "This is the prompt that a teammate typed. List the speakers and their talks. Cache the comment counts. Add a form. Show one speaker when the URL has ?speaker=2. The agent made 30 calls, and then it said: \"The feature is complete.\" Your job is to check that claim."
+    },
+    {
+      "id": "predict",
+      "text": "First, predict. What does the prompt not say? It does not say Next sixteen, or that the reads in lib are already cached. Which two requests pull against each other? Cache the counts, and the speaker parameter, because a cached scope cannot read the request. Which tag must the action clear? Comments dash talk I D, from lib slash comments.",
+      "caption": "First, predict. What does the prompt not say? It does not say Next 16, or that the reads in lib/ are already cached. Which two requests pull against each other? \"Cache the counts\" and ?speaker=, because a cached scope cannot read the request. Which tag must the action clear? comments-${talkId}, from lib/comments.ts."
+    },
+    {
+      "id": "t1do",
+      "text": "Task one. Give the agent eyes. With the dev server running, the ask M C P script asks the same questions as an agent. Get errors says: No browser sessions connected. Get routes lists the speakers route, but nobody opened it. Compile route builds it without a browser, and finds the first error.",
+      "caption": "Task 1. Give the agent eyes. With the dev server running, ask-mcp.mjs asks the same questions as an agent. get_errors says: No browser sessions connected. get_routes lists the speakers route, but nobody opened it. compile_route builds it without a browser, and finds the first error."
+    },
+    {
+      "id": "t1see",
+      "text": "Now open the page in a tab. It is blank, because the server answers with a five hundred. Get errors returns two empty lists. The page is broken, and get errors sees nothing. Get logs returns a file path, not the log. There are nine tools. None of them looks inside the cache.",
+      "caption": "Now open the page in a tab. It is blank, because the server answers with a 500. get_errors returns two empty lists. The page is broken, and get_errors sees nothing. get_logs returns a file path, not the log. There are nine tools. None of them looks inside the cache."
+    },
+    {
+      "id": "t2",
+      "text": "Task two. Find the docs. The docs in node modules match the version that you run. Create prompt dot M D, with the heading Read first. Add one doc for each question: use cache, update Tag, cache Life, page, the caching guide, and the C L I page. Then add the tag from lib slash comments.",
+      "caption": "Task 2. Find the docs. The docs in node_modules match the version that you run. Create prompt.md, with the heading \"Read first:\". Add one doc for each question: use-cache, updateTag, cacheLife, page, the caching guide, and the CLI page. Then add the tag from lib/comments.ts."
+    },
+    {
+      "id": "t3",
+      "text": "Task three. Write the prompt, and predict the run. Use a new folder, agent speakers. Say that the new count must also show on talk one. Then add the proof. Run T S C and the build, and paste the output. Do not test with a write. Stop after three failures. Last, write five predictions in predict dot M D.",
+      "caption": "Task 3. Write the prompt, and predict the run. Use a new folder, agent-speakers/. Say that the new count must also show on /talks/1. Then add the proof. Run tsc and the build, and paste the output. Do not test with a write. Stop after three failures. Last, write five predictions in predict.md."
+    },
+    {
+      "id": "t4read",
+      "text": "Task four. Read the run, one call at a time. Read the dev server calls first. After call thirteen, the agent says: No errors reported. But the answer was No browser sessions connected. That says nothing about the page. The agent never called compile route. The first error was already in the body of call fourteen.",
+      "caption": "Task 4. Read the run, one call at a time. Read the dev server calls first. After call 13, the agent says: \"No errors reported.\" But the answer was \"No browser sessions connected\". That says nothing about the page. The agent never called compile_route. The first error was already in the body of call 14."
+    },
+    {
+      "id": "t4stop",
+      "text": "Now find the loop. From call twenty, the agent edits one line, then runs curl and get errors. The answer never changes. Stop it after call twenty six. Call seventeen was refused, so the agent wrote a script, and it saved a comment to D B dot JSON. Then write a correction in four parts: stop, what you know, what to do, and the proof.",
+      "caption": "Now find the loop. From call 20, the agent edits one line, then runs curl and get_errors. The answer never changes. Stop it after call 26. Call 17 was refused, so the agent wrote a script, and it saved a comment to db.json. Then write a correction in four parts: stop, what you know, what to do, and the proof."
+    },
+    {
+      "id": "t5tsc",
+      "text": "Task five. The review. The build is the fact checker, so use it one error at a time. First, run T S C. It finds one error. Cache Life short does not exist. The table in the cache Life doc lists the real profiles. The file wants thirty seconds, so use seconds.",
+      "caption": "Task 5. The review. The build is the fact-checker, so use it one error at a time. First, run tsc. It finds one error: cacheLife(\"short\") does not exist. The table in the cacheLife doc lists the real profiles. The file wants 30 seconds, so use \"seconds\"."
+    },
+    {
+      "id": "t5build",
+      "text": "Now run the build. The compiler stops at actions dot T S. A use server file can export only ay sink functions. Remove the word export from max length. Build again. Now the prerender stops. The page reads search Params inside use cache. Delete the use cache line at the top of the page.",
+      "caption": "Now run the build. The compiler stops at actions.ts. A \"use server\" file can export only async functions. Remove the word export from MAX_LENGTH. Build again. Now the prerender stops. The page reads searchParams inside \"use cache\". Delete the \"use cache\" line at the top of the page."
+    },
+    {
+      "id": "t5suspense",
+      "text": "Build again. The new error says uncached data during prerendering, and it has no line number. Add the debug prerender flag. Now it points at await search Params. Move that code into an ay sink component, and wrap it in Suspense. The shell shows at once, and the list streams in. The build is green.",
+      "caption": "Build again. The new error says \"uncached or runtime data during prerendering\", and it has no line number. Add --debug-prerender. Now it points at await searchParams. Move that code into an async component, and wrap it in <Suspense>. The shell shows at once, and the list streams in. The build is green."
+    },
+    {
+      "id": "t5copy",
+      "text": "The build is green, but one bug is left. Open talk one. It says two comments. On the speakers page, add a comment. The count goes up to three. Open talk one again. It still says two. The agent wrote a second copy of get Comments, with its own tag. Delete comment count dot T S. Read get Comments, and clear the comments tag. Now both pages say four.",
+      "caption": "The build is green, but one bug is left. Open /talks/1. It says 2 comments. On the speakers page, add a comment. The count goes up to 3. Open /talks/1 again. It still says 2. The agent wrote a second copy of getComments, with its own tag. Delete comment-count.ts. Read getComments, and clear the comments tag. Now both pages say 4."
+    },
+    {
+      "id": "t6",
+      "text": "Write the review with four questions. Does it do what the prompt asked? Does it fix the cause, or hide a symptom? What else did it touch? Is there a second copy of the mistake? Task six. Compare your files with the solution. The solution also checks the status of the post, so a failed write throws. If you have an agent, run your prompt on a branch.",
+      "caption": "Write the review with four questions. Does it do what the prompt asked? Does it fix the cause, or hide a symptom? What else did it touch? Is there a second copy of the mistake? Task 6. Compare your files with the solution. The solution also checks the status of the POST, so a failed write throws. If you have an agent, run your prompt on a branch."
+    },
+    {
+      "id": "t7",
+      "text": "Task seven. Give the agent inside the app a new tool. A tool is a file. Search talks calls the search Route Handler, because eve runs outside Next, and cannot use its cache. The description tells the model when to use it. The schema checks the query. A read needs no approval. Only a write waits for a person. The eval checks that the tool ran once.",
+      "caption": "Task 7. Give the agent inside the app a new tool. A tool is a file. search_talks calls the search Route Handler, because eve runs outside Next, and cannot use its cache. The description tells the model when to use it. The schema checks the query. A read needs no approval. Only a write waits for a person. The eval checks that the tool ran once."
+    },
+    {
+      "id": "close",
+      "text": "Prove it. Four mistakes stopped the build. The compiler caught the export. The type check caught the profile. The prerender caught search Params, two times. A fifth mistake stopped nothing, and only you caught it: the second copy. The agent said that the feature was complete. One command would have shown that it was not: N P X next build. To start again, run N P M run reset.",
+      "caption": "Prove it. Four mistakes stopped the build. The compiler caught the export. The type check caught the profile. The prerender caught searchParams, two times. A fifth mistake stopped nothing, and only you caught it: the second copy. The agent said that the feature was complete. One command would have shown that it was not: npx next build. To start again, run npm run reset."
+    }
+  ]
+}

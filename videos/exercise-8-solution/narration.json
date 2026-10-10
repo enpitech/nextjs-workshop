@@ -1,0 +1,69 @@
+{
+  "voice": "en-US-AvaNeural",
+  "rate": "+4%",
+  "gap": 0.85,
+  "lead": 1.4,
+  "tail": 2.6,
+  "beats": [
+    {
+      "id": "intro",
+      "text": "This is the solution to Exercise eight, file by file. It runs at slash exercises slash eight slash solution. Blue files have no directive. Orange files say use client. The purple file says use server.",
+      "caption": "This is the solution to Exercise 8, file by file. It runs at /exercises/8/solution. Blue files have no directive. Orange files say \"use client\". The purple file says \"use server\"."
+    },
+    {
+      "id": "layout",
+      "text": "Tasks one and two. The layout stays mounted, so the note keeps its text. The sidebar link is a client file, because use Pathname is a hook. The end prop makes Overview match only its own U R L. Suspense wraps the links.",
+      "caption": "Tasks 1 and 2. The layout stays mounted, so the note keeps its text. The sidebar link is a client file, because usePathname is a hook. The end prop makes Overview match only its own URL. Suspense wraps the links."
+    },
+    {
+      "id": "overview",
+      "text": "Tasks three and four. The Overview is an async Server Component. Promise dot all reads both lists together, in about zero point eight seconds. Collapsible is a client file. Speaker list has no directive, and it arrives as children.",
+      "caption": "Tasks 3 and 4. The Overview is an async Server Component. Promise.all reads both lists together, in about 0.8 s. Collapsible is a client file. SpeakerList has no directive, and it arrives as children."
+    },
+    {
+      "id": "table",
+      "text": "Task five. The talks page reads the data on the server. The talk table is a client file, so it holds the filter. The talks prop crosses as plain data. Choose performance, and two talks stay.",
+      "caption": "Task 5. The talks page reads the data on the server. The talk table is a client file, so it holds the filter. The talks prop crosses as plain data. Choose performance, and two talks stay."
+    },
+    {
+      "id": "vote",
+      "text": "Task six. The vote action says use server. It checks the I D and adds the vote. Two update Tag calls mark the cache as old. The button says Voting for two to three seconds. Then it says Thanks, thirteen votes now.",
+      "caption": "Task 6. The vote action says \"use server\". It checks the ID and adds the vote. Two updateTag calls mark the cache as old. The button says Voting… for 2 to 3 s. Then it says Thanks. 13 votes now."
+    },
+    {
+      "id": "one",
+      "text": "Task seven. The page awaits params, so it needs a boundary. Without one, the dev badge says Blocking Route. Loading dot T S X shows a placeholder at once. The talk arrives after about one point seven seconds.",
+      "caption": "Task 7. The page awaits params, so it needs a boundary. Without one, the dev badge says \"Blocking Route\". loading.tsx shows a placeholder at once. The talk arrives after about 1.7 s."
+    },
+    {
+      "id": "errors",
+      "text": "Task eight. A crash and a missing talk look different. Boom shows the error box with a retry button. Ninety nine shows No such talk. The sidebar stays in both. The status is still two hundred, because loading already sent the page.",
+      "caption": "Task 8. A crash and a missing talk look different. /talks/boom shows the error box with a retry button. /talks/99 shows \"No such talk\". The sidebar stays in both. The status is still 200, because loading.tsx already sent the page."
+    },
+    {
+      "id": "title",
+      "text": "Task nine. The layout exports a fixed title, Dashboard. The talks page exports Talks. The talk page uses generate Metadata, because its title depends on the data.",
+      "caption": "Task 9. The layout exports a fixed title, Dashboard. The talks page exports Talks. The talk page uses generateMetadata, because its title depends on the data."
+    },
+    {
+      "id": "json",
+      "text": "Task ten. A Route Handler answers a program. It reads the category from the U R L. An unknown category gets a four hundred with an error body. Anything else gets a two hundred with JSON.",
+      "caption": "Task 10. A Route Handler answers a program. It reads the category from the URL. An unknown category gets a 400 with an error body. Anything else gets a 200 with JSON."
+    },
+    {
+      "id": "provider",
+      "text": "Task eleven. The theme provider is a client file. It renders children, but it does not import them, so the pages stay Server Components. The toggle is a small client leaf. A click turns the whole dashboard light.",
+      "caption": "Task 11. The theme provider is a client file. It renders children, but it does not import them, so the pages stay Server Components. The toggle is a small client leaf. A click turns the whole dashboard light."
+    },
+    {
+      "id": "reload",
+      "text": "Now reload. The server cannot read local storage, so the first render is dark. After mount, the effect loads the saved choice, and the page turns light. The click handler saves the choice.",
+      "caption": "Now reload. The server cannot read localStorage, so the first render is dark. After mount, the effect loads the saved choice, and the page turns light. The click handler saves the choice."
+    },
+    {
+      "id": "close",
+      "text": "The client graph has six use client files: sidebar link, talk table, vote button, error, theme provider and theme toggle. Badge is in the graph. Stat card is not. To start again, run npm run reset.",
+      "caption": "The client graph has six \"use client\" files: sidebar-link, talk-table, vote-button, error, theme-provider and theme-toggle. Badge is in the graph. StatCard is not. To start again, run npm run reset."
+    }
+  ]
+}

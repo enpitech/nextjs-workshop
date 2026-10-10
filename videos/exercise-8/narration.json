@@ -1,0 +1,54 @@
+{
+  "voice": "en-US-AvaNeural",
+  "rate": "+4%",
+  "gap": 0.85,
+  "lead": 1.4,
+  "tail": 2.6,
+  "beats": [
+    {
+      "id": "intro",
+      "text": "Exercise eight. You build an organizer dashboard in eleven tasks. Each task uses one idea from Day one.",
+      "caption": "Exercise 8. You build an organizer dashboard in eleven tasks. Each task uses one idea from Day 1."
+    },
+    {
+      "id": "router",
+      "text": "Run npm run reset first. Only page and route files get a U R L.",
+      "caption": "Run npm run reset first. Only page and route files get a URL."
+    },
+    {
+      "id": "layout",
+      "text": "Tasks one and two. A layout wraps every page and stays mounted. A client link marks the current page.",
+      "caption": "Tasks 1 and 2. A layout wraps every page and stays mounted. A client link marks the current page."
+    },
+    {
+      "id": "data",
+      "text": "Tasks three to five. Server Components await their data. Promise dot all reads both together. The client table gets plain data and holds the filter.",
+      "caption": "Tasks 3 to 5. Server Components await their data. Promise.all reads both together. The client table gets plain data and holds the filter."
+    },
+    {
+      "id": "vote",
+      "text": "Task six. The vote is a Server Action. The browser gets only an I D, and update Tag refreshes the cache.",
+      "caption": "Task 6. The vote is a Server Action. The browser gets only an ID, and updateTag refreshes the cache."
+    },
+    {
+      "id": "trouble",
+      "text": "Tasks seven and eight. Loading shows a placeholder at once. Error catches a crash. Not found handles a missing talk. The sidebar stays.",
+      "caption": "Tasks 7 and 8. loading shows a placeholder at once. error catches a crash. not-found handles a missing talk. The sidebar stays."
+    },
+    {
+      "id": "api",
+      "text": "Tasks nine and ten. Metadata names each tab, and a Route Handler sends JSON.",
+      "caption": "Tasks 9 and 10. Metadata names each tab, and a Route Handler sends JSON."
+    },
+    {
+      "id": "theme",
+      "text": "Task eleven. A client provider holds the theme. Server pages pass through as children. Local storage keeps the choice, and an effect loads it.",
+      "caption": "Task 11. A client provider holds the theme. Server pages pass through as children. localStorage keeps the choice, and a useEffect loads it."
+    },
+    {
+      "id": "outro",
+      "text": "Short on time? Skip tasks four, six, nine, ten and eleven. Then compare with the solution.",
+      "caption": "Short on time? Skip Tasks 4, 6, 9, 10 and 11. Then compare with the solution."
+    }
+  ]
+}
