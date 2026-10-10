@@ -1,0 +1,52 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 6: Break #9, import "server-only" uncommented in app/breaks/9/broken/secret-card.tsx. Verdict: UNCHANGED (overlay itself is NEEDS-BROWSER; terminal and HTML carry the same text).
+
+curl results with line 3 uncommented: /breaks/9/broken 500, / 500, /talks/1 500 (every route).
+Before uncommenting: /breaks/9/broken 200; the chunk /_next/static/chunks/app_breaks_9_broken_1b6pizhlsecal._.js contains dangerous-api-key (grep count 1).
+The 500 HTML contains the first message below (the second message appears only in the terminal).
+
+⨯ ./app/breaks/9/broken/secret-card.tsx:3:1
+Error: You're importing a module that depends on "server-only" into a React Client Component module. This API is only available in Server Components but one of its parents is marked with "use client", so this module is also a Client Component.
+    Learn more: https://nextjs.org/docs/app/building-your-application/rendering
+  1 | // Break #9, broken: written as a Server Component. No directive, and it holds a secret.
+  2 | // The guard: uncomment the next line. The import from page.tsx becomes an error.
+> 3 | import "server-only";
+    | ^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | const API_KEY = "dangerous-api-key";
+  6 |
+
+Ecmascript file had an error
+
+Import traces:
+  Client Component Browser:
+    ./app/breaks/9/broken/secret-card.tsx [Client Component Browser]
+    ./app/breaks/9/broken/page.tsx [Client Component Browser]
+    ./app/breaks/9/broken/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/breaks/9/broken/secret-card.tsx [Client Component SSR]
+    ./app/breaks/9/broken/page.tsx [Client Component SSR]
+    ./app/breaks/9/broken/page.tsx [Server Component]
+
+
+
+./app/breaks/9/broken/secret-card.tsx:3:1
+Error: 'server-only' cannot be imported from a Client Component module
+  1 | // Break #9, broken: written as a Server Component. No directive, and it holds a secret.
+  2 | // The guard: uncomment the next line. The import from page.tsx becomes an error.
+> 3 | import "server-only";
+    | ^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | const API_KEY = "dangerous-api-key";
+  6 |
+
+It should only be used from a Server Component.
+
+Import traces:
+  Client Component Browser:
+    ./app/breaks/9/broken/secret-card.tsx [Client Component Browser]
+    ./app/breaks/9/broken/page.tsx [Client Component Browser]
+    ./app/breaks/9/broken/page.tsx [Server Component]
+
+  Client Component SSR:

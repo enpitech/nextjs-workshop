@@ -1,0 +1,63 @@
+Captured 2026-10-08 on Next 16.4.0
+Claim 5 (page 5e L937-944): `next build` when a Client Component imports a server-only data layer. Verdict: texts UNCHANGED; the error COUNT depends on the repo, not on the version (see below).
+# Method: copy of the 16.4.0 app (Node v22.17.0, json-server on 3001, cacheComponents true). A 16.3.5 control copy (same source, next@16.3.5 from the repo node_modules) is named where used.
+
+## A. Client Component imports only lib/api.ts (which has `import "server-only"`): 16.4.0
+> Build error occurred
+Error: Turbopack build failed with 2 errors:
+./lib/api.ts:3:1
+Error: You're importing a module that depends on "server-only". This API is only available in Server Components in the App Router, but you are using it in the Pages Router.
+    Learn more: https://nextjs.org/docs/app/building-your-application/rendering/server-components
+  1 | // The HTTP client for json-server on port 3001. Every data module imports read from here.
+  2 | // "server-only" turns an import from a Client Component into a build error.
+> 3 | import "server-only";
+    | ^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | export const API = "http://localhost:3001";
+  6 |
+
+Ecmascript file had an error
+
+Import traces:
+  App Route:
+    ./lib/api.ts
+    ./lib/speakers.ts
+    ./app/exercises/6/solution/api/speakers/[id]/route.ts
+
+  Client Component Browser:
+    ./lib/api.ts [Client Component Browser]
+    ./app/tmp5/page.tsx [Client Component Browser]
+    ./app/tmp5/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./lib/api.ts [Client Component SSR]
+    ./app/tmp5/page.tsx [Client Component SSR]
+    ./app/tmp5/page.tsx [Server Component]
+
+  Server Component:
+    ./lib/api.ts
+    ./lib/speakers.ts
+[... import traces cut ...]
+# 16.4.0 count: "Turbopack build failed with 2 errors" (the "Pages Router" sentence is still there: "but you are using it in the Pages Router.")
+# 16.3.5 control, same source: also 2 errors, same two messages. Only difference: 16.3.5 prints stack lines `at <unknown> (./lib/api.ts:3:1)`, 16.4.0 prints `at ignore-listed frames`.
+
+## B. The Haiku-style page (app/page.tsx with "use client" importing getTalks from lib/talks.ts), see claim 40: 8 errors on 16.4.0 AND 8 errors on the 16.3.5 control
+Error: Turbopack build failed with 8 errors:
+./lib/talks.ts:10:3
+Error: It is not allowed to define inline "use cache" annotated functions in Client Components.
+./lib/talks.ts:17:3
+Error: It is not allowed to define inline "use cache" annotated functions in Client Components.
+./lib/talks.ts:4:10
+Error: You're importing a module that depends on "cacheLife". This API is only available in Server Components in the App Router, but you are using it in the Pages Router.
+./lib/talks.ts:4:21
+Error: You're importing a module that depends on "cacheTag". This API is only available in Server Components in the App Router, but you are using it in the Pages Router.
+./lib/api.ts:3:1
+Error: You're importing a module that depends on "server-only". This API is only available in Server Components in the App Router, but you are using it in the Pages Router.
+./lib/talks.ts:3:1
+Error: You're importing a module that depends on "server-only". This API is only available in Server Components in the App Router, but you are using it in the Pages Router.
+./lib/api.ts:3:1
+Error: 'server-only' cannot be imported from a Client Component module
+./lib/talks.ts:3:1
+Error: 'server-only' cannot be imported from a Client Component module
+
+# So "7 errors" (5e) and "6 errors" (16d) in the page are stale against today's repo: lib/db.ts was split into lib/api.ts + lib/talks.ts + lib/speakers.ts, which changes the count. Not a 16.4.0 change.

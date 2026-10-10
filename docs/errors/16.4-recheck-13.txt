@@ -1,0 +1,8 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 13: Exercise 4 starter (app/exercises/4/actions.ts without "use server"), next dev terminal, GET /exercises/4 -> 200. Verdict: UNCHANGED (the overlay is the same error; not seen in a browser).
+
+  <... id={1} action={function upvote}>
+⨯ Error: Functions cannot be passed directly to Client Components unless you explicitly expose it by marking it with "use server". Or maybe you meant to call this function rather than return it.
+  <... id={1} action={function upvote}>
+                     ^^^^^^^^^^^^^^^^^
+    at ignore-listed frames {

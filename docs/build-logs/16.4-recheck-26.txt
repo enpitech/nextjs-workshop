@@ -1,0 +1,164 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 26: counts 20 -> 8 -> 7 are in 16.4-recheck-19.txt. Below: next dev -p 3200 log with the cache lines deleted, route / (dev text differs from build text). Overlay cards and Copy prompt: needs browser (badge showed '3 Issues'; the overlay did not open from the automated click, shadow DOM not readable).
+
+##### DEV LOG
+▲ Next.js 16.4.0 (Turbopack)
+- Local:         http://localhost:3200
+- Network:       http://192.168.1.120:3200
+- Environments: .env.local
+✓ Ready in 774ms
+⚠ `cacheComponents` is enabled without a corresponding `partialPrefetching` option. Set `partialPrefetching` to either `true` or `false`.
+
+The only reason to set `partialPrefetching` to `false` is if you're migrating an older Cache Components app. The initial release of Cache Components did not include Partial Prefetching. New projects should enable both Cache Components and Partial Prefetching.
+
+Both Cache Components and Partial Prefetching will be enabled everywhere in the next major release, and the old configurations will be removed.
+
+Learn more: https://nextjs.org/docs/app/guides/adopting-partial-prefetching
+✓ Running next.config.ts took 73ms
+- Cache Components enabled
+
+ GET / 200 in 1298ms (next.js: 247ms, application-code: 1051ms)
+Error: Route "/": Next.js encountered uncached data during prerendering.
+
+`fetch(...)` or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] Cache the data access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at read (lib\api.ts:8:21)
+    at getTalks (lib\talks.ts:10:14)
+    at Home (app\page.tsx:8:31)
+   6 |
+   7 | export async function read<T>(path: string): Promise<T> {
+>  8 |   const res = await fetch(`${API}${path}`);
+     |                     ^
+   9 |   if (!res.ok) throw new Error(`GET ${path} failed with ${res.status}`);
+  10 |   return res.json();
+  11 | }
+ GET / 200 in 871ms (next.js: 4ms, application-code: 867ms)
+Error: Route "/": Next.js encountered uncached data during prerendering.
+
+`fetch(...)` or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] Cache the data access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at read (lib\api.ts:8:21)
+    at getTalks (lib\talks.ts:10:14)
+    at Home (app\page.tsx:8:31)
+   6 |
+   7 | export async function read<T>(path: string): Promise<T> {
+>  8 |   const res = await fetch(`${API}${path}`);
+     |                     ^
+   9 |   if (!res.ok) throw new Error(`GET ${path} failed with ${res.status}`);
+  10 |   return res.json();
+  11 | }
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head headRenderTree={{...}}>
+                    <__next_viewport_boundary__>
+                    <MetadataWrapper>
+                      <__next_metadata_boundary__>
+                        <div
+                          hidden={true}
+-                         bis_skin_checked="1"
+                        >
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html lang="en">
+                          <body
+                            className="flex min-h-dvh flex-col font-sans"
+-                           __processed_76aac033-de59-4337-a3d2-9c6b5f20c399__="true"
+-                           bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWll..."
+                          >
+                            <Suspense>
+                            <div
+                              className="fade-in mx-auto w-full max-w-3xl flex-1 px-5 py-10 sm:px-8"
+-                             bis_skin_checked="1"
+                            >
+                            ...
+                  ...
+ 
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <RenderFromTemplateContext>
+      <ScrollHandler renderTree={{...}}>
+        <InnerScrollHandler scrollRef={{scrollRef:null, ...}} renderTree={{...}}>
+          <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
+            <LoadingBoundary name="/" loading={null}>
+              <HTTPAccessFallbackBoundary notFound={{...}} forbidden={undefined} unauthorized={undefined}>
+                <HTTPAccessFallbackErrorBoundary pathname="/" notFound={{...}} forbidden={undefined} ...>
+                  <RedirectBoundary>
+                    <RedirectErrorBoundary router={{...}}>
+                      <InnerLayoutRouter url="/" tree={[...]} params={{}} renderTree={{...}} segmentPath={[...]} ...>
+                        <SegmentViewNode type="page" pagePath="page.tsx">
+                          <SegmentTrieNode>
+                          <Home>
+                            <main>
+                              <header>
+                              <TalkList talks={[...]}>
+                                <div
+-                                 bis_skin_checked="1"
+                                >
+                                  <div
+                                    className="mb-8 flex flex-wrap items-end justify-between gap-4"
+-                                   bis_skin_checked="1"
+                                  >
+                                  <div
+                                    className="space-y-10"
+-                                   bis_skin_checked="1"
+                                  >
+                              <Card>
+                                <div
+                                  className="panel p-6"
+-                                 bis_skin_checked="1"
+                                >
++                                 Speakers
+                        ...
+                      ...
+          ...
+ 
+[browser] Image with src "/logo.svg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[?25h

@@ -1,0 +1,244 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 22: <Suspense> removed around <Nav /> in app/layout.tsx. Plain build first, then --debug-prerender.
+
+##### PLAIN
+▲ Next.js 16.4.0 (Turbopack)
+- Environments: .env.local
+⚠ `cacheComponents` is enabled without a corresponding `partialPrefetching` option. Set `partialPrefetching` to either `true` or `false`.
+
+The only reason to set `partialPrefetching` to `false` is if you're migrating an older Cache Components app. The initial release of Cache Components did not include Partial Prefetching. New projects should enable both Cache Components and Partial Prefetching.
+
+Both Cache Components and Partial Prefetching will be enabled everywhere in the next major release, and the old configurations will be removed.
+
+Learn more: https://nextjs.org/docs/app/guides/adopting-partial-prefetching
+✓ Running next.config.ts took 58ms
+- Cache Components enabled
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 3.3s
+  Running TypeScript ...
+  Finished TypeScript in 2.4s ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/76) ...
+  Generating static pages using 19 workers (19/76) 
+Error: Route "/exercises/5/[id]": Next.js encountered URL data `usePathname()` in a Client Component outside of `<Suspense>`.
+
+This blocks prerendering because the value is only available at runtime.
+
+Ways to fix this:
+  - [stream] Wrap the component in `<Suspense fallback={...}>` so the hook value streams in after prerendering
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-client-hook
+    at <unknown> (components\nav.tsx:19:20)
+    at body (<anonymous>)
+    at html (<anonymous>)
+  17 |
+  18 | export function Nav() {
+> 19 |   const pathname = usePathname();
+     |                    ^
+  20 |   // "/" is active only on the home page and the talk pages. Every other link owns its prefix.
+  21 |   const isActive = (href: string) =>
+  22 |     href === "/" ? pathname === "/" || pathname.startsWith("/talks") : pathname.startsWith(href); {
+  digest: 'CLIENT_HOOK_DYNAMIC'
+}
+To get a more detailed stack trace and pinpoint the issue, try one of the following:
+  - Start the app in development mode by running `next dev`, then open "/exercises/5/[id]" in your browser to investigate the error.
+  - Rerun the production build with `next build --debug-prerender` to generate better stack traces.
+Error occurred prerendering page "/exercises/5/[id]". Read more: https://nextjs.org/docs/messages/prerender-error
+Export encountered an error on /exercises/5/[id]/page: /exercises/5/[id], exiting the build.
+⨯ Next.js build worker exited with code: 1 and signal: null
+EXIT=1
+
+##### --debug-prerender
+⚠ Prerendering is running in debug mode with NODE_ENV='development'. This will affect performance and should not be used for production.
+▲ Next.js 16.4.0 (Turbopack)
+- Environments: .env.local
+⚠ `cacheComponents` is enabled without a corresponding `partialPrefetching` option. Set `partialPrefetching` to either `true` or `false`.
+
+The only reason to set `partialPrefetching` to `false` is if you're migrating an older Cache Components app. The initial release of Cache Components did not include Partial Prefetching. New projects should enable both Cache Components and Partial Prefetching.
+
+Both Cache Components and Partial Prefetching will be enabled everywhere in the next major release, and the old configurations will be removed.
+
+Learn more: https://nextjs.org/docs/app/guides/adopting-partial-prefetching
+✓ Running next.config.ts took 67ms
+- Cache Components enabled
+- Experiments (use with caution):
+  ✓ allowDevelopmentBuild (enabled by `--debug-prerender`)
+  ⨯ prerenderEarlyExit (disabled by `--debug-prerender`)
+  ✓ serverSourceMaps (enabled by `--debug-prerender`)
+  ⨯ turbopackMinify (disabled by `--debug-prerender`)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 5.9s
+  Running TypeScript ...
+  Finished TypeScript in 2.9s ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/76) ...
+  Generating static pages using 19 workers (19/76) 
+Error: Route "/exercises/5/[id]": Next.js encountered URL data `usePathname()` in a Client Component outside of `<Suspense>`.
+
+This blocks prerendering because the value is only available at runtime.
+
+Ways to fix this:
+  - [stream] Wrap the component in `<Suspense fallback={...}>` so the hook value streams in after prerendering
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-client-hook
+    at Nav (components\nav.tsx:19:31)
+    at RootLayout (app\layout.tsx:20:9)
+  17 |
+  18 | export function Nav() {
+> 19 |   const pathname = usePathname();
+     |                               ^
+  20 |   // "/" is active only on the home page and the talk pages. Every other link owns its prefix.
+  21 |   const isActive = (href: string) =>
+  22 |     href === "/" ? pathname === "/" || pathname.startsWith("/talks") : pathname.startsWith(href); {
+  digest: 'CLIENT_HOOK_DYNAMIC'
+}
+To debug the issue, start the app in development mode by running `next dev`, then open "/exercises/5/[id]" in your browser to investigate the error.
+Error occurred prerendering page "/exercises/5/[id]". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/exercises/8/solution/dashboard/talks/[id]": Next.js encountered URL data `usePathname()` in a Client Component outside of `<Suspense>`.
+
+This blocks prerendering because the value is only available at runtime.
+
+Ways to fix this:
+  - [stream] Wrap the component in `<Suspense fallback={...}>` so the hook value streams in after prerendering
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-client-hook
+    at Nav (components\nav.tsx:19:31)
+    at RootLayout (app\layout.tsx:20:9)
+  17 |
+  18 | export function Nav() {
+> 19 |   const pathname = usePathname();
+     |                               ^
+  20 |   // "/" is active only on the home page and the talk pages. Every other link owns its prefix.
+  21 |   const isActive = (href: string) =>
+  22 |     href === "/" ? pathname === "/" || pathname.startsWith("/talks") : pathname.startsWith(href); {
+  digest: 'CLIENT_HOOK_DYNAMIC'
+}
+To debug the issue, start the app in development mode by running `next dev`, then open "/exercises/8/solution/dashboard/talks/[id]" in your browser to investigate the error.
+Error occurred prerendering page "/exercises/8/solution/dashboard/talks/[id]". Read more: https://nextjs.org/docs/messages/prerender-error
+  Generating static pages using 19 workers (38/76) 
+Error: Route "/exercises/7/[id]": Next.js encountered URL data `usePathname()` in a Client Component outside of `<Suspense>`.
+
+This blocks prerendering because the value is only available at runtime.
+
+Ways to fix this:
+  - [stream] Wrap the component in `<Suspense fallback={...}>` so the hook value streams in after prerendering
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-client-hook
+    at Nav (components\nav.tsx:19:31)
+    at RootLayout (app\layout.tsx:20:9)
+  17 |
+  18 | export function Nav() {
+> 19 |   const pathname = usePathname();
+     |                               ^
+  20 |   // "/" is active only on the home page and the talk pages. Every other link owns its prefix.
+  21 |   const isActive = (href: string) =>
+  22 |     href === "/" ? pathname === "/" || pathname.startsWith("/talks") : pathname.startsWith(href); {
+  digest: 'CLIENT_HOOK_DYNAMIC'
+}
+To debug the issue, start the app in development mode by running `next dev`, then open "/exercises/7/[id]" in your browser to investigate the error.
+Error occurred prerendering page "/exercises/7/[id]". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/exercises/5/solution/[id]": Next.js encountered URL data `usePathname()` in a Client Component outside of `<Suspense>`.
+
+This blocks prerendering because the value is only available at runtime.
+
+Ways to fix this:
+  - [stream] Wrap the component in `<Suspense fallback={...}>` so the hook value streams in after prerendering
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-client-hook
+    at Nav (components\nav.tsx:19:31)
+    at RootLayout (app\layout.tsx:20:9)
+  17 |
+  18 | export function Nav() {
+> 19 |   const pathname = usePathname();
+     |                               ^
+  20 |   // "/" is active only on the home page and the talk pages. Every other link owns its prefix.
+  21 |   const isActive = (href: string) =>
+  22 |     href === "/" ? pathname === "/" || pathname.startsWith("/talks") : pathname.startsWith(href); {
+  digest: 'CLIENT_HOOK_DYNAMIC'
+}
+To debug the issue, start the app in development mode by running `next dev`, then open "/exercises/5/solution/[id]" in your browser to investigate the error.
+Error occurred prerendering page "/exercises/5/solution/[id]". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/exercises/7/solution/[id]": Next.js encountered URL data `usePathname()` in a Client Component outside of `<Suspense>`.
+
+This blocks prerendering because the value is only available at runtime.
+
+Ways to fix this:
+  - [stream] Wrap the component in `<Suspense fallback={...}>` so the hook value streams in after prerendering
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-client-hook
+    at Nav (components\nav.tsx:19:31)
+    at RootLayout (app\layout.tsx:20:9)
+  17 |
+  18 | export function Nav() {
+> 19 |   const pathname = usePathname();
+     |                               ^
+  20 |   // "/" is active only on the home page and the talk pages. Every other link owns its prefix.
+  21 |   const isActive = (href: string) =>
+  22 |     href === "/" ? pathname === "/" || pathname.startsWith("/talks") : pathname.startsWith(href); {
+  digest: 'CLIENT_HOOK_DYNAMIC'
+}
+To debug the issue, start the app in development mode by running `next dev`, then open "/exercises/7/solution/[id]" in your browser to investigate the error.
+Error occurred prerendering page "/exercises/7/solution/[id]". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/exercises/0/solution/speakers/[id]": Next.js encountered URL data `usePathname()` in a Client Component outside of `<Suspense>`.
+
+This blocks prerendering because the value is only available at runtime.
+
+Ways to fix this:
+  - [stream] Wrap the component in `<Suspense fallback={...}>` so the hook value streams in after prerendering
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-client-hook
+    at Nav (components\nav.tsx:19:31)
+    at RootLayout (app\layout.tsx:20:9)
+  17 |
+  18 | export function Nav() {
+> 19 |   const pathname = usePathname();
+     |                               ^
+  20 |   // "/" is active only on the home page and the talk pages. Every other link owns its prefix.
+  21 |   const isActive = (href: string) =>
+  22 |     href === "/" ? pathname === "/" || pathname.startsWith("/talks") : pathname.startsWith(href); {
+  digest: 'CLIENT_HOOK_DYNAMIC'
+}
+To debug the issue, start the app in development mode by running `next dev`, then open "/exercises/0/solution/speakers/[id]" in your browser to investigate the error.
+Error occurred prerendering page "/exercises/0/solution/speakers/[id]". Read more: https://nextjs.org/docs/messages/prerender-error
+  Generating static pages using 19 workers (57/76) 
+Error: Route "/talks/[id]": Next.js encountered URL data `usePathname()` in a Client Component outside of `<Suspense>`.
+
+This blocks prerendering because the value is only available at runtime.
+
+Ways to fix this:
+  - [stream] Wrap the component in `<Suspense fallback={...}>` so the hook value streams in after prerendering
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-client-hook
+    at Nav (components\nav.tsx:19:31)
+    at RootLayout (app\layout.tsx:20:9)
+  17 |
+  18 | export function Nav() {
+> 19 |   const pathname = usePathname();
+     |                               ^
+  20 |   // "/" is active only on the home page and the talk pages. Every other link owns its prefix.
+  21 |   const isActive = (href: string) =>
+  22 |     href === "/" ? pathname === "/" || pathname.startsWith("/talks") : pathname.startsWith(href); {
+  digest: 'CLIENT_HOOK_DYNAMIC'
+}
+To debug the issue, start the app in development mode by running `next dev`, then open "/talks/[id]" in your browser to investigate the error.
+Error occurred prerendering page "/talks/[id]". Read more: https://nextjs.org/docs/messages/prerender-error
+
+> Export encountered errors on 7 paths:
+	/exercises/0/solution/speakers/[id]/page: /exercises/0/solution/speakers/[id]
+	/exercises/5/[id]/page: /exercises/5/[id]
+	/exercises/5/solution/[id]/page: /exercises/5/solution/[id]
+	/exercises/7/[id]/page: /exercises/7/[id]
+	/exercises/7/solution/[id]/page: /exercises/7/solution/[id]
+	/exercises/8/solution/dashboard/talks/[id]/page: /exercises/8/solution/dashboard/talks/[id]
+	/talks/[id]/page: /talks/[id]
+EXIT=1

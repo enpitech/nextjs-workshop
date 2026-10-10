@@ -1,0 +1,21 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 7: RSC payload rows of "/" (curl -L -H 'RSC: 1' 'http://localhost:3400/?_rsc=abc', next dev). Verdict: CHANGED.
+# Response 200, Content-Type: text/x-component. (A bogus _rsc value gets a 307 to /?_rsc first, so use -L.)
+
+16.3.5 (docs/payloads/home-rsc-rows.txt), module path and chunk list inline in the I row:
+74:I["[project]/components/talk-list.tsx [app-client] (ecmascript)",["/_next/static/chunks/node_modules_next_dist_0mrnf9s._.js","/_next/static/chunks/_11_d4cp._.js"],"TalkList"]
+
+16.4.0, the I row only holds $ references; the path and each chunk are separate string rows:
+3:"/_next/static/chunks/node_modules_next_1lklf_7rjm1r0._.js"
+4:"/_next/static/chunks/components_12hrh0wb31qa4._.js"
+93:"[project]/components/talk-list.tsx [app-client] (ecmascript)"
+94:"/_next/static/chunks/_1v4zfhb982mvb._.js"
+95:I["$93",["$3","$4","$94"],"TalkList"]
+
+16.4.0 props row, preceded by dev-only debug rows (96:D"$97" ...):
+96:D"$97"
+96:[{"id":1,"title":"Two graphs, one boundary","speakerId":1,"votes":14,"category":"architecture"},{"id":2,"title":"Reading the RSC payload","speakerId":2,"votes":9,"category":"frontend"},{"id":3,"title":"Caching is opt-in","speakerId":3,"votes":15,"category":
+
+Reading: the I row is still a client reference with the export name "TalkList". What changed: (1) the module path and chunk files moved into their own rows and the I row points at them with $93, $3, $4, $94; (2) the row ids are hex, so 95 and 96, not 74 and 75; (3) dev adds D"..." debug rows before the props row. The props row is still plain JSON.
+Data differs from the 16.3.5 capture only because json-server's db.json holds 'votes' and 'category' fields here, not 'track'. That is data, not Next.
+Prefetch only in production / ?_rsc= request on click: Network tab, NEEDS-BROWSER.

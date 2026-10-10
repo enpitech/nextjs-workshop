@@ -1,0 +1,19 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 9: Break #8 RSC rows (curl -L -H 'RSC: 1' .../breaks/8/{broken,fixed}?_rsc=abc, next dev). Verdict: UNCHANGED in substance; row format CHANGED as in claim 7.
+
+## broken: the layout is one client reference row
+49:"[project]/app/breaks/8/broken/layout.tsx [app-client] (ecmascript)"
+4a:"/_next/static/chunks/app_breaks_8_15nd5lo276_99._.js"
+4b:I["$49",["$3","$4","$4a"],"default"]
+Count of 'Panel, imported by the layout' in the broken RSC response: 0. In the SSR HTML: 1 in markup, 0 in the inline self.__next_f scripts.
+
+## fixed: ThemeProvider is the client reference, Panel arrives as rendered JSX
+50:"[project]/app/breaks/8/theme-provider.tsx [app-client] (ecmascript)"
+51:"/_next/static/chunks/app_breaks_8_theme-provider_tsx_0qeyqh4931rge._.js"
+52:I["$50",["$3","$4","$51"],"ThemeProvider"]
+53:D"$55"
+53:D"$54"
+53:D"$57"
+53:["$","aside",null,{"className":"panel p-5","children":[["$","h2",null,{"className":"mb-2 font-medium","children":"Panel, imported by the layout"},"$54","$58",1],"$59"]},"$54","$56",1]
+
+Differences from docs/payloads/break-8-rows.txt: the I rows use $ references to separate path and chunk rows; ids are different hex numbers; in dev the broken layout row is 4b and the ThemeToggle row is ab.

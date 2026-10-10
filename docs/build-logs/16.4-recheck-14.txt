@@ -1,0 +1,26 @@
+Captured 2026-10-08 on Next 16.4.0
+Claim 14, build part (page 4b L760): Exercise 0, delete app/exercises/0/solution/speakers/[id]/loading.tsx, `next build`. Verdict: UNCHANGED (same error text, same route, build fails). The dev badge text was not checked.
+# Method: copy of the 16.4.0 app (Node v22.17.0, json-server on 3001, cacheComponents true). A 16.3.5 control copy (same source, next@16.3.5 from the repo node_modules) is named where used.
+
+Error: Route "/exercises/0/solution/speakers/[id]": Next.js encountered uncached or runtime data during prerendering.
+
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at section (<anonymous>)
+    at div (<anonymous>)
+    at main (<anonymous>)
+    at div (<anonymous>)
+    at body (<anonymous>)
+    at html (<anonymous>)
+To get a more detailed stack trace and pinpoint the issue, try one of the following:
+  - Start the app in development mode by running `next dev`, then open "/exercises/0/solution/speakers/[id]" in your browser to investigate the error.
+  - Rerun the production build with `next build --debug-prerender` to generate better stack traces.
+Error occurred prerendering page "/exercises/0/solution/speakers/[id]". Read more: https://nextjs.org/docs/messages/prerender-error
+Export encountered an error on /exercises/0/solution/speakers/[id]/page: /exercises/0/solution/speakers/[id], exiting the build.
+# Compared with docs/errors/exercise-0-params-without-suspense.txt (16.3.5): identical message, [stream]/[cache]/[block] list and route. 76 static pages now (38 then; the repo grew).

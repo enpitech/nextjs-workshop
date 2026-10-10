@@ -1,0 +1,16 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 47: first load after a vote is stale only if the page was open. Verdict: warm case UNCHANGED; cold case NOT-CHECKED.
+# next dev -p 3400, json-server on 3001 (delay 800 ms). Talk 2 started at 9 votes. Count read from the HTML of curl http://localhost:3400/talks/2.
+
+GET1 children\":[9,\" votes >9<!-- --> votes 
+GET2 children\":[9,\" votes >9<!-- --> votes 
+DB "votes": 9
+POST {"id":2,"title":"ReadingtheRSCpayload","speakerId":2,"votes":10,"category":"frontend"}
+DB "votes": 10
+GET after vote #1 children\":[9,\" votes >9<!-- --> votes 
+GET #2 children\":[9,\" votes >9<!-- --> votes 
+GET after 4s children\":[10,\" votes >10<!-- --> votes 
+
+Same pattern as docs/build-logs/day2-review-A13.txt case A: stale on the first two loads, fresh after a few seconds.
+Case B (cold cache after a restart) not run, to avoid a second vote on the shared database.
+SIDE EFFECT: talk 2 in the shared db.json is now 10 votes (was 9). I tried to PATCH it back and the permission system denied it. Reset with npm run reset or PATCH /talks/2 {"votes":9}.

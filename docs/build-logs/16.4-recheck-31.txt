@@ -1,0 +1,24 @@
+Captured 2026-10-08 on Next 16.4.0
+Claim 31, build part (page 12f L2839-2894): route rows with and without generateStaticParams. Verdict: UNCHANGED. The updateTag error text was checked in source only (no POST on dev).
+# Method: copy of the 16.4.0 app (Node v22.17.0, json-server on 3001, cacheComponents true). A 16.3.5 control copy (same source, next@16.3.5 from the repo node_modules) is named where used.
+
+## Plain build, 16.4.0, rows for /api/talks (also in the full table, same as 16.3.5)
+├ ○ /api/talks                                            1m      1h
+├ ƒ /api/talks/[id]
+├ ƒ /api/talks/search
+├ ƒ /api/talks/vote
+├ ƒ /exercises/8/solution/dashboard/api/talks
+├ ○ /exercises/9/solution/board/api/talks                 1h      1d
+
+## With `export function generateStaticParams() { return [{ id: "1" }, { id: "2" }]; }` added to app/api/talks/[id]/route.ts
+├ ○ /api/talks                                            1m      1h
+├   /api/talks/[id]
+│ ├ ● /api/talks/1                                        1m      1h
+│ └ ● /api/talks/2                                        1m      1h
+├ ƒ /api/talks/search
+├ ƒ /api/talks/vote
+├ ƒ /exercises/8/solution/dashboard/api/talks
+├ ○ /exercises/9/solution/board/api/talks                 1h      1d
+
+## updateTag error text, node_modules/next/dist/server/web/spec-extension/revalidate.js, 16.4.0 and 16.3.5 (identical):
+updateTag can only be called from within a Server Action. To invalidate cache tags in Route Handlers or other contexts, use revalidateTag instead. See more info here: https://nextjs.org/docs/app/api-reference/functions/updateTag

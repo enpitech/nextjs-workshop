@@ -1,0 +1,54 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 24: tmp page /tmp-rule, getGreeting() with "use cache" reading cookies(). Plain next build.
+▲ Next.js 16.4.0 (Turbopack)
+- Environments: .env.local
+⚠ `cacheComponents` is enabled without a corresponding `partialPrefetching` option. Set `partialPrefetching` to either `true` or `false`.
+
+The only reason to set `partialPrefetching` to `false` is if you're migrating an older Cache Components app. The initial release of Cache Components did not include Partial Prefetching. New projects should enable both Cache Components and Partial Prefetching.
+
+Both Cache Components and Partial Prefetching will be enabled everywhere in the next major release, and the old configurations will be removed.
+
+Learn more: https://nextjs.org/docs/app/guides/adopting-partial-prefetching
+✓ Running next.config.ts took 56ms
+- Cache Components enabled
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 7.7s
+  Running TypeScript ...
+  Finished TypeScript in 6.8s ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/77) ...
+  Generating static pages using 19 workers (19/77) 
+  Generating static pages using 19 workers (38/77) 
+  Generating static pages using 19 workers (57/77) 
+⨯ Error: Route "/tmp-rule": `cookies()` can't be read inside `"use cache"`. Read it outside the cached function and pass what you need as an argument.
+Learn more: https://nextjs.org/docs/messages/next-request-in-use-cache
+    at g (app\tmp-rule\page.tsx:5:24)
+  3 | async function getGreeting() {
+  4 |   "use cache";
+> 5 |   const theme = (await cookies()).get("theme")?.value ?? "light";
+    |                        ^
+  6 |   return `theme: ${theme}`;
+  7 | }
+  8 | {
+  digest: '2741893628'
+}
+Error: Route "/tmp-rule": `cookies()` can't be read inside `"use cache"`. Read it outside the cached function and pass what you need as an argument.
+Learn more: https://nextjs.org/docs/messages/next-request-in-use-cache
+    at g (app\tmp-rule\page.tsx:5:24)
+  3 | async function getGreeting() {
+  4 |   "use cache";
+> 5 |   const theme = (await cookies()).get("theme")?.value ?? "light";
+    |                        ^
+  6 |   return `theme: ${theme}`;
+  7 | }
+  8 | {
+  digest: '2741893628'
+}
+To get a more detailed stack trace and pinpoint the issue, try one of the following:
+  - Start the app in development mode by running `next dev`, then open "/tmp-rule" in your browser to investigate the error.
+  - Rerun the production build with `next build --debug-prerender` to generate better stack traces.
+Error occurred prerendering page "/tmp-rule". Read more: https://nextjs.org/docs/messages/prerender-error
+Export encountered an error on /tmp-rule/page: /tmp-rule, exiting the build.
+⨯ Next.js build worker exited with code: 1 and signal: null
+EXIT=1

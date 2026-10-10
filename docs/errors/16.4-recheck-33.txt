@@ -1,0 +1,32 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 33 (dev part): proxy.ts runtime export, middleware.ts, matcher break, build row. Verdict: message text UNCHANGED, but WHEN it prints differs; the rest UNCHANGED.
+
+## export const runtime = "edge"; added to proxy.ts
+Hot edit while next dev was running: nothing printed on /admin (307) or /talks/1 (200), two tries.
+Fresh next dev start with the line in place, terminal (no 'Error: ' prefix, printed before 'Cache Components enabled'):
+⨯ Route segment config is not allowed in Proxy file at "./proxy.ts". Proxy always runs on Node.js runtime. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+/admin still answered 307 (the redirect ran). Whether the overlay shows the text with 'Error: ': NEEDS-BROWSER.
+The message string is the same in 16.3.5 and 16.4.0 (node_modules/next/dist/build/analysis/get-page-static-info.js:601).
+
+## proxy.ts renamed to middleware.ts, export renamed to middleware, fresh next dev
+/admin -> 307 to http://localhost:3400/ (it works). Terminal:
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+
+  To migrate automatically, run:
+  npx @next/codemod@canary middleware-to-proxy .
+
+  Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+(A hot rename while dev was running did not take effect until restart: /admin stayed 200 for a while.)
+The warning prints '@next/codemod@canary', the page says '@next/codemod@latest'. Same text in 16.3.5's source.
+
+## matcher removed (config export commented out): GET / -> 307 Location: / (redirect loop), as the page says.
+
+## next build, route table last rows
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)             prerendered as static content
+◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
+ƒ  (Dynamic)            server-rendered on demand
+

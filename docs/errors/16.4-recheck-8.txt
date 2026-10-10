@@ -1,0 +1,18 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 8: Break #1 function prop. Verdict: UNCHANGED (dev terminal text). next build not checked (the route uses connection(), so the build passes).
+
+## /breaks/1/broken, prop onVote (next dev terminal)
+⨯ Error: Event handlers cannot be passed to Client Component props.
+  <... talks={[...]} onVote={function onVote}>
+                            ^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+    at ignore-listed frames {
+  digest: '4051269813'
+
+## same route with the prop renamed to format
+⨯ Error: Functions cannot be passed directly to Client Components unless you explicitly expose it by marking it with "use server". Or maybe you meant to call this function rather than return it.
+  <... talks={[...]} format={function format}>
+                            ^^^^^^^^^^^^^^^^^
+    at ignore-listed frames {
+  digest: '3948692670'
+}

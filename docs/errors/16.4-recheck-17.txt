@@ -1,0 +1,21 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 17: RouteContext, 405, route and page conflict. Verdict: UNCHANGED.
+
+## RouteContext is generated: .next/dev/types/routes.d.ts (next dev) and .next/types/routes.d.ts (next build) both contain 'interface RouteContext<AppRouteHandlerRoute extends AppRouteHandlerRoutes>'.
+
+## curl -i -X DELETE http://localhost:3400/api/talks (next dev)
+HTTP/1.1 405 Method Not Allowed
+## curl -i -X DELETE http://localhost:3401/api/talks (next start)
+HTTP/1.1 405 Method Not Allowed   (plus 'Allow: GET' and 'Allow: HEAD' headers and body 'Method Not Allowed'; dev sent no Allow header)
+
+## app/talks/route.ts next to app/talks/page.tsx
+next dev, GET /talks -> 500, terminal:
+Error: An issue occurred while preparing your Next.js app
+Conflicting route and page at /talks: route at /talks/route and page at /talks/page
+
+next build (exit 1):
+> Build error occurred
+Error: Turbopack build failed with 1 error:
+./app
+Error: An issue occurred while preparing your Next.js app
+Conflicting route and page at /talks: route at /talks/route and page at /talks/page

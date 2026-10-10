@@ -1,0 +1,26 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 35: ask-mcp.mjs against next dev. Verdict: nine tools UNCHANGED, /_next/mcp only in dev UNCHANGED, 'No browser sessions connected' UNCHANGED, route count CHANGED (28 in the frozen 2026-09-16 run, 77 now).
+# The script hardcodes localhost:3000. I ran copies with 3000 replaced by 3400 (dev) and 3401 (next start).
+
+$ node ask-mcp.mjs   # next dev
+get_project_metadata
+get_errors
+get_page_metadata
+get_logs
+get_server_action_by_id
+get_routes
+get_request_insights
+get_compilation_issues
+compile_route
+
+$ node ask-mcp.mjs   # next start
+HTTP 404. No MCP answer. Is this next dev?
+
+$ node ask-mcp.mjs get_errors
+{"error":"No browser sessions connected. Please open your application in a browser to retrieve error state."}
+$ node ask-mcp.mjs get_page_metadata
+{"error":"No browser sessions connected. Please open your application in a browser to retrieve page metadata."}
+$ node ask-mcp.mjs nope
+MCP error -32602: Tool nope not found
+
+get_routes appRouter entries: 77 (the app has more routes now, including Exercises 0-10).

@@ -1,0 +1,24 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 4: useState in a Server Component, Date.now() in a Client Component, hydration mismatch. Verdict: useState text UNCHANGED; hydration and Date.now NEEDS-BROWSER.
+
+## useState in app/probe/page.tsx (no directive): next dev terminal, curl /probe -> HTTP 500
+○ Compiling /probe ...
+⨯ ./app/probe/page.tsx:1:10
+Error: You're importing a module that depends on `useState` into a React Server Component module. This API is only available in Client Components. To fix, mark the file (or its parent) with the `"use client"` directive.
+    Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+> 1 | import { useState } from "react";
+    |          ^^^^^^^^
+  2 |
+  3 | export default function Probe() {
+  4 |   const [n, setN] = useState(0);
+
+Ecmascript file had an error
+
+
+ GET /probe 500 in 2.1s (next.js: 1965ms, application-code: 184ms)
+
+## Date.now() in a Client Component with cacheComponents on (app/tmp-hydration/page.tsx)
+curl /tmp-hydration -> HTTP 200. SSR HTML contains <p>Rendered at <!-- -->1791460208586</p>. No 'unstable value' text in the HTML, the terminal or .next/dev/logs/next-development.log (grep count 0).
+In 16.3.5 this error was captured from the browser console (docs/errors/date-now-in-client-component.txt). It is raised on the client, so it needs a browser.
+
+## Hydration failed (typeof window branch): a client-side React error in the browser console. NEEDS-BROWSER.

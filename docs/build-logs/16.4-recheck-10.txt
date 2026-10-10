@@ -1,0 +1,25 @@
+Captured 2026-10-08 on Next 16.4.0
+Claim 10 (page 5l L1146-1180): Break #2, `next experimental-analyze`. Verdict: CHANGED. On 16.4.0 the barrel with use client no longer ships the 622 KB emoji table for /breaks/2/broken, and the command is now documented as `next analyze`.
+# Method: copy of the 16.4.0 app (Node v22.17.0, json-server on 3001, cacheComponents true). A 16.3.5 control copy (same source, next@16.3.5 from the repo node_modules) is named where used.
+
+## 1. Does the 622 KB table ship? (plain `next build`, then grep the chunks, as in break-2-chunks.txt)
+16.4.0:   grep -rl "SYMBOL NUMBER 3999" .next  ->  no file. Largest chunks: 534201, 227771, 115412 bytes. /breaks/2/broken loads 10 chunks (one extra, 553 bytes), /breaks/2/fixed loads 9.
+16.3.5 control (same source): grep -l "SYMBOL NUMBER 3999" .next/static/chunks/*.js -> 1zf58s3z10df8.js, 622501 bytes. /breaks/2/broken loads 11 chunks, /breaks/2/fixed loads 9.
+
+## 2. `next analyze` / `next experimental-analyze` on 16.4.0 (route list, same unit as the treemap: KB = 1024 bytes, client, compressed)
+/breaks/2/broken   249.47 KB compressed      (page says 404.28 KB)
+/breaks/2/fixed    249.19 KB compressed      (page says 274.33 KB)
+Client graph from `next analyze export` (sum of "part" records under /_next/static):
+  broken 187 modules, 648,023 bytes uncompressed (632.83 KB), 255,454 bytes compressed
+  fixed  184 modules, 647,427 bytes uncompressed (632.25 KB), 255,173 bytes compressed
+Table view for /breaks/2/broken lists components/ui/badge.tsx 327 B, components/ui/card.tsx 170 B, components/ui/emoji-picker.tsx 66 B. There is NO components/ui/emoji-table.ts and no components/ui/ box of 129.72 KB.
+
+## 3. 16.3.5 control on today's source, analyzer UI (not the 2026-09-16 numbers on the page)
+/breaks/2/broken   430.75 KB compressed, 1.97 MB uncompressed, 185 modules; components/ui/emoji-table.ts 128.85 KB (the page's 128.85 KB is reproduced exactly).
+(The page's 404.28 KB / 1.91 MB / 170 modules are from an older tree. Today's tree is bigger on 16.3.5 too.) /breaks/2/fixed was not re-read on the control.
+
+## 4. Command name
+16.4.0 `npx next experimental-analyze --help`: "Usage: next analyze|experimental-analyze [options] [command]". New: --snapshot <name>, --experimental-app-only, subcommand `export` (JSON Lines).
+16.4.0 docs (node_modules/next/dist/docs/01-app/02-guides/package-bundling.md:22-45) use `npx next analyze`; header "## Next.js Bundle Analyzer" (no "(Experimental)"), "Available in v16.1 and later." still there.
+16.3.5 docs use `npx next experimental-analyze`, header "## Next.js Bundle Analyzer (Experimental)". `next experimental-analyze` still works on 16.4.0 (used for this run).
+16.4.0 analyzer UI: new toggles "Table / Treemap" and "Initial load only / Behind async boundary / Initial + async paths". The route selector top left still exists.

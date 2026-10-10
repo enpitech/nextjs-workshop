@@ -1,0 +1,41 @@
+Captured 2026-10-08 on Next 16.4.0
+Claim 18 (page 10g L1963-1964, L2029-2034): Exercise 8 solution build rows and the two removal experiments. Verdict: UNCHANGED. The 3 Issues badge (browser extension) was not checked.
+# Method: copy of the 16.4.0 app (Node v22.17.0, json-server on 3001, cacheComponents true). A 16.3.5 control copy (same source, next@16.3.5 from the repo node_modules) is named where used.
+
+## Route rows for the solution, 16.4.0 (identical to the full route table of day2-review-A1.txt on 16.3.5: 93 lines, `diff` empty)
+├ ○ /exercises/8
+├ ○ /exercises/8/solution
+├ ○ /exercises/8/solution/dashboard                       1m      1h
+├ ƒ /exercises/8/solution/dashboard/api/talks
+├ ○ /exercises/8/solution/dashboard/talks                 1m      1h
+├   /exercises/8/solution/dashboard/talks/[id]
+│ └ ◐ /exercises/8/solution/dashboard/talks/[id]
+├ ○ /exercises/8/solution/dashboard/votes
+
+## Experiment 1: remove <Suspense> around the SidebarLink nav in app/exercises/8/solution/dashboard/layout.tsx (replaced by <>...</>). Build FAILS (exit 1):
+Error: Route "/exercises/8/solution/dashboard/talks/[id]": Next.js encountered URL data `usePathname()` in a Client Component outside of `<Suspense>`.
+
+This blocks prerendering because the value is only available at runtime.
+
+Ways to fix this:
+  - [stream] Wrap the component in `<Suspense fallback={...}>` so the hook value streams in after prerendering
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-client-hook
+    at <unknown> (app\exercises\8\solution\dashboard\sidebar-link.tsx:8:3)
+[...]
+Export encountered an error on /exercises/8/solution/dashboard/talks/[id]/page: /exercises/8/solution/dashboard/talks/[id], exiting the build.
+
+## Experiment 2: delete app/exercises/8/solution/dashboard/talks/[id]/loading.tsx. Build FAILS (exit 1):
+Error: Route "/exercises/8/solution/dashboard/talks/[id]": Next.js encountered uncached or runtime data during prerendering.
+
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+[...]
+Export encountered an error on /exercises/8/solution/dashboard/talks/[id]/page: /exercises/8/solution/dashboard/talks/[id], exiting the build.

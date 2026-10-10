@@ -1,0 +1,226 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 21: plain next build on the clean repo copy (flag on), then the same code with cacheComponents false and every use-cache/cacheLife/cacheTag line and 'export const instant' removed.
+
+##### FLAG ON
+▲ Next.js 16.4.0 (Turbopack)
+- Environments: .env.local
+⚠ `cacheComponents` is enabled without a corresponding `partialPrefetching` option. Set `partialPrefetching` to either `true` or `false`.
+
+The only reason to set `partialPrefetching` to `false` is if you're migrating an older Cache Components app. The initial release of Cache Components did not include Partial Prefetching. New projects should enable both Cache Components and Partial Prefetching.
+
+Both Cache Components and Partial Prefetching will be enabled everywhere in the next major release, and the old configurations will be removed.
+
+Learn more: https://nextjs.org/docs/app/guides/adopting-partial-prefetching
+✓ Running next.config.ts took 603ms
+- Cache Components enabled
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 12.9s
+  Running TypeScript ...
+  Finished TypeScript in 6.2s ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/76) ...
+  Generating static pages using 19 workers (19/76) 
+  Generating static pages using 19 workers (38/76) 
+  Generating static pages using 19 workers (57/76) 
+✓ Generating static pages using 19 workers (76/76) in 3.6s
+  Finalizing page optimization ...
+
+Route (app)                                       Revalidate  Expire
+┌ ○ /                                                     1m      1h
+├ ○ /_not-found
+├ ○ /agent
+├ ○ /api/talks                                            1m      1h
+├ ƒ /api/talks/[id]
+├ ƒ /api/talks/search
+├ ƒ /api/talks/vote
+├ ○ /breaks
+├ ◐ /breaks/1/broken
+├ ○ /breaks/1/fixed                                       1m      1h
+├ ○ /breaks/10/broken                                     1m      1h
+├ ○ /breaks/10/fixed                                      1m      1h
+├ ○ /breaks/2/broken
+├ ○ /breaks/2/fixed
+├ ƒ /breaks/3/broken/a
+├ ƒ /breaks/3/broken/b
+├ ◐ /breaks/3/fixed/a
+├ ◐ /breaks/3/fixed/b
+├ ◐ /breaks/4/broken
+├ ◐ /breaks/4/fixed
+├ ○ /breaks/5/broken                                      1m      1h
+├ ○ /breaks/5/fixed                                       1m      1h
+├ ◐ /breaks/6/broken
+├ ○ /breaks/6/fixed
+├ ○ /breaks/7/broken
+├ ○ /breaks/7/fixed
+├ ○ /breaks/8/broken                                      1m      1h
+├ ○ /breaks/8/fixed                                       1m      1h
+├ ○ /breaks/9/broken
+├ ○ /breaks/9/fixed
+├ ○ /exercises
+├ ○ /exercises/0
+├ ○ /exercises/0/solution
+├ ○ /exercises/0/solution/speakers                        1h      1d
+├   /exercises/0/solution/speakers/[id]                   1h      1d
+│ └ ◐ /exercises/0/solution/speakers/[id]                 1h      1d
+├ ◐ /exercises/1
+├ ○ /exercises/1/solution                                 1m      1h
+├ ○ /exercises/10
+├ ○ /exercises/10/solution
+├ ○ /exercises/10/solution/top                            1m      1h
+├ ○ /exercises/2                                          1m      1h
+├ ○ /exercises/2/solution                                 1m      1h
+├ ◐ /exercises/3
+├ ◐ /exercises/3/solution
+├ ◐ /exercises/4
+├ ○ /exercises/4/solution                                 1m      1h
+├ ○ /exercises/5                                          1m      1h
+├   /exercises/5/[id]
+│ └ ◐ /exercises/5/[id]
+├ ○ /exercises/5/solution                                 1m      1h
+├   /exercises/5/solution/[id]
+│ └ ◐ /exercises/5/solution/[id]
+├ ○ /exercises/6
+├ ƒ /exercises/6/api/speakers/[id]
+├ ○ /exercises/6/solution
+├ ƒ /exercises/6/solution/api/speakers/[id]
+├ ○ /exercises/7
+├   /exercises/7/[id]
+│ └ ◐ /exercises/7/[id]
+├ ○ /exercises/7/solution
+├   /exercises/7/solution/[id]
+│ └ ◐ /exercises/7/solution/[id]
+├ ○ /exercises/8
+├ ○ /exercises/8/solution
+├ ○ /exercises/8/solution/dashboard                       1m      1h
+├ ƒ /exercises/8/solution/dashboard/api/talks
+├ ○ /exercises/8/solution/dashboard/talks                 1m      1h
+├   /exercises/8/solution/dashboard/talks/[id]
+│ └ ◐ /exercises/8/solution/dashboard/talks/[id]
+├ ○ /exercises/8/solution/dashboard/votes
+├ ○ /exercises/9
+├ ○ /exercises/9/solution
+├ ◐ /exercises/9/solution/board                           1h      1d
+├ ƒ /exercises/9/solution/board/api/revalidate
+├ ○ /exercises/9/solution/board/api/talks                 1h      1d
+├ ○ /search
+├ ○ /spa
+├ ◐ /spa/query
+├ ○ /spa/use                                              1m      1h
+├ ○ /submit                                               1h      1d
+├ ○ /talks
+└   /talks/[id]
+  └ ◐ /talks/[id]
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)             prerendered as static content
+◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
+ƒ  (Dynamic)            server-rendered on demand
+
+exit 0
+
+##### FLAG OFF
+▲ Next.js 16.4.0 (Turbopack)
+- Environments: .env.local
+✓ Running next.config.ts took 62ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 5.0s
+  Running TypeScript ...
+  Finished TypeScript in 5.0s ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/69) ...
+  Generating static pages using 19 workers (17/69) 
+  Generating static pages using 19 workers (34/69) 
+  Generating static pages using 19 workers (51/69) 
+✓ Generating static pages using 19 workers (69/69) in 867ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /agent
+├ ƒ /api/talks
+├ ƒ /api/talks/[id]
+├ ƒ /api/talks/search
+├ ƒ /api/talks/vote
+├ ○ /breaks
+├ ƒ /breaks/1/broken
+├ ○ /breaks/1/fixed
+├ ○ /breaks/10/broken
+├ ○ /breaks/10/fixed
+├ ○ /breaks/2/broken
+├ ○ /breaks/2/fixed
+├ ƒ /breaks/3/broken/a
+├ ƒ /breaks/3/broken/b
+├ ƒ /breaks/3/fixed/a
+├ ƒ /breaks/3/fixed/b
+├ ƒ /breaks/4/broken
+├ ƒ /breaks/4/fixed
+├ ○ /breaks/5/broken
+├ ○ /breaks/5/fixed
+├ ƒ /breaks/6/broken
+├ ○ /breaks/6/fixed
+├ ○ /breaks/7/broken
+├ ○ /breaks/7/fixed
+├ ○ /breaks/8/broken
+├ ○ /breaks/8/fixed
+├ ○ /breaks/9/broken
+├ ○ /breaks/9/fixed
+├ ○ /exercises
+├ ○ /exercises/0
+├ ○ /exercises/0/solution
+├ ○ /exercises/0/solution/speakers
+├ ƒ /exercises/0/solution/speakers/[id]
+├ ƒ /exercises/1
+├ ○ /exercises/1/solution
+├ ○ /exercises/10
+├ ○ /exercises/10/solution
+├ ○ /exercises/10/solution/top
+├ ○ /exercises/2
+├ ○ /exercises/2/solution
+├ ƒ /exercises/3
+├ ƒ /exercises/3/solution
+├ ƒ /exercises/4
+├ ○ /exercises/4/solution
+├ ○ /exercises/5
+├ ƒ /exercises/5/[id]
+├ ○ /exercises/5/solution
+├ ƒ /exercises/5/solution/[id]
+├ ○ /exercises/6
+├ ƒ /exercises/6/api/speakers/[id]
+├ ○ /exercises/6/solution
+├ ƒ /exercises/6/solution/api/speakers/[id]
+├ ○ /exercises/7
+├ ƒ /exercises/7/[id]
+├ ○ /exercises/7/solution
+├ ƒ /exercises/7/solution/[id]
+├ ○ /exercises/8
+├ ○ /exercises/8/solution
+├ ○ /exercises/8/solution/dashboard
+├ ƒ /exercises/8/solution/dashboard/api/talks
+├ ○ /exercises/8/solution/dashboard/talks
+├ ƒ /exercises/8/solution/dashboard/talks/[id]
+├ ○ /exercises/8/solution/dashboard/votes
+├ ○ /exercises/9
+├ ○ /exercises/9/solution
+├ ƒ /exercises/9/solution/board
+├ ƒ /exercises/9/solution/board/api/revalidate
+├ ƒ /exercises/9/solution/board/api/talks
+├ ○ /search
+├ ○ /spa
+├ ƒ /spa/query
+├ ○ /spa/use
+├ ○ /submit
+├ ○ /talks
+└ ƒ /talks/[id]
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+EXIT=0

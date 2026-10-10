@@ -1,0 +1,27 @@
+Captured 2026-10-08 on Next 16.4.0
+Claim 40 (page 16d L3329-3331, L3346): Haiku 2.7d diff (page turned into a Client Component importing the data layer) and `npm run build` while `next dev` runs. Verdict: texts and behavior UNCHANGED; the error count is 8 on today's repo, on both 16.4.0 and 16.3.5 (page says 6).
+# Method: copy of the 16.4.0 app (Node v22.17.0, json-server on 3001, cacheComponents true). A 16.3.5 control copy (same source, next@16.3.5 from the repo node_modules) is named where used.
+
+## Haiku 2.7d diff applied to app/page.tsx (use client, getTalks imported from @/lib/talks, useEffect/useState), plain `next build`, 16.4.0 (exit 1)
+Error: Turbopack build failed with 8 errors:
+./lib/talks.ts:10:3
+Error: It is not allowed to define inline "use cache" annotated functions in Client Components.
+./lib/talks.ts:17:3
+Error: It is not allowed to define inline "use cache" annotated functions in Client Components.
+./lib/talks.ts:4:10
+Error: You're importing a module that depends on "cacheLife". This API is only available in Server Components in the App Router, but you are using it in the Pages Router.
+./lib/talks.ts:4:21
+Error: You're importing a module that depends on "cacheTag". This API is only available in Server Components in the App Router, but you are using it in the Pages Router.
+./lib/api.ts:3:1
+Error: You're importing a module that depends on "server-only". This API is only available in Server Components in the App Router, but you are using it in the Pages Router.
+./lib/talks.ts:3:1
+Error: You're importing a module that depends on "server-only". This API is only available in Server Components in the App Router, but you are using it in the Pages Router.
+./lib/api.ts:3:1
+Error: 'server-only' cannot be imported from a Client Component module
+./lib/talks.ts:3:1
+Error: 'server-only' cannot be imported from a Client Component module
+# 16.3.5 control, same file: "Turbopack build failed with 8 errors" and the same eight lines. The page's "6 errors" dates from when everything was in lib/db.ts.
+# Both guards the page names are in the list: `'server-only' cannot be imported from a Client Component module` and `It is not allowed to define inline "use cache" annotated functions in Client Components.`
+
+## `npm run build` while `next dev -p 3300` runs in the same folder (16.4.0)
+exit 0. Route table identical to the clean build (diff empty). Before the build GET /talks/2 200; after: GET /talks/2 200, GET / 200, GET /talks/3 200. Dev log: no error. (Same result as day2-review-A1.txt on 16.3.5.)

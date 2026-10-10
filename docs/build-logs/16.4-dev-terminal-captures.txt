@@ -1,0 +1,34 @@
+Captured 2026-10-08 on Next 16.4.0
+# next dev terminal: blocking-route error for an uncached fetch with no Suspense (temp page app/tmp-block/page.tsx), and the browser console forwarding with logging.browserToTerminal: true
+
+## blocking-route error printed by next dev when the page was requested
+Error: Route "/tmp-block": Next.js encountered uncached data during prerendering.
+
+`fetch(...)` or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] Cache the data access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at P (app\tmp-block\page.tsx:3:21)
+  1 | // An uncached read, no Suspense, no "use cache".
+  2 | export default async function P() {
+> 3 |   const res = await fetch("http://localhost:3001/talks/1");
+    |                     ^
+  4 |   const talk = await res.json();
+  5 |   return <p>{talk.title}</p>;
+  6 | }
+
+## button onClick with console.error("workshop test") and console.log("workshop log"), browserToTerminal: true
+[browser] workshop test 
+    at onClick (app/tmp-log/page.tsx:8:17)
+   6 |       type="button"
+   7 |       onClick={() => {
+>  8 |         console.error("workshop test");
+     |                 ^
+   9 |         console.log("workshop log");
+  10 |       }}
+  11 |     > (app/tmp-log/page.tsx:8:17)
+[browser] workshop log (app/tmp-log/page.tsx:9:17)

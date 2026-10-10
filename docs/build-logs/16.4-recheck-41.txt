@@ -1,0 +1,36 @@
+Captured 2026-10-08 on Next 16.4.0
+Claim 41 (page 16e L3378-3381): Haiku and Fable cacheLife diffs. Verdict: UNCHANGED (TS2769 text, 13 failing routes, plain build stops at /breaks/1/fixed, expire: 300 green with `/` as `○ 1m 5m`).
+# Method: copy of the 16.4.0 app (Node v22.17.0, json-server on 3001, cacheComponents true). A 16.3.5 control copy (same source, next@16.3.5 from the repo node_modules) is named where used.
+
+## cacheLife({ duration: 60 }) in lib/talks.ts, `next build` 16.4.0 (exit 1, same on 16.3.5 control)
+lib/talks.ts(11,15): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Object literal may only specify known properties, and 'duration' does not exist in type '{ stale?: number | undefined; revalidate?: number | undefined; expire?: number | undefined; }'.
+Failed to type check.
+# 16.3.5 evidence (docs/agent-runs/2.7-haiku-build-checks.txt:15-17) has the same three lines; the page quote leaves out the middle line.
+
+## cacheLife({ stale: 60, revalidate: 60, expire: 60 }), plain `next build` 16.4.0 (exit 1)
+Error: Route "/breaks/1/fixed": Next.js encountered uncached or runtime data during prerendering.
+Export encountered an error on /breaks/1/fixed/page: /breaks/1/fixed, exiting the build.
+
+## same edit, `next build --debug-prerender` 16.4.0 (exit 1): distinct failing routes = 13
+Error occurred prerendering page "/"
+Error occurred prerendering page "/breaks/1/fixed"
+Error occurred prerendering page "/breaks/10/broken"
+Error occurred prerendering page "/breaks/10/fixed"
+Error occurred prerendering page "/breaks/8/broken"
+Error occurred prerendering page "/breaks/8/fixed"
+Error occurred prerendering page "/exercises/1/solution"
+Error occurred prerendering page "/exercises/10/solution/top"
+Error occurred prerendering page "/exercises/4/solution"
+Error occurred prerendering page "/exercises/5"
+Error occurred prerendering page "/exercises/5/solution"
+Error occurred prerendering page "/exercises/8/solution/dashboard"
+Error occurred prerendering page "/exercises/8/solution/dashboard/talks"
+# Identical list to day2-review-A2.txt. "Unexpected cache miss after cache warming phase" lines: 8 here (A2 file: 9 lines). MIN_PRERENDERABLE_EXPIRE = 300 (node_modules/next/dist/server/use-cache/constants.js:28).
+
+## expire: 300, plain build 16.4.0 (exit 0)
+┌ ○ /                                                     1m      5m
+├ ○ /breaks/1/fixed                                       1m      5m
+├ ○ /exercises/1/solution                                 1m      5m
+├ ○ /exercises/5                                          1m      5m

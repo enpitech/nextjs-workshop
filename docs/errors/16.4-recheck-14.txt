@@ -1,0 +1,33 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 14: Exercise 0, app/exercises/0/solution/speakers/[id]/loading.tsx removed. Verdict: build error UNCHANGED; dev text matches the page; the badge itself NEEDS-BROWSER.
+
+## next dev terminal on GET /exercises/0/solution/speakers/1 (HTTP 200)
+Error: Route "/exercises/0/solution/speakers/[id]": Next.js encountered runtime data during prerendering.
+
+`cookies()`, `headers()`, `params`, or `searchParams` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-runtime
+    at SpeakerPage (app\exercises\0\solution\speakers\[id]\page.tsx:13:18)
+> 13 |   const { id } = await params;
+
+The label 'Blocking Route' exists in 16.4.0: node_modules/next/dist/next-devtools/dev-overlay/components/errors/error-type-label/error-type-label.d.ts. Whether the badge shows it: NEEDS-BROWSER.
+
+## next build (exit 1), identical to docs/errors/exercise-0-params-without-suspense.txt apart from timings:
+Error: Route "/exercises/0/solution/speakers/[id]": Next.js encountered uncached or runtime data during prerendering.
+
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+  - Rerun the production build with `next build --debug-prerender` to generate better stack traces.
+Error occurred prerendering page "/exercises/0/solution/speakers/[id]". Read more: https://nextjs.org/docs/messages/prerender-error
+Export encountered an error on /exercises/0/solution/speakers/[id]/page: /exercises/0/solution/speakers/[id], exiting the build.
+⨯ Next.js build worker exited with code: 1 and signal: null

@@ -1,0 +1,17 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 37: tool behaviour. Verdict: UNCHANGED (all four statements).
+# Same method as 16.4-recheck-35.txt, no browser connected.
+
+get_routes: lists /exercises/10, /exercises/10/solution, /exercises/10/solution/top before any request to those pages, so it scans files. appRouter has 77 entries.
+
+$ node ask-mcp.mjs get_logs   # path shortened
+{"logFilePath":"<recheck-c>\.next\dev\logs\next-development.log"}
+
+$ node ask-mcp.mjs get_page_metadata
+{"error":"No browser sessions connected. Please open your application in a browser to retrieve page metadata."}
+
+$ node ask-mcp.mjs get_request_insights
+{"error":"Request Insights is not enabled. Set experimental.requestInsights = true in next.config.js and restart next dev."}
+
+$ node ask-mcp.mjs get_project_metadata   # path shortened
+{"projectPath":"<recheck-c>","devServerUrl":"http://localhost:3400"}

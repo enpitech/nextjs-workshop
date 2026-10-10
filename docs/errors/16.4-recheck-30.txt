@@ -1,0 +1,13 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 30: NEXT_PRIVATE_DEBUG_CACHE=1 and the Cache prefix in dev. Verdict: UNCHANGED.
+# console.log("inside getTalks") added in the "use cache" function getTalks in lib/talks.ts, next dev with NEXT_PRIVATE_DEBUG_CACHE=1, GET / twice.
+
+use-cache: initializing cache handlers
+DefaultCacheHandler: get ["80e396dae8c0901d06eb4f2ec14913f79f9ee960cc",[],["development","4773684210655913-1"]] not found
+inside getTalks
+'use cache' Resume Data Cache entry saved ["80e396dae8c0901d06eb4f2ec14913f79f9ee960cc",[],["development","4773684210655913-1"]]
+ Cache  inside getTalks
+DefaultCacheHandler: set ["80e396dae8c0901d06eb4f2ec14913f79f9ee960cc",[],["development","4773684210655913-1"]] start
+DefaultCacheHandler: set ["80e396dae8c0901d06eb4f2ec14913f79f9ee960cc",[],["development","4773684210655913-1"]] done
+'use cache' Resume Data Cache entry found ["80e396dae8c0901d06eb4f2ec14913f79f9ee960cc",[],["development","4773684210655913-1"]]
+ Cache  inside getTalks

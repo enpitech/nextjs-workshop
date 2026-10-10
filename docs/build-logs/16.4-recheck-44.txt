@@ -1,0 +1,7 @@
+Captured 2026-10-08 on Next 16.4.0
+Claim 44, build table only (page 17 L3429-3433, L3478): `○ /agent` row. Verdict: UNCHANGED on Node 22. Node 24 / eve on was NOT checked (no Node 24 on this machine).
+# Method: copy of the 16.4.0 app (Node v22.17.0, json-server on 3001, cacheComponents true). A 16.3.5 control copy (same source, next@16.3.5 from the repo node_modules) is named where used.
+
+## Row (16.4.0 build, Node v22.17.0, withEve off because next.config.ts only wraps on Node >= 24)
+├ ○ /agent
+# Same row in 16.3.5 (day2-review-A1.txt). The build prints no eve warning on Node 22. next.config.ts still reads: export default nodeMajor >= 24 ? withEve(nextConfig) : nextConfig;

@@ -1,0 +1,361 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 23: --debug-prerender (run 1 = 20 routes, see 16.4-recheck-19.txt for the full log), plus the variant that deletes only the "use cache" lines.
+
+##### ONLY THE DIRECTIVE DELETED (22 routes)
+⚠ Prerendering is running in debug mode with NODE_ENV='development'. This will affect performance and should not be used for production.
+▲ Next.js 16.4.0 (Turbopack)
+- Environments: .env.local
+⚠ `cacheComponents` is enabled without a corresponding `partialPrefetching` option. Set `partialPrefetching` to either `true` or `false`.
+
+The only reason to set `partialPrefetching` to `false` is if you're migrating an older Cache Components app. The initial release of Cache Components did not include Partial Prefetching. New projects should enable both Cache Components and Partial Prefetching.
+
+Both Cache Components and Partial Prefetching will be enabled everywhere in the next major release, and the old configurations will be removed.
+
+Learn more: https://nextjs.org/docs/app/guides/adopting-partial-prefetching
+✓ Running next.config.ts took 64ms
+- Cache Components enabled
+- Experiments (use with caution):
+  ✓ allowDevelopmentBuild (enabled by `--debug-prerender`)
+  ⨯ prerenderEarlyExit (disabled by `--debug-prerender`)
+  ✓ serverSourceMaps (enabled by `--debug-prerender`)
+  ⨯ turbopackMinify (disabled by `--debug-prerender`)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 5.3s
+  Running TypeScript ...
+  Finished TypeScript in 2.4s ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/76) ...
+Error occurred prerendering page "/api/talks". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/api/talks": `cacheLife()` can only be called inside a `"use cache"` or `"use cache: private"` function.
+Learn more: https://nextjs.org/docs/messages/cache-life-outside-use-cache
+    at getTalks (lib\talks.ts:10:12)
+    at GET (app\api\talks\route.ts:11:31)
+   8 | // Reads. Cached with "use cache". The tag is how a write finds the entry.
+   9 | export async function getTalks(): Promise<Talk[]> {
+> 10 |   cacheLife("minutes");
+     |            ^
+  11 |   cacheTag("talks");
+  12 |   return read<Talk[]>("/talks");
+  13 | }
+Error occurred prerendering page "/breaks/1/fixed". Read more: https://nextjs.org/docs/messages/prerender-error
+Error occurred prerendering page "/exercises/2". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/breaks/1/fixed": `cacheLife()` can only be called inside a `"use cache"` or `"use cache: private"` function.
+Learn more: https://nextjs.org/docs/messages/cache-life-outside-use-cache
+    at getTalks (lib\talks.ts:10:12)
+    at Fixed (app\breaks\1\fixed\page.tsx:7:31)
+   8 | // Reads. Cached with "use cache". The tag is how a write finds the entry.
+   9 | export async function getTalks(): Promise<Talk[]> {
+> 10 |   cacheLife("minutes");
+     |            ^
+  11 |   cacheTag("talks");
+  12 |   return read<Talk[]>("/talks");
+  13 | } {
+  digest: '2442434123'
+}
+Error: Route "/exercises/2": `cacheLife()` can only be called inside a `"use cache"` or `"use cache: private"` function.
+Learn more: https://nextjs.org/docs/messages/cache-life-outside-use-cache
+    at getTalk (lib\talks.ts:16:12)
+    at Exercise2 (app\exercises\2\page.tsx:8:29)
+  14 |
+  15 | export async function getTalk(id: number): Promise<Talk> {
+> 16 |   cacheLife("minutes");
+     |            ^
+  17 |   cacheTag(`talk-${id}`);
+  18 |   return read<Talk>(`/talks/${id}`);
+  19 | } {
+  digest: '4017790918'
+}
+Error occurred prerendering page "/exercises/2/solution". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/exercises/2/solution": `cacheLife()` can only be called inside a `"use cache"` or `"use cache: private"` function.
+Learn more: https://nextjs.org/docs/messages/cache-life-outside-use-cache
+    at getTalk (lib\talks.ts:16:12)
+    at Solution2 (app\exercises\2\solution\page.tsx:11:29)
+  14 |
+  15 | export async function getTalk(id: number): Promise<Talk> {
+> 16 |   cacheLife("minutes");
+     |            ^
+  17 |   cacheTag(`talk-${id}`);
+  18 |   return read<Talk>(`/talks/${id}`);
+  19 | } {
+  digest: '3237500711'
+}
+Error occurred prerendering page "/breaks/5/fixed". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/breaks/5/fixed": `cacheLife()` can only be called inside a `"use cache"` or `"use cache: private"` function.
+Learn more: https://nextjs.org/docs/messages/cache-life-outside-use-cache
+    at getTalk (lib\talks.ts:16:12)
+    at Fixed (app\breaks\5\fixed\page.tsx:6:29)
+  14 |
+  15 | export async function getTalk(id: number): Promise<Talk> {
+> 16 |   cacheLife("minutes");
+     |            ^
+  17 |   cacheTag(`talk-${id}`);
+  18 |   return read<Talk>(`/talks/${id}`);
+  19 | } {
+  digest: '530759203'
+}
+Error occurred prerendering page "/exercises/5". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/exercises/5": `cacheLife()` can only be called inside a `"use cache"` or `"use cache: private"` function.
+Learn more: https://nextjs.org/docs/messages/cache-life-outside-use-cache
+    at getTalks (lib\talks.ts:10:12)
+    at Exercise5 (app\exercises\5\page.tsx:6:31)
+   8 | // Reads. Cached with "use cache". The tag is how a write finds the entry.
+   9 | export async function getTalks(): Promise<Talk[]> {
+> 10 |   cacheLife("minutes");
+     |            ^
+  11 |   cacheTag("talks");
+  12 |   return read<Talk[]>("/talks");
+  13 | } {
+  digest: '2746820415'
+}
+Error occurred prerendering page "/exercises/4/solution". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/exercises/4/solution": `cacheLife()` can only be called inside a `"use cache"` or `"use cache: private"` function.
+Learn more: https://nextjs.org/docs/messages/cache-life-outside-use-cache
+    at getTalks (lib\talks.ts:10:12)
+    at Solution4 (app\exercises\4\solution\page.tsx:8:31)
+   8 | // Reads. Cached with "use cache". The tag is how a write finds the entry.
+   9 | export async function getTalks(): Promise<Talk[]> {
+> 10 |   cacheLife("minutes");
+     |            ^
+  11 |   cacheTag("talks");
+  12 |   return read<Talk[]>("/talks");
+  13 | } {
+  digest: '989098942'
+}
+Error occurred prerendering page "/breaks/8/broken". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/breaks/8/broken": `cacheLife()` can only be called inside a `"use cache"` or `"use cache: private"` function.
+Learn more: https://nextjs.org/docs/messages/cache-life-outside-use-cache
+    at getTalks (lib\talks.ts:10:12)
+    at Talks (app\breaks\8\talks.tsx:7:31)
+   8 | // Reads. Cached with "use cache". The tag is how a write finds the entry.
+   9 | export async function getTalks(): Promise<Talk[]> {
+> 10 |   cacheLife("minutes");
+     |            ^
+  11 |   cacheTag("talks");
+  12 |   return read<Talk[]>("/talks");
+  13 | } {
+  digest: '756238771'
+}
+Error occurred prerendering page "/breaks/8/fixed". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/breaks/8/fixed": `cacheLife()` can only be called inside a `"use cache"` or `"use cache: private"` function.
+Learn more: https://nextjs.org/docs/messages/cache-life-outside-use-cache
+    at getTalks (lib\talks.ts:10:12)
+    at Talks (app\breaks\8\talks.tsx:7:31)
+   8 | // Reads. Cached with "use cache". The tag is how a write finds the entry.
+   9 | export async function getTalks(): Promise<Talk[]> {
+> 10 |   cacheLife("minutes");
+     |            ^
+  11 |   cacheTag("talks");
+  12 |   return read<Talk[]>("/talks");
+  13 | } {
+  digest: '699216051'
+}
+Error occurred prerendering page "/exercises/8/solution/dashboard/talks". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/exercises/8/solution/dashboard/talks": `cacheLife()` can only be called inside a `"use cache"` or `"use cache: private"` function.
+Learn more: https://nextjs.org/docs/messages/cache-life-outside-use-cache
+    at getTalks (lib\talks.ts:10:12)
+    at TalksPage (app\exercises\8\solution\dashboard\talks\page.tsx:10:31)
+   8 | // Reads. Cached with "use cache". The tag is how a write finds the entry.
+   9 | export async function getTalks(): Promise<Talk[]> {
+> 10 |   cacheLife("minutes");
+     |            ^
+  11 |   cacheTag("talks");
+  12 |   return read<Talk[]>("/talks");
+  13 | } {
+  digest: '305875289'
+}
+  Generating static pages using 19 workers (19/76) 
+Error occurred prerendering page "/breaks/10/fixed". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/breaks/10/fixed": `cacheLife()` can only be called inside a `"use cache"` or `"use cache: private"` function.
+Learn more: https://nextjs.org/docs/messages/cache-life-outside-use-cache
+    at getTalks (lib\talks.ts:10:12)
+    at Page (app\breaks\10\fixed\page.tsx:7:31)
+   8 | // Reads. Cached with "use cache". The tag is how a write finds the entry.
+   9 | export async function getTalks(): Promise<Talk[]> {
+> 10 |   cacheLife("minutes");
+     |            ^
+  11 |   cacheTag("talks");
+  12 |   return read<Talk[]>("/talks");
+  13 | } {
+  digest: '2729129050'
+}
+Error occurred prerendering page "/breaks/10/broken". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/breaks/10/broken": `cacheLife()` can only be called inside a `"use cache"` or `"use cache: private"` function.
+Learn more: https://nextjs.org/docs/messages/cache-life-outside-use-cache
+    at getTalks (lib\talks.ts:10:12)
+    at Page (app\breaks\10\broken\page.tsx:8:31)
+   8 | // Reads. Cached with "use cache". The tag is how a write finds the entry.
+   9 | export async function getTalks(): Promise<Talk[]> {
+> 10 |   cacheLife("minutes");
+     |            ^
+  11 |   cacheTag("talks");
+  12 |   return read<Talk[]>("/talks");
+  13 | } {
+  digest: '3876140923'
+}
+Error occurred prerendering page "/exercises/5/solution". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/exercises/5/solution": `cacheLife()` can only be called inside a `"use cache"` or `"use cache: private"` function.
+Learn more: https://nextjs.org/docs/messages/cache-life-outside-use-cache
+    at getTalks (lib\talks.ts:10:12)
+    at Solution5 (app\exercises\5\solution\page.tsx:6:31)
+   8 | // Reads. Cached with "use cache". The tag is how a write finds the entry.
+   9 | export async function getTalks(): Promise<Talk[]> {
+> 10 |   cacheLife("minutes");
+     |            ^
+  11 |   cacheTag("talks");
+  12 |   return read<Talk[]>("/talks");
+  13 | } {
+  digest: '2632083659'
+}
+  Generating static pages using 19 workers (38/76) 
+Error occurred prerendering page "/". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/": `cacheLife()` can only be called inside a `"use cache"` or `"use cache: private"` function.
+Learn more: https://nextjs.org/docs/messages/cache-life-outside-use-cache
+    at getTalks (lib\talks.ts:10:12)
+    at Home (app\page.tsx:8:31)
+   8 | // Reads. Cached with "use cache". The tag is how a write finds the entry.
+   9 | export async function getTalks(): Promise<Talk[]> {
+> 10 |   cacheLife("minutes");
+     |            ^
+  11 |   cacheTag("talks");
+  12 |   return read<Talk[]>("/talks");
+  13 | } {
+  digest: '2598962642'
+}
+Error occurred prerendering page "/exercises/1/solution". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/exercises/1/solution": `cacheLife()` can only be called inside a `"use cache"` or `"use cache: private"` function.
+Learn more: https://nextjs.org/docs/messages/cache-life-outside-use-cache
+    at getTalks (lib\talks.ts:10:12)
+    at Solution1 (app\exercises\1\solution\page.tsx:8:31)
+   8 | // Reads. Cached with "use cache". The tag is how a write finds the entry.
+   9 | export async function getTalks(): Promise<Talk[]> {
+> 10 |   cacheLife("minutes");
+     |            ^
+  11 |   cacheTag("talks");
+  12 |   return read<Talk[]>("/talks");
+  13 | } {
+  digest: '3628505047'
+}
+Error occurred prerendering page "/exercises/0/solution/speakers". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/exercises/0/solution/speakers": `cacheLife()` can only be called inside a `"use cache"` or `"use cache: private"` function.
+Learn more: https://nextjs.org/docs/messages/cache-life-outside-use-cache
+    at getSpeakers (lib\speakers.ts:14:12)
+    at SpeakersLayout (app\exercises\0\solution\speakers\layout.tsx:10:37)
+  12 |
+  13 | export async function getSpeakers(): Promise<Speaker[]> {
+> 14 |   cacheLife("hours");
+     |            ^
+  15 |   cacheTag("speakers");
+  16 |   return read<Speaker[]>("/speakers");
+  17 | } {
+  digest: '1245451354'
+}
+Error occurred prerendering page "/exercises/0/solution/speakers/[id]". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/exercises/0/solution/speakers/[id]": `cacheLife()` can only be called inside a `"use cache"` or `"use cache: private"` function.
+Learn more: https://nextjs.org/docs/messages/cache-life-outside-use-cache
+    at getSpeakers (lib\speakers.ts:14:12)
+    at SpeakersLayout (app\exercises\0\solution\speakers\layout.tsx:10:37)
+  12 |
+  13 | export async function getSpeakers(): Promise<Speaker[]> {
+> 14 |   cacheLife("hours");
+     |            ^
+  15 |   cacheTag("speakers");
+  16 |   return read<Speaker[]>("/speakers");
+  17 | } {
+  digest: '2446651770'
+}
+Error occurred prerendering page "/spa/use". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/spa/use": `cacheLife()` can only be called inside a `"use cache"` or `"use cache: private"` function.
+Learn more: https://nextjs.org/docs/messages/cache-life-outside-use-cache
+    at getTalks (lib\talks.ts:10:12)
+    at Page (app\spa\use\page.tsx:10:32)
+   8 | // Reads. Cached with "use cache". The tag is how a write finds the entry.
+   9 | export async function getTalks(): Promise<Talk[]> {
+> 10 |   cacheLife("minutes");
+     |            ^
+  11 |   cacheTag("talks");
+  12 |   return read<Talk[]>("/talks");
+  13 | } {
+  digest: '2347651236'
+}
+Error occurred prerendering page "/breaks/5/broken". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/breaks/5/broken": `cacheLife()` can only be called inside a `"use cache"` or `"use cache: private"` function.
+Learn more: https://nextjs.org/docs/messages/cache-life-outside-use-cache
+    at getTalk (lib\talks.ts:16:12)
+    at Broken (app\breaks\5\broken\page.tsx:6:29)
+  14 |
+  15 | export async function getTalk(id: number): Promise<Talk> {
+> 16 |   cacheLife("minutes");
+     |            ^
+  17 |   cacheTag(`talk-${id}`);
+  18 |   return read<Talk>(`/talks/${id}`);
+  19 | } {
+  digest: '2672868154'
+}
+Error occurred prerendering page "/exercises/8/solution/dashboard". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/exercises/8/solution/dashboard": `cacheLife()` can only be called inside a `"use cache"` or `"use cache: private"` function.
+Learn more: https://nextjs.org/docs/messages/cache-life-outside-use-cache
+    at getTalks (lib\talks.ts:10:12)
+    at Overview (app\exercises\8\solution\dashboard\page.tsx:10:56)
+   8 | // Reads. Cached with "use cache". The tag is how a write finds the entry.
+   9 | export async function getTalks(): Promise<Talk[]> {
+> 10 |   cacheLife("minutes");
+     |            ^
+  11 |   cacheTag("talks");
+  12 |   return read<Talk[]>("/talks");
+  13 | } {
+  digest: '2778946277'
+}
+Error occurred prerendering page "/exercises/10/solution/top". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/exercises/10/solution/top": `cacheLife()` can only be called inside a `"use cache"` or `"use cache: private"` function.
+Learn more: https://nextjs.org/docs/messages/cache-life-outside-use-cache
+    at getTalks (lib\talks.ts:10:12)
+    at TopTalks (app\exercises\10\solution\top\page.tsx:10:31)
+   8 | // Reads. Cached with "use cache". The tag is how a write finds the entry.
+   9 | export async function getTalks(): Promise<Talk[]> {
+> 10 |   cacheLife("minutes");
+     |            ^
+  11 |   cacheTag("talks");
+  12 |   return read<Talk[]>("/talks");
+  13 | } {
+  digest: '2654502246'
+}
+Error occurred prerendering page "/submit". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Route "/submit": `cacheLife()` can only be called inside a `"use cache"` or `"use cache: private"` function.
+Learn more: https://nextjs.org/docs/messages/cache-life-outside-use-cache
+    at getSpeakers (lib\speakers.ts:14:12)
+    at Submit (app\submit\page.tsx:7:37)
+  12 |
+  13 | export async function getSpeakers(): Promise<Speaker[]> {
+> 14 |   cacheLife("hours");
+     |            ^
+  15 |   cacheTag("speakers");
+  16 |   return read<Speaker[]>("/speakers");
+  17 | } {
+  digest: '1967578152'
+}
+
+> Export encountered errors on 22 paths:
+	/api/talks/route: /api/talks
+	/breaks/1/fixed/page: /breaks/1/fixed
+	/breaks/10/broken/page: /breaks/10/broken
+	/breaks/10/fixed/page: /breaks/10/fixed
+	/breaks/5/broken/page: /breaks/5/broken
+	/breaks/5/fixed/page: /breaks/5/fixed
+	/breaks/8/broken/page: /breaks/8/broken
+	/breaks/8/fixed/page: /breaks/8/fixed
+	/exercises/0/solution/speakers/[id]/page: /exercises/0/solution/speakers/[id]
+	/exercises/0/solution/speakers/page: /exercises/0/solution/speakers
+	/exercises/1/solution/page: /exercises/1/solution
+	/exercises/10/solution/top/page: /exercises/10/solution/top
+	/exercises/2/page: /exercises/2
+	/exercises/2/solution/page: /exercises/2/solution
+	/exercises/4/solution/page: /exercises/4/solution
+	/exercises/5/page: /exercises/5
+	/exercises/5/solution/page: /exercises/5/solution
+	/exercises/8/solution/dashboard/page: /exercises/8/solution/dashboard
+	/exercises/8/solution/dashboard/talks/page: /exercises/8/solution/dashboard/talks
+	/page: /
+	/spa/use/page: /spa/use
+	/submit/page: /submit
+EXIT=1

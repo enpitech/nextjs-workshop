@@ -1,0 +1,26 @@
+Captured 2026-10-08 on Next 16.4.0
+Claim 39 (page 16c L3260-3261, L3291-3294): the Haiku 2.7c /speakers diff and the Pages-era errors. Verdict: UNCHANGED.
+# Method: copy of the 16.4.0 app (Node v22.17.0, json-server on 3001, cacheComponents true). A 16.3.5 control copy (same source, next@16.3.5 from the repo node_modules) is named where used.
+
+## Haiku 2.7c diff applied (app/speakers/page.tsx, components/back-button.tsx, getSpeakers with use cache / cacheLife("minutes") in a temp lib file), plain build exit 0:
+├ ○ /exercises/0/solution/speakers                        1h      1d
+├   /exercises/0/solution/speakers/[id]                   1h      1d
+│ └ ◐ /exercises/0/solution/speakers/[id]                 1h      1d
+├ ƒ /exercises/6/api/speakers/[id]
+├ ƒ /exercises/6/solution/api/speakers/[id]
+├ ○ /speakers                                             1m      1h
+└ ○ /tmp-speakers-hours                                   1h      1d
+# `○ /speakers 1m 1h` is exactly the line in the page. /tmp-speakers-hours (repo getSpeakers, cacheLife("hours")) is `○ 1h 1d`, as in day2-review-A20.txt.
+
+## next/router in a Client Component under app/, next dev 16.4.0: GET /tmp-router -> 500
+Error: NextRouter was not mounted. https://nextjs.org/docs/messages/next-router-not-mounted
+    at Page (app\tmp-router\page.tsx:5:27)
+# The dev log then also prints `Error: Route "/tmp-router": Could not validate `instant` because an error prevented the target segment from rendering.` with the NextRouter error as [cause]. Same on the 16.3.5 control.
+
+## getServerSideProps in app/, next build 16.4.0:
+> Build error occurred
+Error: Turbopack build failed with 1 error:
+./app/tmp-gssp/page.tsx:1:23
+Error: "getServerSideProps" is not supported in app/. Read more: https://nextjs.org/docs/app/building-your-application/data-fetching
+> 1 | export async function getServerSideProps() { return { props: {} }; }
+# Same text on the 16.3.5 control. 16.4.0 prints `at ignore-listed frames` where 16.3.5 prints `at <unknown> (./app/tmp-gssp/page.tsx:1:23)`.

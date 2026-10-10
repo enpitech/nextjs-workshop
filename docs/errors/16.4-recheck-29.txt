@@ -1,0 +1,9 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 29: revalidateTag arity, { expire: 0 }, updateTag outside a Server Action. Verdict: UNCHANGED.
+
+## node node_modules/typescript/bin/tsc --noEmit with revalidateTag("talks") on line 3 and revalidateTag("talks", { expire: 0 }) on line 4 of a scratch file
+app/tmp29/bad.ts(3,3): error TS2554: Expected 2 arguments, but got 1.
+(line 4, the { expire: 0 } form, gave no error)
+
+## POST to a scratch Route Handler on next dev, mode update -> HTTP 500; mode expire0 -> HTTP 200 {"ok":"expire0"}
+⨯ Error: updateTag can only be called from within a Server Action. To invalidate cache tags in Route Handlers or other contexts, use revalidateTag instead. See more info here: https://nextjs.org/docs/app/api-reference/functions/updateTag

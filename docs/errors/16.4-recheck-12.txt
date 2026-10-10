@@ -1,0 +1,15 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 12: Server Action POST headers and the onVote reference. Verdict: UNCHANGED for the client code and the $h reference; Network tab itself NEEDS-BROWSER. The 44-hex-character claim is wrong in both versions (42).
+
+## Headers the 16.4.0 client sends (node_modules/next/dist/client/components/router-reducer/reducers/server-action-reducer.js:53-55)
+Accept: RSC_CONTENT_TYPE_HEADER = text/x-component
+[ACTION_HEADER] = next-action (app-router-headers.js:96)
+[NEXT_ROUTER_STATE_TREE_HEADER] = next-router-state-tree (app-router-headers.js:97)
+
+## /exercises/1/solution HTML, the prop is a reference
+..."talks":"$89","onVote":"$h8e"}...
+
+## Action id length
+/talks/1 form field: id 603f53be1013badd1779464a06d688ed755f17c4a9 = 42 hex characters (the page says 44).
+16.3.5 evidence (docs/agent-runs/2.6-planted-bug.md:293) has 60f0bea0214769b862122d267f07421c39d34439f2... also 42 characters. So 44 was never right.
+No action was submitted: the vote action writes to the shared json-server.

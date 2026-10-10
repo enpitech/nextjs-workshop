@@ -1,0 +1,51 @@
+Captured 2026-10-08 on Next 16.4.0, Node 22.17.0 (copy of repo at scratchpad/app-16.4; real repo untouched)
+Shell had AI_AGENT and CLAUDECODE set. Command: npx next dev -p 3100
+
+=== dev terminal output (port 3100) ===
+▲ Next.js 16.4.0 (Turbopack)
+- Local:         http://localhost:3100
+- Network:       http://192.168.1.120:3100
+- Environments: .env.local
+✓ Ready in 880ms
+⚠ `cacheComponents` is enabled without a corresponding `partialPrefetching` option. Set `partialPrefetching` to either `true` or `false`.
+
+The only reason to set `partialPrefetching` to `false` is if you're migrating an older Cache Components app. The initial release of Cache Components did not include Partial Prefetching. New projects should enable both Cache Components and Partial Prefetching.
+
+Both Cache Components and Partial Prefetching will be enabled everywhere in the next major release, and the old configurations will be removed.
+
+Learn more: https://nextjs.org/docs/app/guides/adopting-partial-prefetching
+✓ Running next.config.ts took 70ms
+- Cache Components enabled
+
+✓ Generated AGENTS.md for AI agents. Set `agentRules: false` in next.config to disable.
+[?25h
+
+=== diff pre-16.4-AGENTS.md AGENTS.md (after next dev) ===
+3c3
+< # This is NOT the Next.js you know
+---
+> ## This is NOT the Next.js you know
+
+=== CLAUDE.md vs pre-16.4-CLAUDE.md ===
+identical (not touched by 16.4 next dev)
+
+=== .next/dev/lock while dev ran ===
+{"pid":100968,"port":3100,"hostname":"localhost","appUrl":"http://localhost:3100","startedAt":1791459872766}
+
+=== second: npx next dev -p 3101 (while first ran) ===
+⨯ Another next dev server is already running.
+
+- Local:        http://localhost:3100
+- PID:          100968
+- Dir:          <scratchpad>\app-16.4
+- Log:          .next\dev\logs\next-development.log
+
+You can access the existing server at http://localhost:3100,
+or run taskkill /PID 100968 /F to stop it and start a new one.
+(preceded by the same Next.js 16.4.0 banner, Ready line and partialPrefetching warning; process exited, port 3101 not bound)
+
+=== POST /_next/mcp tools/list ===
+get_project_metadata get_errors get_page_metadata get_logs get_server_action_by_id get_routes get_request_insights get_compilation_issues compile_route (9 tools; get_request_insights needs experimental.requestInsights)
+
+=== agent upgrade / security reminders in dev terminal ===
+None. Only line about agents: Generated AGENTS.md for AI agents. Set agentRules: false in next.config to disable.

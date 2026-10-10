@@ -1,0 +1,55 @@
+Captured 2026-10-08 on Next 16.4.0
+Claim 32 (page 12g L2909, L2959-2966, L2911): Exercise 9 builds. Verdict: CHANGED for the `cookies()` inside use cache error text (new text below). Rows, the other two errors and the reset trap are UNCHANGED.
+# Method: copy of the 16.4.0 app (Node v22.17.0, json-server on 3001, cacheComponents true). A 16.3.5 control copy (same source, next@16.3.5 from the repo node_modules) is named where used.
+
+## Solution rows, plain build 16.4.0 (same as exercise-9-solution.txt Part 1 and Part 2)
+├ ○ /exercises/9
+├ ◐ /exercises/9/board                                    1h      1d
+├ ƒ /exercises/9/board/api/revalidate
+├ ○ /exercises/9/board/api/talks                          1h      1d
+├ ○ /exercises/9/solution
+├ ◐ /exercises/9/solution/board                           1h      1d
+├ ƒ /exercises/9/solution/board/api/revalidate
+├ ○ /exercises/9/solution/board/api/talks                 1h      1d
+
+## Task 1 starting board (cookies() + two uncached reads at the top), plain build: same message, route and exit as docs/errors/exercise-9-blocking-route.txt (diff of the error block is empty)
+Error: Route "/exercises/9/board": Next.js encountered uncached or runtime data during prerendering.
+
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+## --debug-prerender frame: "at Board (app\exercises\9\board\page.tsx:5:28)" and code frame line "> 5 |   const id = (await cookies()).get("speaker")?.value;"  (same as 16.3.5)
+
+## Task 2 (cookie in <Suspense>, reads still uncached), --debug-prerender: frame "at Board (app\exercises\9\board\page.tsx:6:58)", fetch in lib\api.ts:8:21 (same as 16.3.5)
+
+## Task 4 wrong way, cookies() inside a use cache function: CHANGED
+OLD (16.3.5, docs/errors/exercise-9-cookies-inside-use-cache.txt; a re-run on a 16.3.5 control copy gives the same):
+⨯ Error: Route /exercises/9/board used `cookies()` inside "use cache". Accessing Dynamic data sources inside a cache scope is not supported. If you need this data inside a cached function use `cookies()` outside of the cached function and pass the required dynamic data in as an argument. See more info here: https://nextjs.org/docs/messages/next-request-in-use-cache
+NEW (16.4.0):
+Error: Route "/exercises/9/board": `cookies()` can't be read inside `"use cache"`. Read it outside the cached function and pass what you need as an argument.
+Learn more: https://nextjs.org/docs/messages/next-request-in-use-cache
+    at n (app\exercises\9\board\data.ts:35:21)
+  33 |   "use cache";
+  34 |   cacheLife("days");
+> 35 |   const id = (await cookies()).get("speaker")?.value;
+     |                     ^
+  36 |   return id ? fetchSpeaker(Number(id)) : null;
+  37 | }
+  38 | {
+  digest: '2948393672'
+}
+
+## Reset trap (16.4.0): dev run with app/exercises/9/board/ present, dev stopped, board/ deleted, `next build`:
+  Running TypeScript ...
+.next/dev/types/validator.ts(993,39): error TS2307: Cannot find module '../../../app/exercises/9/board/page.js' or its corresponding type declarations.
+.next/dev/types/validator.ts(1001,69): error TS2344: Type '__InvalidParamMatchingKeys' does not satisfy the constraint 'never'.
+  Type 'string' is not assignable to type 'never'.
+.next/dev/types/validator.ts(1284,39): error TS2307: Cannot find module '../../../app/exercises/9/board/api/revalidate/route.js' or its corresponding type declarations.
+.next/dev/types/validator.ts(1294,39): error TS2307: Cannot find module '../../../app/exercises/9/board/api/talks/route.js' or its corresponding type declarations.
+Failed to type check.
+# Then `next dev` once (GET /), stopped, `next build` again: exit 0, no TS error. Path `.next/dev/types/validator.ts` and the cure are UNCHANGED.

@@ -1,0 +1,8 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 15: Break #10 client throw after a click. Verdict: NEEDS-BROWSER. Nothing happens until a click, so curl cannot show it.
+
+Checked without a browser:
+- app/breaks/10/talk-viewer.tsx line 25 is unchanged: {byId[openId].title} (the 25:76 position still points at .title).
+- GET /breaks/10/broken on next start answers 200 (the page loads, as in 16.3.5).
+- diff -rq of node_modules/next/dist/client/components/builtin between 16.3.5 and 16.4.0: no differences. 'This page couldn't load' (with the typographic apostrophe in the source) and 'Reload to try again, or go back.' come from there.
+Not checked: the Runtime TypeError overlay text, the [browser] Uncaught TypeError line in the terminal (needs a connected browser), the white page after the click.

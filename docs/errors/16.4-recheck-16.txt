@@ -1,0 +1,37 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 16: Exercise 7 server errors. Verdict: terminal and HTML parts UNCHANGED; browser-rendered strings NEEDS-BROWSER.
+
+## next dev, curl: /exercises/7/boom 200, /exercises/7/99 200, /exercises/7/solution/boom 200, /exercises/7/solution/99 200 (a missing speaker is 200, as before)
+⨯ Error: Boom: a render error on the server
+    at SpeakerPage (app\exercises\7\[id]\page.tsx:10:28)
+   8 | }) {
+   9 |   const { id } = await params;
+> 10 |   if (id === "boom") throw new Error("Boom: a render error on the server");
+     |                            ^
+  11 |
+  12 |   // /99 throws here: getSpeaker() fails with "GET /speakers/99 failed with 404".
+  13 |   const speaker = await getSpeaker(Number(id)); {
+  digest: '663607566'
+⨯ Error: Boom: a render error on the server
+    at SpeakerPage (app\exercises\7\solution\[id]\page.tsx:11:28)
+...
+⨯ Error: GET /speakers/99 failed with 404
+    at read (lib\api.ts:9:22)
+   7 | export async function read<T>(path: string): Promise<T> {
+   8 |   const res = await fetch(`${API}${path}`);
+(the 16.3.5 file trimmed the code frame; 16.4.0 prints it. Digests differ per run.)
+
+## next start, terminal: full message plus digest (stack is a minified chunk path)
+⨯ Error: Boom: a render error on the server
+  digest: '273326410'
+⨯ Error: GET /speakers/99 failed with 404
+  digest: '2414888807'
+⨯ Error: Boom: a render error on the server
+  digest: '3362609210'
+⨯ Error: GET /speakers/99 failed with 404
+  digest: '2414888807'
+
+## next start, HTML of /exercises/7/boom: digest present, message absent
+digest "273326410" found; 'Boom: a render' count 0. Same for /solution/boom (3362609210) and /99 (2414888807).
+
+Not seen: 'This page couldn't load / A server error occurred. Reload to try again. / ERROR <digest>' and 'Minified React error #441' are rendered in the browser. Their source files in next/dist/client/components/builtin are identical to 16.3.5. NEEDS-BROWSER.

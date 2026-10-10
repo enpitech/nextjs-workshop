@@ -1,0 +1,65 @@
+Captured 2026-10-08 on Next 16.4.0
+# ls node_modules/next/dist/docs, curl of docs.md and Accept: text/markdown
+
+$ ls node_modules/next/dist/docs
+01-app
+02-pages
+03-architecture
+04-community
+index.md
+
+$ ls node_modules/next/dist/docs/01-app
+01-getting-started
+02-guides
+03-api-reference
+04-glossary.md
+index.md
+
+$ ls node_modules/next/dist/docs/01-app/01-getting-started | head -3
+01-installation.md
+02-project-structure.md
+03-layouts-and-pages.md
+
+$ curl -s https://nextjs.org/docs/app/guides/ai-agents.md | head -20
+---
+title: How Next.js supports AI coding agents
+description: Learn how Next.js helps AI coding agents use current framework guidance, inspect applications, verify changes, and report issues.
+url: "https://nextjs.org/docs/app/guides/ai-agents"
+docs_index: /docs/llms.txt
+version: 16.4.0
+lastUpdated: 2026-10-06
+prerequisites:
+  - "Guides: /docs/app/guides"
+related:
+  - app/guides/mcp
+  - app/getting-started/upgrading
+  - app/api-reference/config/next-config-js/agentRules
+  - app/api-reference/config/next-config-js/agentFeedback
+  - app/api-reference/config/next-config-js/agentUpgrade
+---
+
+
+> For an index of all Next.js documentation, see [/docs/llms.txt](/docs/llms.txt).
+AI coding agents may rely on training data that predates the Next.js version installed in a project. To help agents use current APIs and verify their work, Next.js provides and evaluates version-matched documentation, managed project instructions, agent-guided upgrades, runtime tools, structured errors, reusable Skills, and optional agent feedback. See the results in the [Next.js agent evaluations](https://nextjs.org/evals).
+
+$ curl -s -H "Accept: text/markdown" https://nextjs.org/docs/app/getting-started/installation | head -20
+---
+title: Installation
+description: "Learn how to create a new Next.js application with the `create-next-app` CLI, and set up TypeScript, ESLint, and Module Path Aliases."
+url: "https://nextjs.org/docs/app/getting-started/installation"
+docs_index: /docs/llms.txt
+version: 16.4.0
+lastUpdated: 2026-10-02
+prerequisites:
+  - "Getting Started: /docs/app/getting-started"
+---
+
+
+> For an index of all Next.js documentation, see [/docs/llms.txt](/docs/llms.txt).
+Create a new Next.js app and run it locally.
+
+## Quick start
+
+1. Create a new Next.js app named `my-app`
+2. `cd my-app` and start the dev server.
+3. Visit `http://localhost:3000`.

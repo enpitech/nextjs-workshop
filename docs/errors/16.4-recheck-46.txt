@@ -1,0 +1,35 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 46: Exercise 10. Verdict: ask-mcp results, next start 404 and the three build rows UNCHANGED; the order of the first error and the compile_route issue count CHANGED.
+
+## ask-mcp.mjs on next dev: nine tools (see 16.4-recheck-35.txt); get_logs returns a path; next start gives 'HTTP 404. No MCP answer. Is this next dev?'
+$ MSYS_NO_PATHCONV=1 node ask-mcp.mjs compile_route routeSpecifier=/exercises/10/solution/top
+{"routeSpecifier":"/exercises/10/solution/top","issues":[]}
+(Without MSYS_NO_PATHCONV=1, Git Bash rewrote the argument to C:/Program Files/Git/exercises/10/solution/top and the answer was {"notFound":true,...}. The README already says PowerShell.)
+
+## next build, route rows (76 static pages, exit 0)
+├ ○ /exercises/10
+├ ○ /exercises/10/solution
+├ ○ /exercises/10/solution/top                            1m      1h
+
+## draft in place (node app/exercises/10/copy-draft.mjs), next dev
+16.3.5 (page): first overlay error is the segment config 'revalidate', also on /exercises/10; compile_route lists five issues.
+16.4.0 terminal order of the errors printed after copying the draft (first error: app/exercises/10/top/page.tsx:16:3):
+     1	Error: It is not allowed to define inline "use cache" annotated functions in Client Components.   (page.tsx:16:3)
+     2	Error: It is not allowed to define inline "use cache" annotated functions in Client Components.   (lib/talks.ts:10:3)
+     3	Error: It is not allowed to define inline "use cache" annotated functions in Client Components.   (lib/talks.ts:17:3)
+     4	Error: Route segment config "revalidate" is not compatible with `nextConfig.cacheComponents`. Please remove it.
+     5	Error: You're importing a module that depends on "cacheLife" into a React Client Component module. ...
+So the first error is now the inline "use cache" one, not the segment config. The segment config error is fourth. GET /exercises/10/top and GET /exercises/10 both answer 500.
+compile_route /exercises/10/top: 10 issues (was five). Titles in order:
+1. It is not allowed to define inline "use cache" annotated functions in Client Components. To use "use cache" functions in a Client 
+2. It is not allowed to define inline "use cache" annotated functions in Client Components. To use "use cache" functions in a Client 
+3. Route segment config "revalidate" is not compatible with `nextConfig.cacheComponents`. Please remove it.
+4. You're importing a module that depends on "cacheLife" into a React Client Component module. This API is only available in Server C
+5. You're importing a module that depends on "cacheLife". This API is only available in Server Components in the App Router, but you 
+6. You're importing a module that depends on "cacheTag". This API is only available in Server Components in the App Router, but you a
+7. You're importing a module that depends on "server-only". This API is only available in Server Components in the App Router, but yo
+8. You're importing a module that depends on "server-only". This API is only available in Server Components in the App Router, but yo
+9. `'server-only'` cannot be imported from a Client Component module
+10. `'server-only'` cannot be imported from a Client Component module
+
+Overlay order and the Task 3 and Task 4 intermediate messages ('The "use client" directive must be placed before other expressions'): NOT-CHECKED / NEEDS-BROWSER.

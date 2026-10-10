@@ -1,0 +1,138 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 25: tmp page /tmp-block (uncached fetch, no Suspense), plain and --debug-prerender; then all cache lines deleted, plain build (1 route).
+
+##### tmp-block PLAIN
+▲ Next.js 16.4.0 (Turbopack)
+- Environments: .env.local
+⚠ `cacheComponents` is enabled without a corresponding `partialPrefetching` option. Set `partialPrefetching` to either `true` or `false`.
+
+The only reason to set `partialPrefetching` to `false` is if you're migrating an older Cache Components app. The initial release of Cache Components did not include Partial Prefetching. New projects should enable both Cache Components and Partial Prefetching.
+
+Both Cache Components and Partial Prefetching will be enabled everywhere in the next major release, and the old configurations will be removed.
+
+Learn more: https://nextjs.org/docs/app/guides/adopting-partial-prefetching
+✓ Running next.config.ts took 78ms
+- Cache Components enabled
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 2.6s
+  Running TypeScript ...
+  Finished TypeScript in 6.3s ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/77) ...
+  Generating static pages using 19 workers (19/77) 
+  Generating static pages using 19 workers (38/77) 
+  Generating static pages using 19 workers (57/77) 
+Error: Route "/tmp-block": Next.js encountered uncached or runtime data during prerendering.
+
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at div (<anonymous>)
+    at body (<anonymous>)
+    at html (<anonymous>)
+To get a more detailed stack trace and pinpoint the issue, try one of the following:
+  - Start the app in development mode by running `next dev`, then open "/tmp-block" in your browser to investigate the error.
+  - Rerun the production build with `next build --debug-prerender` to generate better stack traces.
+Error occurred prerendering page "/tmp-block". Read more: https://nextjs.org/docs/messages/prerender-error
+Export encountered an error on /tmp-block/page: /tmp-block, exiting the build.
+⨯ Next.js build worker exited with code: 1 and signal: null
+EXIT=1
+
+##### tmp-block --debug-prerender
+⚠ Prerendering is running in debug mode with NODE_ENV='development'. This will affect performance and should not be used for production.
+▲ Next.js 16.4.0 (Turbopack)
+- Environments: .env.local
+⚠ `cacheComponents` is enabled without a corresponding `partialPrefetching` option. Set `partialPrefetching` to either `true` or `false`.
+
+The only reason to set `partialPrefetching` to `false` is if you're migrating an older Cache Components app. The initial release of Cache Components did not include Partial Prefetching. New projects should enable both Cache Components and Partial Prefetching.
+
+Both Cache Components and Partial Prefetching will be enabled everywhere in the next major release, and the old configurations will be removed.
+
+Learn more: https://nextjs.org/docs/app/guides/adopting-partial-prefetching
+✓ Running next.config.ts took 65ms
+- Cache Components enabled
+- Experiments (use with caution):
+  ✓ allowDevelopmentBuild (enabled by `--debug-prerender`)
+  ⨯ prerenderEarlyExit (disabled by `--debug-prerender`)
+  ✓ serverSourceMaps (enabled by `--debug-prerender`)
+  ⨯ turbopackMinify (disabled by `--debug-prerender`)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 5.4s
+  Running TypeScript ...
+  Finished TypeScript in 2.5s ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/77) ...
+  Generating static pages using 19 workers (19/77) 
+  Generating static pages using 19 workers (38/77) 
+  Generating static pages using 19 workers (57/77) 
+Error: Route "/tmp-block": Next.js encountered uncached or runtime data during prerendering.
+
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at P (app\tmp-block\page.tsx:3:21)
+  1 | // An uncached read, no Suspense, no "use cache".
+  2 | export default async function P() {
+> 3 |   const res = await fetch("http://localhost:3001/talks/1");
+    |                     ^
+  4 |   const talk = await res.json();
+  5 |   return <p>{talk.title}</p>;
+  6 | }
+To debug the issue, start the app in development mode by running `next dev`, then open "/tmp-block" in your browser to investigate the error.
+Error occurred prerendering page "/tmp-block". Read more: https://nextjs.org/docs/messages/prerender-error
+
+> Export encountered errors on 1 path:
+	/tmp-block/page: /tmp-block
+EXIT=1
+
+##### ALL CACHE LINES DELETED, PLAIN BUILD
+▲ Next.js 16.4.0 (Turbopack)
+- Environments: .env.local
+⚠ `cacheComponents` is enabled without a corresponding `partialPrefetching` option. Set `partialPrefetching` to either `true` or `false`.
+
+The only reason to set `partialPrefetching` to `false` is if you're migrating an older Cache Components app. The initial release of Cache Components did not include Partial Prefetching. New projects should enable both Cache Components and Partial Prefetching.
+
+Both Cache Components and Partial Prefetching will be enabled everywhere in the next major release, and the old configurations will be removed.
+
+Learn more: https://nextjs.org/docs/app/guides/adopting-partial-prefetching
+✓ Running next.config.ts took 71ms
+- Cache Components enabled
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 5.0s
+  Running TypeScript ...
+  Finished TypeScript in 2.7s ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/76) ...
+Error: Route "/breaks/1/fixed": Next.js encountered uncached or runtime data during prerendering.
+
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at div (<anonymous>)
+    at body (<anonymous>)
+    at html (<anonymous>)
+To get a more detailed stack trace and pinpoint the issue, try one of the following:
+  - Start the app in development mode by running `next dev`, then open "/breaks/1/fixed" in your browser to investigate the error.
+  - Rerun the production build with `next build --debug-prerender` to generate better stack traces.
+Error occurred prerendering page "/breaks/1/fixed". Read more: https://nextjs.org/docs/messages/prerender-error
+Export encountered an error on /breaks/1/fixed/page: /breaks/1/fixed, exiting the build.
+⨯ Next.js build worker exited with code: 1 and signal: null
+EXIT=1

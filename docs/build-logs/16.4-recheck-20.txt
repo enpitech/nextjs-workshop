@@ -1,0 +1,64 @@
+Captured 2026-10-08 on Next 16.4.0
+# Claim 20: four tmp pages, one segment config each, cacheComponents true, plain next build.
+▲ Next.js 16.4.0 (Turbopack)
+- Environments: .env.local
+⚠ `cacheComponents` is enabled without a corresponding `partialPrefetching` option. Set `partialPrefetching` to either `true` or `false`.
+
+The only reason to set `partialPrefetching` to `false` is if you're migrating an older Cache Components app. The initial release of Cache Components did not include Partial Prefetching. New projects should enable both Cache Components and Partial Prefetching.
+
+Both Cache Components and Partial Prefetching will be enabled everywhere in the next major release, and the old configurations will be removed.
+
+Learn more: https://nextjs.org/docs/app/guides/adopting-partial-prefetching
+✓ Running next.config.ts took 56ms
+- Cache Components enabled
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 4 errors:
+./app/tmp-dynamic/page.tsx:1:14
+Error: Route segment config "dynamic" is not compatible with `nextConfig.cacheComponents`. Please remove it.
+> 1 | export const dynamic = 'force-dynamic';
+    |              ^^^^^^^
+  2 |
+  3 | export default function P() {
+  4 |   return <p>x</p>;
+
+Ecmascript file had an error
+
+
+./app/tmp-dynamicParams/page.tsx:1:14
+Error: Route segment config "dynamicParams" is not compatible with `nextConfig.cacheComponents`. Please remove it.
+> 1 | export const dynamicParams = false;
+    |              ^^^^^^^^^^^^^
+  2 |
+  3 | export default function P() {
+  4 |   return <p>x</p>;
+
+Ecmascript file had an error
+
+
+./app/tmp-fetchCache/page.tsx:1:14
+Error: Route segment config "fetchCache" is not compatible with `nextConfig.cacheComponents`. Please remove it.
+> 1 | export const fetchCache = 'force-no-store';
+    |              ^^^^^^^^^^
+  2 |
+  3 | export default function P() {
+  4 |   return <p>x</p>;
+
+Ecmascript file had an error
+
+
+./app/tmp-revalidate/page.tsx:1:14
+Error: Route segment config "revalidate" is not compatible with `nextConfig.cacheComponents`. Please remove it.
+> 1 | export const revalidate = 60;
+    |              ^^^^^^^^^^
+  2 |
+  3 | export default function P() {
+  4 |   return <p>x</p>;
+
+Ecmascript file had an error
+
+
+    at ignore-listed frames
+EXIT=1
