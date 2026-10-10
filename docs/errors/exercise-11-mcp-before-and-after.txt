@@ -1,0 +1,17 @@
+$ node app/exercises/11/ask-mcp.mjs get_errors   (no browser tab open on the app)
+{"error":"No browser sessions connected. Please open your application in a browser to retrieve error state."}
+
+$ node app/exercises/11/ask-mcp.mjs get_routes   (filtered to exercise 11)
+    "/exercises/11/solution",
+    "/exercises/11/solution/speakers",
+    "/exercises/11/speakers",
+
+$ node app/exercises/11/ask-mcp.mjs get_logs
+{"logFilePath":"C:\\Users\\rotem\\OneDrive\\שולחן העבודה\\workshops\\nextjs-workshop\\.next\\dev\\logs\\next-development.log"}
+
+$ node app/exercises/11/ask-mcp.mjs compile_route routeSpecifier=/exercises/11/speakers  (issues only)
+error [project]/app/exercises/11/speakers/actions.ts | Only async functions are allowed to be exported in a "use server" file.
+error [project]/app/exercises/11/speakers/comment-form.tsx | Export `addComment` doesn't exist in target module
+
+Browser open on the draft page (500 error page, no client app):
+{"configErrors":[],"sessionErrors":[]}

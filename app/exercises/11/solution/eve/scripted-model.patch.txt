@@ -1,0 +1,14 @@
+Exercise 11, Stretch. Two changes to agent/lib/scripted-model.ts, so that the scripted model
+calls search_talks. A real model needs neither. Undo them with: git checkout agent/
+
+1. In the first branch of respond(), before the line `const talk = result.output as ...`, add:
+
+      if (result.name === "search_talks") {
+        const found = result.output as { title: string }[];
+        return `Found ${found.length}: ${found.map((t) => t.title).join(", ")}.`;
+      }
+
+2. In the second branch, before the line `if (text.includes("vote") && id > 0) {`, add:
+
+      const q = text.match(/search the talks for (\w+)/)?.[1];
+      if (q) return { toolCalls: [{ name: "search_talks", input: { q } }] };

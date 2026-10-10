@@ -1,0 +1,10 @@
+$ node app/exercises/11/ask-mcp.mjs   (tool list)
+get_project_metadata
+get_errors
+get_page_metadata
+get_logs
+get_server_action_by_id
+get_routes
+get_request_insights
+get_compilation_issues
+compile_route

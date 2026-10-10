@@ -1,0 +1,8 @@
+Exercise 11, the second copy of the cache. Real run in the dev browser, fixed draft (build green), fresh data.
+1. Open /talks/1. Comments: 2 (reads getComments, tag comments-1).
+2. Open /exercises/11/speakers?speaker=1. Two graphs, one boundary (2 comments).
+3. Add one comment on that page. The draft action calls updateTag("comment-count-1") only.
+4. The draft page says: Two graphs, one boundary (3 comments).
+5. Open /talks/1 again. It still says: Comments 2. The list has the two old comments.
+6. curl http://localhost:3001/comments?talkId=1 returns 3 comments.
+No tool and no build prints an error for this.

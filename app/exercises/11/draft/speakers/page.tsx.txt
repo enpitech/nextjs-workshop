@@ -1,0 +1,41 @@
+"use cache";
+// PLANTED. The workshop author wrote this file to look like a typical agent draft.
+// It is not the output of a real agent run. Review it before you trust it.
+import { getSpeakers } from "@/lib/speakers";
+import { getTalks } from "@/lib/talks";
+import { getCommentCount } from "./comment-count";
+import { CommentForm } from "./comment-form";
+
+// Cache the whole page, so the counts are fast.
+export default async function Speakers({
+  searchParams,
+}: {
+  searchParams: Promise<{ speaker?: string }>;
+}) {
+  const { speaker } = await searchParams;
+  const [speakers, talks] = await Promise.all([getSpeakers(), getTalks()]);
+  const shown = speaker ? speakers.filter((s) => s.id === Number(speaker)) : speakers;
+
+  return (
+    <main>
+      <h1 className="mb-4 text-2xl font-bold">Speakers</h1>
+      {shown.map((s) => (
+        <section key={s.id} className="mb-6">
+          <h2 className="text-lg font-semibold">{s.name}</h2>
+          <ul className="space-y-3">
+            {talks
+              .filter((t) => t.speakerId === s.id)
+              .map(async (t) => (
+                <li key={t.id}>
+                  <p>
+                    {t.title} ({await getCommentCount(t.id)} comments)
+                  </p>
+                  <CommentForm talkId={t.id} />
+                </li>
+              ))}
+          </ul>
+        </section>
+      ))}
+    </main>
+  );
+}

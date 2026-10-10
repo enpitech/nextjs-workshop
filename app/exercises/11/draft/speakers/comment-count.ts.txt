@@ -1,0 +1,15 @@
+// PLANTED. The workshop author wrote this file to look like a typical agent draft.
+// It is not the output of a real agent run. Review it before you trust it.
+import "server-only";
+import { cacheLife, cacheTag } from "next/cache";
+import { API } from "@/lib/api";
+
+// The number of comments under one talk. Cached for 30 seconds.
+export async function getCommentCount(talkId: number): Promise<number> {
+  "use cache";
+  cacheLife("short");
+  cacheTag(`comment-count-${talkId}`);
+  const res = await fetch(`${API}/comments?talkId=${talkId}`);
+  const comments = await res.json();
+  return comments.length;
+}

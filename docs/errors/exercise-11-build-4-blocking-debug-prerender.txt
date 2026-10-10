@@ -1,0 +1,47 @@
+⚠ Prerendering is running in debug mode with NODE_ENV='development'. This will affect performance and should not be used for production.
+▲ Next.js 16.3.5 (Turbopack)
+- Environments: .env.local
+✓ Running next.config.ts took 56ms
+- Cache Components enabled
+- Experiments (use with caution):
+  ✓ allowDevelopmentBuild (enabled by `--debug-prerender`)
+  ⨯ prerenderEarlyExit (disabled by `--debug-prerender`)
+  ✓ serverSourceMaps (enabled by `--debug-prerender`)
+  ⨯ turbopackMinify (disabled by `--debug-prerender`)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 4.2s
+  Running TypeScript ...
+  Finished TypeScript in 1897ms ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/79) ...
+SecretCard ran in the server. Key starts with dang
+SecretCard ran in the server. Key starts with dang
+SecretCard ran in the server. Key starts with dang
+Error: Route "/exercises/11/speakers": Next.js encountered uncached or runtime data during prerendering.
+
+`fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
+
+Ways to fix this:
+  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access
+  - [cache] For uncached data (`fetch`, database calls): cache the access with `"use cache"` (does not apply to `connection()`)
+  - [block] Set `export const instant = false` to allow a blocking route
+
+Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+    at Speakers (app\exercises\11\speakers\page.tsx:14:23)
+  12 |   searchParams: Promise<{ speaker?: string }>;
+  13 | }) {
+> 14 |   const { speaker } = await searchParams;
+     |                       ^
+  15 |   const [speakers, talks] = await Promise.all([getSpeakers(), getTalks()]);
+  16 |   const shown = speaker ? speakers.filter((s) => s.id === Number(speaker)) : speakers;
+  17 |
+To debug the issue, start the app in development mode by running `next dev`, then open "/exercises/11/speakers" in your browser to investigate the error.
+Error occurred prerendering page "/exercises/11/speakers". Read more: https://nextjs.org/docs/messages/prerender-error
+SecretCard ran in the server. Key starts with dang
+  Generating static pages using 19 workers (19/79) 
+  Generating static pages using 19 workers (39/79) 
+  Generating static pages using 19 workers (59/79) 
+
+> Export encountered errors on 1 path:
+	/exercises/11/speakers/page: /exercises/11/speakers

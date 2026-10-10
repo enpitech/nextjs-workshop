@@ -12,6 +12,7 @@ const exercises = [
   { n: 8, title: "Build the organizer dashboard (capstone)" },
   { n: 9, title: "Make the talk board fast (capstone)" },
   { n: 10, title: "Review an agent's draft (capstone)" },
+  { n: 11, title: "Drive an agent end to end (capstone)" },
 ];
 
 export default function Exercises() {

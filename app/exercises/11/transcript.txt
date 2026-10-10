@@ -1,0 +1,85 @@
+PLANTED. The workshop author wrote this transcript to look like a typical agent run.
+It is not the output of a real agent run. The real runs are in docs/agent-runs/.
+
+The prompt, as the teammate typed it:
+
+  In app/exercises/11/speakers/, add a page that lists every speaker with their talks.
+  Show how many comments each talk has. Cache the counts. Add a small form under each talk
+  to add a comment, and make the new count show right away. Show only one speaker when the
+  URL has ?speaker=2. Keep it small.
+
+The calls, in order. "dev server" means a call to next-devtools-mcp, which asks the running
+`next dev`. Every other call works on files or the shell.
+
+  1  Read          AGENTS.md
+                   -> "This is NOT the Next.js you know ... read node_modules/next/dist/docs/"
+  2  Read          lib/speakers.ts
+                   -> getSpeakers(), "use cache", cacheLife("hours"), cacheTag("speakers")
+  3  Read          lib/talks.ts
+                   -> getTalks(), getTalk(id), addVote(id)
+  4  Grep          "comment" in lib/
+                   -> lib/comments.ts, lib/types.ts
+  5  Read          node_modules/next/dist/docs/01-app/03-api-reference/01-directives/use-cache.md
+                   (lines 1 to 60 only)
+                   -> the intro and the first example
+  6  dev server    nextjs_index
+                   -> one server, port 3000
+  7  dev server    nextjs_call get_errors
+                   -> {"error":"No browser sessions connected. Please open your application in a browser to retrieve error state."}
+  8  dev server    nextjs_call get_routes
+                   -> the routes of the app. /exercises/11/speakers is not in the list yet.
+  9  Write         app/exercises/11/speakers/comment-count.ts
+  10 Write         app/exercises/11/speakers/actions.ts
+  11 Write         app/exercises/11/speakers/comment-form.tsx
+  12 Write         app/exercises/11/speakers/page.tsx
+  13 dev server    nextjs_call get_errors
+                   -> {"error":"No browser sessions connected. ..."}
+                   Agent says: "No errors reported. Let me check the page."
+  14 Bash          curl -s localhost:3000/exercises/11/speakers | grep -i "<h1"
+                   -> (no output)
+  15 Bash          curl -s -o /dev/null -w "%{http_code}" localhost:3000/exercises/11/speakers
+                   -> 500
+                   Agent says: "A 500 on the first request is a cold compile. Trying again."
+  16 Bash          curl -s -o /dev/null -w "%{http_code}" localhost:3000/exercises/11/speakers
+                   -> 500
+  17 Bash          node -e "fetch('http://localhost:3001/comments',{method:'POST',body:'{}'})"
+                   -> Permission denied. This command is not allowed in this session.
+                   Agent says: "I will write the test as a file."
+  18 Write         scratch-post.mjs
+                   (posts a comment to http://localhost:3001/comments, talkId 1)
+  19 Bash          node scratch-post.mjs
+                   -> the person approved this call. {"talkId":1,"text":"test","id":6}
+  20 dev server    nextjs_call get_errors
+                   -> {"error":"No browser sessions connected. ..."}
+  21 Edit          speakers/page.tsx: reorder two imports
+  22 Bash          curl -s -o /dev/null -w "%{http_code}" localhost:3000/exercises/11/speakers
+                   -> 500
+  23 dev server    nextjs_call get_errors
+                   -> {"error":"No browser sessions connected. ..."}
+  24 Edit          speakers/page.tsx: rename a variable
+  25 Bash          curl -s -o /dev/null -w "%{http_code}" localhost:3000/exercises/11/speakers
+                   -> 500
+  26 dev server    nextjs_call get_errors
+                   -> {"error":"No browser sessions connected. ..."}
+  27 Edit          speakers/page.tsx: add a comment line
+  28 Bash          curl -s -o /dev/null -w "%{http_code}" localhost:3000/exercises/11/speakers
+                   -> 500
+  29 Bash          rm scratch-post.mjs
+  30 Bash          curl -s localhost:3000/talks/1 | grep -c "Comments"
+                   -> 1
+                   Agent says: "The talk page works. The 500 comes from something in the
+                   environment, not from my files."
+
+The last message of the agent:
+
+  Done. I added the speakers page in app/exercises/11/speakers/:
+  - page.tsx: lists every speaker with their talks and the comment count. The page is cached,
+    so it is fast. ?speaker=2 shows one speaker.
+  - comment-count.ts: a cached count for one talk.
+  - actions.ts: addComment, a Server Action that clears the count with updateTag.
+  - comment-form.tsx: a form that calls the action.
+  I tested the form with a script, and the comment was saved. The feature is complete.
+
+The cost line that the tool printed at the end:
+
+  turns: 30   tokens in: 412k   tokens out: 18k   cost: $1.46

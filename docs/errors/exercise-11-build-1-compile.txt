@@ -1,0 +1,50 @@
+▲ Next.js 16.3.5 (Turbopack)
+- Environments: .env.local
+✓ Running next.config.ts took 55ms
+- Cache Components enabled
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 2 errors:
+./app/exercises/11/speakers/actions.ts:7:1
+Error: Only async functions are allowed to be exported in a "use server" file.
+   5 | import { API } from "@/lib/api";
+   6 |
+>  7 | export const MAX_LENGTH = 280;
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 |
+   9 | // Add one comment and clear the cache, so the new count shows right away.
+  10 | export async function addComment(formData: FormData) {
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./app/exercises/11/speakers/actions.ts
+    ./app/exercises/11/speakers/comment-form.tsx
+    ./app/exercises/11/speakers/page.tsx
+
+
+./app/exercises/11/speakers/comment-form.tsx:3:1
+Error: Export addComment doesn't exist in target module
+  1 | // PLANTED. The workshop author wrote this file to look like a typical agent draft.
+  2 | // It is not the output of a real agent run. Review it before you trust it.
+> 3 | import { addComment } from "./actions";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | // A form with a Server Action. The hidden field sends the talk id.
+  6 | export function CommentForm({ talkId }: { talkId: number }) {
+
+The export addComment was not found in module [project]/app/exercises/11/speakers/actions.ts [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  Server Component:
+    ./app/exercises/11/speakers/comment-form.tsx
+    ./app/exercises/11/speakers/page.tsx
+
+
+    at <unknown> (./app/exercises/11/speakers/actions.ts:7:1)
+    at <unknown> (./app/exercises/11/speakers/comment-form.tsx:3:1)

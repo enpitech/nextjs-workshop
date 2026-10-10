@@ -1,0 +1,13 @@
+▲ Next.js 16.3.5 (Turbopack)
+- Environments: .env.local
+✓ Running next.config.ts took 47ms
+- Cache Components enabled
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 1985ms
+  Running TypeScript ...
+app/exercises/11/speakers/comment-count.ts(10,13): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '"short"' has no properties in common with type '{ stale?: number | undefined; revalidate?: number | undefined; expire?: number | undefined; }'.
+Failed to type check.
+

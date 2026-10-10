@@ -1,0 +1,42 @@
+▲ Next.js 16.3.5 (Turbopack)
+- Environments: .env.local
+✓ Running next.config.ts took 52ms
+- Cache Components enabled
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 1738ms
+  Running TypeScript ...
+  Finished TypeScript in 1866ms ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/79) ...
+SecretCard ran in the server. Key starts with dang
+SecretCard ran in the server. Key starts with dang
+⨯ Error: Route /exercises/11/speakers used `searchParams` inside "use cache". Accessing dynamic request data inside a cache scope is not supported. If you need some search params inside a cached function await `searchParams` outside of the cached function and pass only the required search params as arguments to the cached function. See more info here: https://nextjs.org/docs/messages/next-request-in-use-cache
+    at n (app\exercises\11\speakers\page.tsx:15:23)
+  13 |   searchParams: Promise<{ speaker?: string }>;
+  14 | }) {
+> 15 |   const { speaker } = await searchParams;
+     |                       ^
+  16 |   const [speakers, talks] = await Promise.all([getSpeakers(), getTalks()]);
+  17 |   const shown = speaker ? speakers.filter((s) => s.id === Number(speaker)) : speakers;
+  18 | {
+  digest: '375111577@E842'
+}
+SecretCard ran in the server. Key starts with dang
+Error: Route /exercises/11/speakers used `searchParams` inside "use cache". Accessing dynamic request data inside a cache scope is not supported. If you need some search params inside a cached function await `searchParams` outside of the cached function and pass only the required search params as arguments to the cached function. See more info here: https://nextjs.org/docs/messages/next-request-in-use-cache
+    at n (app\exercises\11\speakers\page.tsx:15:23)
+  13 |   searchParams: Promise<{ speaker?: string }>;
+  14 | }) {
+> 15 |   const { speaker } = await searchParams;
+     |                       ^
+  16 |   const [speakers, talks] = await Promise.all([getSpeakers(), getTalks()]);
+  17 |   const shown = speaker ? speakers.filter((s) => s.id === Number(speaker)) : speakers;
+  18 | {
+  digest: '375111577@E842'
+}
+To get a more detailed stack trace and pinpoint the issue, try one of the following:
+  - Start the app in development mode by running `next dev`, then open "/exercises/11/speakers" in your browser to investigate the error.
+  - Rerun the production build with `next build --debug-prerender` to generate better stack traces.
+Error occurred prerendering page "/exercises/11/speakers". Read more: https://nextjs.org/docs/messages/prerender-error
+Export encountered an error on /exercises/11/speakers/page: /exercises/11/speakers, exiting the build.
+⨯ Next.js build worker exited with code: 1 and signal: null
