@@ -18,7 +18,7 @@ export function NavLink({
         className={
           "rounded-full px-3 py-1.5 transition-colors " +
           (active
-            ? "bg-ink text-white"
+            ? "bg-accent text-white"
             : "text-muted hover:bg-accent-soft hover:text-accent-strong")
         }
       >

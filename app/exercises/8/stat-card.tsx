@@ -4,7 +4,12 @@ export function StatCard({ label, value }: { label: string; value: string | numb
   return (
     <div className="panel p-5">
       <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{label}</p>
-      <p className="mt-2 text-2xl font-bold tracking-tight tabular-nums">{value}</p>
+      {/* A long value, such as a talk title, gets a smaller size so that it fits the box. */}
+      <p
+        className={`mt-2 font-bold tracking-tight tabular-nums ${String(value).length > 6 ? "text-base leading-snug" : "text-3xl"}`}
+      >
+        {value}
+      </p>
     </div>
   );
 }

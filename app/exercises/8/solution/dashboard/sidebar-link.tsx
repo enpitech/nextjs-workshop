@@ -22,7 +22,7 @@ export function SidebarLink({
       className={
         "block rounded-lg px-3 py-1.5 text-sm transition-colors " +
         (active
-          ? "bg-ink text-white"
+          ? "bg-accent-soft font-bold text-ink shadow-[inset_3px_0_0_var(--color-accent)]"
           : "text-muted hover:bg-accent-soft hover:text-accent-strong")
       }
     >

@@ -1,12 +1,12 @@
-# Exercise 8: build the organizer dashboard (about 55 min)
+# Exercise 8: build the organizer dashboard (about 63 min)
 
 Open http://localhost:3000/exercises/8.
 
-You build a dashboard for a small conference in ten tasks. Each task uses one idea from Day 1, and its title gives the step. After each task, the dashboard works.
+You build a dashboard for a small conference in eleven tasks. Each task uses one idea from Day 1, and its title gives the step. After each task, the dashboard works.
 
 This exercise stands alone. You do not need another exercise or demo. Everything you use is in the Setup list.
 
-Do the tasks in order. If time is short, skip Tasks 4, 6, 9 and 10.
+Do the tasks in order. If time is short, skip Tasks 4, 6, 9, 10 and 11.
 
 ## Setup
 
@@ -19,6 +19,7 @@ These files are given. Do not change them.
 - `stat-card.tsx`: one number in a box, for Task 3.
 - `collapsible.tsx`: a panel that opens and closes, for Task 4.
 - `badge.tsx`: a small colored label, for Task 5.
+- `theme.css`: the light colors for an element with `data-theme="light"`, for Task 11.
 
 `lib/talks.ts`, `lib/speakers.ts` and `lib/comments.ts` start with `import "server-only"`, so a Client Component cannot import them. The first read takes 800 ms. After that, the answer is cached. When you save a file, `next dev` reloads your code and clears this cache. So the first load after an edit is slow again.
 
@@ -34,8 +35,11 @@ app/exercises/8/
   stat-card.tsx          given: one number in a box
   collapsible.tsx        given: a panel that opens and closes
   badge.tsx              given: a small colored label
+  theme.css              given: the light colors
   dashboard/
     layout.tsx           Task 1: the sidebar and a note field, around every dashboard page
+    theme-provider.tsx   Task 11: the context that holds the theme
+    theme-toggle.tsx     Task 11: the button that switches it
     sidebar-link.tsx     Task 2: a link that knows if it is the current page
     page.tsx             Task 3: the Overview with four numbers
     speaker-list.tsx     Task 4: the speakers
@@ -60,7 +64,7 @@ app/exercises/8/
 Answer these before you write code. The answers are at the end.
 
 1. Which files in the target get a URL?
-2. Which files that you write start with `"use client"`? There are four.
+2. Which files that you write start with `"use client"`? There are six.
 3. Which file starts with `"use server"`?
 4. The dashboard needs two kinds of boundary. Where do they go?
 
@@ -228,6 +232,35 @@ You see `200` with all six talks, `200` with the one `ai` talk, and `400` with `
 
 Why: a page answers a person with `not-found.tsx`. A Route Handler answers a program with a status code and an error body. A Server Component calls `getTalks()` directly, not this route.
 
+## Task 11: the theme toggle (Step 5, 8 min)
+
+A button in the sidebar switches the dashboard between dark and light. The choice survives a reload.
+
+1. Create `dashboard/theme-provider.tsx`. Line 1 is `"use client"`, because context and state need the browser.
+2. Write `type Theme = "light" | "dark";` and create the context: `const ThemeContext = createContext<{ theme: Theme; toggle: () => void }>({ theme: "dark", toggle: () => {} });`
+3. Export `ThemeProvider`. It gets `children`. Add `const [theme, setTheme] = useState<Theme>("dark");`
+4. Write `toggle`. It sets the other theme and saves it with `localStorage.setItem("exercise-8-theme", next)`.
+5. Return `<ThemeContext value={{ theme, toggle }}>` around `<div data-theme={theme} className="rounded-2xl bg-paper p-6 text-ink">{children}</div>`.
+6. Export `useTheme()`. It returns `useContext(ThemeContext)`.
+7. Create `dashboard/theme-toggle.tsx`. Line 1 is `"use client"`. Call `useTheme()`, and return a `<button onClick={toggle}>`. It says "Light mode" when the theme is dark, and "Dark mode" when it is light.
+8. In `layout.tsx`, add `import "../theme.css";`. Wrap everything that the layout returns in `<ThemeProvider>`. Put `<ThemeToggle />` in the `<aside>`, under the note.
+9. Click the button. The dashboard turns light. Reload the page. It is dark again.
+10. In `theme-provider.tsx`, load the choice on mount. The server has no `localStorage`, so read it in an effect, which runs only in the browser:
+
+    ```tsx
+    useEffect(() => {
+      const saved = localStorage.getItem("exercise-8-theme");
+      if (saved === "light" || saved === "dark") setTheme(saved);
+    }, []);
+    ```
+
+11. Run `npm run lint`. The rule `react-hooks/set-state-in-effect` reports the `setTheme` line. Here the effect is on purpose, so add `// eslint-disable-next-line react-hooks/set-state-in-effect` above it.
+12. Choose light and reload.
+
+You see the dashboard light after the reload. For a moment, you first see it dark. The numbers, the speakers and the talks still load on the server, inside the provider.
+
+Why: context needs a Client Component, so the provider is one. It renders `children` and does not import them. The layout stays a Server Component, and the pages arrive in `children` already rendered on the server. Only the provider, the toggle and what they import go to the browser. The first render must match the HTML from the server, so the saved choice comes in a second render, after mount. Save the choice in the click handler, not in an effect on `theme`. That effect also runs on mount, and it writes "dark" over the saved choice.
+
 ## Stretch
 
 1. The old URL. Old bookmarks to Votes must still work. Create `dashboard/votes/page.tsx`, and call `redirect("/exercises/8/dashboard/talks")` from `next/navigation`. Open `/exercises/8/dashboard/votes`. You land on Talks. Code after `redirect()` never runs, because it throws.
@@ -242,13 +275,15 @@ Answer these when the dashboard works. The answers are at the end.
 2. In DevTools, open the Network tab and type `_rsc` in the filter. Click Talks in the sidebar. What does the browser request? Which row starts with `I[`?
 3. Which files in `dashboard/` are in the client graph (the code sent to the browser)? Is `stat-card.tsx`? Is `Badge`?
 4. What does each boundary wait for: the `<Suspense>` in the layout, and `loading.tsx`?
+5. `ThemeProvider` starts with `"use client"`, and every dashboard page is inside it. Why is `dashboard/page.tsx` still a Server Component?
+6. Choose light and reload. Why do you see the dark dashboard for a moment?
 
 ## Answers
 
 Predict:
 
 1. Only `page.tsx` and `route.ts` get a URL: `dashboard/page.tsx`, `talks/page.tsx`, `talks/[id]/page.tsx`, `votes/page.tsx` and `api/talks/route.ts`. All other files are private.
-2. `sidebar-link.tsx`, `talk-table.tsx`, `vote-button.tsx` and `error.tsx`.
+2. `sidebar-link.tsx`, `talk-table.tsx`, `vote-button.tsx`, `error.tsx`, `theme-provider.tsx` and `theme-toggle.tsx`.
 3. `actions.ts`.
 4. The `<Suspense>` goes around the sidebar links in `layout.tsx`. The `loading.tsx` goes in `talks/[id]/`.
 
@@ -256,15 +291,17 @@ Prove it:
 
 1. A Client Component also runs once on the server, so its HTML is in the response. Search engines and link previews read that HTML without JavaScript (Step 1).
 2. A `Link` click requests an RSC payload (`text/x-component`), not a new HTML page. The row that starts with `I[` is the client reference to `talk-table.tsx`. The talks cross the line as a plain JSON row.
-3. The four `"use client"` files, and everything they import. `Badge` is in it, because `talk-table.tsx` imports it. `stat-card.tsx` is not, because only `page.tsx` imports it. The code of `actions.ts` is not in it either. `vote-button.tsx` imports `vote`, but the browser gets only an ID for it.
+3. The six `"use client"` files, and everything they import. `Badge` is in it, because `talk-table.tsx` imports it. `stat-card.tsx` is not, because only `page.tsx` imports it. The code of `actions.ts` is not in it either. `vote-button.tsx` imports `vote`, but the browser gets only an ID for it.
 4. The `<Suspense>` in the layout waits for `usePathname()`. The `loading.tsx` waits for `params` and the reads of the talk page.
+5. The graph follows imports, not the tree on the screen. Next renders the page on the server and gives the result to the layout as `children`. The layout passes it to `ThemeProvider`, which never imports it. So the provider gets the page already rendered, in the payload.
+6. The server cannot read `localStorage`, so it sends the dark HTML. The browser paints it, React hydrates, and only then the effect reads the saved choice and renders again. To remove the flash, the server must know the choice before it renders, for example from a cookie that the layout reads with `cookies()`. That read waits for the request, so it needs its own `<Suspense>`.
 
 Stretch 3: `405 Method Not Allowed`. The file exports only `GET`, so Next answers every other method for you. You write no code for it.
 
 ## Why
 
-Every task is one arrow on the Day 1 drawing. The folder is the router (Steps 2 and 3). Links and hooks need the browser, so they live in small client leaves (Steps 4 and 5). The server reads the data and passes plain values across the line (Steps 5 and 6). Writes cross as an ID (Step 7). Errors, titles and JSON get one file each (Steps 8, 9 and 10).
+Every task is one arrow on the Day 1 drawing. The folder is the router (Steps 2 and 3). Links and hooks need the browser, so they live in small client leaves (Steps 4 and 5). The server reads the data and passes plain values across the line (Steps 5 and 6). Writes cross as an ID (Step 7). Errors, titles and JSON get one file each (Steps 8, 9 and 10). A provider is a Client Component that wraps Server Components without importing them (Step 5).
 
 Compare with `solution/dashboard/`. The solution runs at http://localhost:3000/exercises/8/solution.
 
-Reset: delete `app/exercises/8/dashboard`, then run `npm run reset` for the vote counts.
+Reset: delete `app/exercises/8/dashboard`, then run `npm run reset` for the vote counts. To forget the theme, run `localStorage.removeItem("exercise-8-theme")` in the DevTools console.

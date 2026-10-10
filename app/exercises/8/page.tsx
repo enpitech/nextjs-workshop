@@ -2,7 +2,7 @@
 import Link from "next/link";
 
 const pages = [
-  { href: "/exercises/8/dashboard", note: "Tasks 1 to 4: the layout, the numbers, the speakers" },
+  { href: "/exercises/8/dashboard", note: "Tasks 1 to 4 and 11: the layout, the numbers, the speakers, the theme" },
   { href: "/exercises/8/dashboard/talks", note: "Tasks 5 and 6: the table and the vote button" },
   { href: "/exercises/8/dashboard/talks/1", note: "Tasks 7 and 9: one talk, with its own title" },
   { href: "/exercises/8/dashboard/talks/99", note: "Task 8: no such talk, so a 404" },

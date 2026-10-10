@@ -4,8 +4,8 @@ import Link from "next/link";
 
 export default function TalkNotFound() {
   return (
-    <div className="panel p-6">
-      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">404</p>
+    <div className="panel border-warning/40 p-6">
+      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-warning">404</p>
       <h2 className="mt-1 text-xl font-bold">No such talk</h2>
       <p className="mt-2 text-sm text-muted">The dashboard has no talk with this id.</p>
       <Link

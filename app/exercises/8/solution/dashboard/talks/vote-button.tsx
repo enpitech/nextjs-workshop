@@ -9,8 +9,10 @@ export function VoteButton({ id }: { id: number }) {
   return (
     <form action={formAction} className="flex items-center justify-end gap-3">
       <input type="hidden" name="id" value={id} />
-      {state.message && <span className="text-xs text-muted">{state.message}</span>}
-      <button disabled={pending}>{pending ? "Voting…" : "Vote"}</button>
+      {state.message && <span className="text-xs text-success">{state.message}</span>}
+      <button className="btn-primary" disabled={pending}>
+        {pending ? "Voting…" : "Vote"}
+      </button>
     </form>
   );
 }

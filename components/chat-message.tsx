@@ -16,7 +16,7 @@ export function ChatMessage({
     <li
       className={
         message.role === "user"
-          ? "ml-auto w-fit max-w-[85%] rounded-2xl bg-ink px-4 py-2 text-sm text-white"
+          ? "ml-auto w-fit max-w-[85%] rounded-2xl bg-accent px-4 py-2 text-sm text-white"
           : "w-fit max-w-[85%] space-y-2 text-sm"
       }
     >
